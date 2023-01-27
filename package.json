@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Une application mobile de covoiturage de colis est une application qui permet aux utilisateurs de mettre en relation les expéditeurs et les transporteurs de colis. Il permet aux expéditeurs de publier des annonces pour des colis à transporter, et aux transporteurs de consulter ces annonces et de proposer leurs services pour le transport des colis",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souhailtourjmen/coco.tn-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/souhailtourjmen/coco.tn-server/issues"
+  },
+  "homepage": "https://github.com/souhailtourjmen/coco.tn-server#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "concurrently": "^7.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.1",
+    "mongoose-unique-validator": "^3.1.0"
+  }
+}
