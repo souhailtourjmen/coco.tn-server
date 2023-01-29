@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const transporteurSchema = mongoose.Schema({
-  transporteur: { type: String, required: true },
+  idcartegris: { type: String, required: true ,unique: true, },
 });
-userSchema.plugin(uniqueValidator);
+transporteurSchema.plugin(uniqueValidator);
 module.exports = mongoose.model('Transporteur', userSchema);

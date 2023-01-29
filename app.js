@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express(); 
 const  test = require('./routes/test');
-app.use(express.json());
+const corsOptions = require('./config/corsOptions')
+const connectDB = require('./config/dbConn')
 
 app.use((req, res, next) => { //route for cross-domain routes
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,6 +10,10 @@ app.use((req, res, next) => { //route for cross-domain routes
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+
+app.use(cors(corsOptions));
+
+app.use(express.json());
 
 app.use('/',test);
 
