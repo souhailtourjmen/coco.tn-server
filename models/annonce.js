@@ -32,6 +32,7 @@ const annonceSchema = mongoose.Schema(
         pointExp:{ type: mongoose.Schema.ObjectId, required: true, ref: "PointTrajet" },
         pointDist:{ type: mongoose.Schema.ObjectId, required: true, ref: "PointTrajet" },
     },
+    images: [{ type: mongoose.Schema.ObjectId, ref: "Image" }],
     users:{
         userExp:{ type: mongoose.Schema.ObjectId, required: true, ref: "Profil" },
         userDist:{ type: mongoose.Schema.ObjectId, required: true, ref: "Profil" },
