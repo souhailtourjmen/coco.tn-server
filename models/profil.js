@@ -11,6 +11,14 @@ const profilSchema = mongoose.Schema({
     type: String,
     default: "Annonceur"
 }],
+annonces: [{ 
+  type: mongoose.Schema.ObjectId, 
+  ref: "Annonce" 
+}],
+  annonceCount: {
+    type: Number,
+    default: 0,
+  },
   
 });
 profilSchema.plugin(uniqueValidator);
