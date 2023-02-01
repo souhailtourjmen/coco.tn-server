@@ -12,7 +12,7 @@ const profilSchema = mongoose.Schema({
     default: "Annonceur"
 }],
 annonces: [{ 
-  type: mongoose.Schema.ObjectId, 
+  type:  mongoose.Schema.Types.ObjectId, 
   ref: "Annonce" 
 }],
   annonceCount: {

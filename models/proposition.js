@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const propositionSchema = mongoose.Schema({
     profil: {
-        type: mongoose.Schema.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: "Profil",
         required: true,
       },
       annonce: {
-        type: mongoose.Schema.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: "Annonce",
         required: true,
       },
@@ -24,7 +24,7 @@ const propositionSchema = mongoose.Schema({
         type: Date,
         required: [true, "Please enter the date"]
       },
-      pointPickup:{ type: mongoose.Schema.ObjectId, required: true, ref: "PointTrajet" },
+      pointPickup:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "PointTrajet" },
       created: {
         type: Date,
         default: Date.now,

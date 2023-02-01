@@ -11,8 +11,8 @@ app.use((req, res, next) => { //route for cross-domain routes
   next();
 });
 
-app.use(cors(corsOptions));
-
+// app.use(cors(corsOptions));
+connectDB();
 app.use(express.json());
 
 app.use('/',test);

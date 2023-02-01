@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const userSchema = mongoose.Schema(
   {
     cin: {
@@ -16,24 +16,26 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
-      address: {
-        type: String,
-        maxlength: 255,
+    addresses: [
+      {
+        address: {
+          type: String,
+          maxlength: 255,
+        },
+        city: {
+          type: String,
+          maxlength: 255,
+        },
+        district: {
+          type: String,
+          maxlength: 255,
+        },
+        state: {
+          type: String,
+          maxlength: 255,
+        },
       },
-      city: {
-        type: String,
-        maxlength: 255,
-      },
-      district: {
-        type: String,
-        maxlength: 255,
-      },
-      state: {
-        type: String,
-        maxlength: 255,
-      },
-    },
+    ],
     tel: {
       type: String,
       maxlength: 13,
@@ -49,68 +51,72 @@ const userSchema = mongoose.Schema(
       unique: true,
       maxlength: 254,
     },
-    mdp: {
+    password: {
       type: String,
       required: true,
     },
-    tokens: [
+    tokens: {
+      token: {
+        type: String,
+        default: "",
+      },
+      expireAt: {
+        type: Date,
+        default: Date.now() + 24 * 60 * 60 * 5000,
+      },
+    },
+    roles: [
       {
-        token: {
-          type: String,
-          default: "",
-        },
-        date_expires: {
-          type: Date,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
       },
     ],
-    role: {
-      type: Schema.Types.ObjectId,
-      ref: "Role",
-      required: true,
-    },
     image: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Image",
     },
-    verified: [{
-        email: {
+    verified: {
+      email: {
         type: Boolean,
         default: false,
-        },
-        tel: {
-            type: Boolean,
-            default: false,
-            },
-        cartegris: {
-                type: Boolean,
-                default: false,
-        },
-        
-    }],
-    created: {
-        type: Date,
-        default: Date.now,
       },
+      tel: {
+        type: Boolean,
+        default: false,
+      },
+      cartegris: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    created: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
 userSchema.plugin(uniqueValidator);
 
-UserSchema.pre("save", async function (next) {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
+userSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  this.tokens = {
+    token: await this.getToken(),
+    expireAt: Date.now() + 24 * 60 * 60 * 5000,
+  };
+  this.verified={};
+  next();
+});
+
+userSchema.methods.getToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
   });
-  
-  UserSchema.methods.getJwtToken = function () {
-    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE,
-    });
-  };
-  
-  UserSchema.methods.checkPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-  };
+};
+
+userSchema.methods.checkPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);

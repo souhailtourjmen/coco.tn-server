@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const annonceSchema = mongoose.Schema(
   {
     profil: {
-      type: mongoose.Schema.ObjectId,
+      type:  mongoose.Schema.Types.ObjectId,
       ref: "Profil",
       required: true,
     },
@@ -13,7 +13,7 @@ const annonceSchema = mongoose.Schema(
     },
     objets: [
       {
-        type: mongoose.Schema.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         required: [true, "Please enter the Objet "],
         ref: "Objet",
       },
@@ -29,15 +29,15 @@ const annonceSchema = mongoose.Schema(
         type: Date,
     },
     pointTrajets:{
-        pointExp:{ type: mongoose.Schema.ObjectId, required: true, ref: "PointTrajet" },
-        pointDist:{ type: mongoose.Schema.ObjectId, required: true, ref: "PointTrajet" },
+        pointExp:{ type: mongoose.Schema.Types.ObjectId, required: true, ref: "PointTrajet" },
+        pointDist:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "PointTrajet" },
     },
-    images: [{ type: mongoose.Schema.ObjectId, ref: "Image" }],
+    images: [{ type:  mongoose.Schema.Types.ObjectId, ref: "Image" }],
     users:{
-        userExp:{ type: mongoose.Schema.ObjectId, required: true, ref: "Profil" },
-        userDist:{ type: mongoose.Schema.ObjectId, required: true, ref: "Profil" },
+        userExp:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Profil" },
+        userDist:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Profil" },
     },
-    propositions: [{ type: mongoose.Schema.ObjectId, ref: "Proposition" }],
+    propositions: [{ type:  mongoose.Schema.Types.ObjectId, ref: "Proposition" }],
     propositionCount: {
       type: Number,
       default: 0,

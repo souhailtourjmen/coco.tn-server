@@ -3,12 +3,12 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const channelSchema = mongoose.Schema({
     profils:[{
-        type: Schema.Types.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: 'profil',
         required: true
     }],
     MessageChannel:[{
-        type: Schema.Types.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: 'Chat',
         required: true
     }],

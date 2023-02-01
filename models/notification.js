@@ -10,11 +10,11 @@ const notificationSchema = mongoose.Schema(
         required: true,
       },
       to: {
-        type: Schema.Types.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: 'Profil',
       },
       from: {
-        type: Schema.Types.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: 'Profil',
       },
       created: {
