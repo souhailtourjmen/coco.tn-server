@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const transporteurSchema = require("./transporteur");
 const userSchema = mongoose.Schema(
   {
     cin: {
@@ -17,7 +18,7 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     addresses: [
-      {
+        {
         address: {
           type: String,
           maxlength: 255,
@@ -26,13 +27,9 @@ const userSchema = mongoose.Schema(
           type: String,
           maxlength: 255,
         },
-        district: {
+        code_postal: {
           type: String,
-          maxlength: 255,
-        },
-        state: {
-          type: String,
-          maxlength: 255,
+          maxlength: 4,
         },
       },
     ],
@@ -99,24 +96,37 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(uniqueValidator);
 
 userSchema.pre("save", async function (next) {
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  this.tokens = {
-    token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 5000,
-  };
-  this.verified={};
+  this.password = await this.encryptPassword (this.password);
+  this.tokens = await this.getToken()
+
   next();
 });
 
-userSchema.methods.getToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+
+userSchema.methods.getToken = function () { // returns the token for the authenticated
+  return { token: jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: Date.now() + 24 * 60 * 60 * 5000,
+  }),
+  expireAt: Date.now() + 24 * 60 * 60 * 5000,
+}
 };
 
-userSchema.methods.checkPassword = async function (password) {
+userSchema.methods.encryptPassword = async (password) => { // mehode for crypt password
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
+ //methode compare tow password if exated return true else return false
+userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+/* cette code pour faire extend model transporteur par model user 
+et je utilise cette façon le cas j'ajout un autre acteur
+ comme en future ajoute option à l'annonceur   */
+
+const User = mongoose.model("User", userSchema); 
+const Transporteur = User.discriminator("Transporteur",transporteurSchema);
+module.exports = {
+  User,
+  Transporteur,
+};

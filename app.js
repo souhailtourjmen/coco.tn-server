@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express(); 
-const  test = require('./routes/test');
+const  test = require('./test/routes/test');
+const  userRoute = require('./routes/userRoute');
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 
@@ -15,7 +16,8 @@ app.use((req, res, next) => { //route for cross-domain routes
 connectDB();
 app.use(express.json());
 
-app.use('/',test);
+app.use('/',test); // routesfor test
+app.use('/',userRoute)
 
 
 module.exports = app ; 
