@@ -2,6 +2,7 @@ const express = require('express');
 const app = express(); 
 const  test = require('./test/routes/test');
 const  userRoute = require('./routes/userRoute');
+const  profilRoute = require('./routes/profilRoute');
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 
@@ -17,7 +18,8 @@ connectDB();
 app.use(express.json());
 
 app.use('/',test); // routesfor test
-app.use('/',userRoute)
+app.use('/',userRoute);
+app.use('/',profilRoute);
 
 
 module.exports = app ; 

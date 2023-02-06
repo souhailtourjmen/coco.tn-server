@@ -1,6 +1,6 @@
 const express = require('express');
 const router =express.Router();
-const {getAllUsers ,createUser,getUserByEmail,updateUserRoleByEmail,updateUserInfoByEmail,deleteUserByEmail}= require('../controllers/usersControllers');
+const {getAllUsers ,createUser,getUserByEmail,updateUserRoleByEmail,updateUserInfoByEmail,deleteUserByEmail}= require('../controllers/usersController');
 
 router.post("/api/createUser/", createUser);
 router.get("/api/getUserByEmail/", getUserByEmail);

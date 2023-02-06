@@ -14,7 +14,8 @@ const reviewSchema = mongoose.Schema(
         required:true
     },
     id_colis:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Colis" },
-    id_Transporteur:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
+    /* car il y a list des review chez profil transporteur */
+    // id_Transporteur:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
     id_profil:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
   },
   { timestamps: true }
