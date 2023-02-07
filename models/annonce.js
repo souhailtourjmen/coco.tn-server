@@ -1,11 +1,19 @@
 const mongoose = require("mongoose");
 const annonceSchema = mongoose.Schema(
   {
-    profil: {
+    profil:{ 
+      idProfil:{
       type:  mongoose.Schema.Types.ObjectId,
       ref: "Profil",
       required: true,
     },
+    statut:{
+      type: String,
+      required: [true, "Please enter the statut"],
+      trim: true,
+      default:"exp"
+    }
+  },
     description: {
       type: String,
       required: [true, "Please enter the caption"],
@@ -33,11 +41,10 @@ const annonceSchema = mongoose.Schema(
         pointDist:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "PointTrajet" },
     },
     images: [{ type:  mongoose.Schema.Types.ObjectId, ref: "Image" }],
-    users:{
-        userExp:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Profil" },
-        userDist:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Profil" },
-    },
-    propositions: [{ type:  mongoose.Schema.Types.ObjectId, ref: "Proposition" }],
+
+    idProfilDist:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Profil" },
+
+    listPropositions: [{ type:  mongoose.Schema.Types.ObjectId, ref: "Proposition" }],
     propositionCount: {
       type: Number,
       default: 0,

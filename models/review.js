@@ -13,10 +13,10 @@ const reviewSchema = mongoose.Schema(
         type: Number ,
         required:true
     },
-    id_colis:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Colis" },
+    idColis:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "Colis" },
     /* car il y a list des review chez profil transporteur */
     // id_Transporteur:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
-    id_profil:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
+    idProfil:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
   },
   { timestamps: true }
 );
