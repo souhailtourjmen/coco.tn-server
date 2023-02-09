@@ -1,6 +1,6 @@
-const Colis =require("../models/colis")
-const Profil =require("../models/profil")
-const Review =require("../models/review")
+const Colis =require("../../models/colis")
+const Profil =require("../../models/profil")
+const Review =require("../../models/review")
 
 
 const getAllReview = async (req, res)  => {

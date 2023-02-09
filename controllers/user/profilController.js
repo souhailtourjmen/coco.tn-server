@@ -1,10 +1,10 @@
-const Profil = require("../models/profil");
-const {User,Transporteur} = require("../models/user");
-const Role = require("../models/role");
-const Review = require("../models/review");
-const Colis = require("../models/colis");
-const Channel = require("../models/channel");
-const Image = require("../models/image");
+const Profil = require("../../models/profil");
+const {User,Transporteur} = require("../../models/user");
+const Role = require("../../models/role");
+const Review = require("../../models/review");
+const Colis = require("../../models/colis");
+const Channel = require("../../models/channel");
+const Image = require("../../models/image");
 
 const getAllProfils = async (req, res) => {
     try {
@@ -258,7 +258,7 @@ const createProfil = async (req, res) => {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "something went wrong, fail to create user ",
+        message: "something went wrong, fail to create profil ",
       });
     }
   };

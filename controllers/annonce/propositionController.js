@@ -1,7 +1,7 @@
-const Annonce =require("../models/annonce")
-const Proposition =require("../models/proposition")
-const Profil =require("../models/profil")
-const PT =require("../models/pointTrajet")
+const Annonce =require("../../models/annonce")
+const Proposition =require("../../models/proposition")
+const Profil =require("../../models/profil")
+const PT =require("../../models/pointTrajet")
 
 
 const getAllProposition = async (req, res)  => {

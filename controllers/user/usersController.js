@@ -1,6 +1,6 @@
-const {User,Transporteur} = require("../models/user");
-const Role = require("../models/role");
-const Image = require("../models/image");
+const {User,Transporteur} = require("../../models/user");
+const Role = require("../../models/role");
+const Image = require("../../models/image");
 
 const getAllUsers = async (req, res) => {
   try {

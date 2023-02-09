@@ -1,9 +1,9 @@
-const Annonce =require("../models/annonce")
-const Objet =require("../models/objet")
-const Profil =require("../models/profil")
-const Image =require("../models/image")
-const PT =require("../models/pointTrajet") /// PT => point trajectory
-const Proposition =require("../models/proposition")
+const Annonce =require("../../models/annonce")
+const Objet =require("../../models/objet")
+const Profil =require("../../models/profil")
+const Image =require("../../models/image")
+const PT =require("../../models/pointTrajet") /// PT => point trajectory
+const Proposition =require("../../models/proposition")
 
 const getAllAnnonces = async (req, res) => {
     try {

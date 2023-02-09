@@ -52,16 +52,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    tokens: {
-      token: {
-        type: String,
-        default: "",
-      },
-      expireAt: {
-        type: Date,
-        default: Date.now() + 24 * 60 * 60 * 5000,
-      },
-    },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -93,19 +83,8 @@ userSchema.plugin(uniqueValidator);
 
 userSchema.pre("save", async function (next) {
   this.password = await this.encryptPassword (this.password);
-  this.tokens = await this.getToken()
-
   next();
 });
-
-
-userSchema.methods.getToken = function () { // returns the token for the authenticated
-  return { token: jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: Date.now() + 24 * 60 * 60 * 5000,
-  }),
-  expireAt: Date.now() + 24 * 60 * 60 * 5000,
-}
-};
 
 userSchema.methods.encryptPassword = async (password) => { // mehode for crypt password
   const salt = await bcrypt.genSalt(10);

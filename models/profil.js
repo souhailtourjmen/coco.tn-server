@@ -12,6 +12,16 @@ const profilSchema = mongoose.Schema({
     type: String,
     default: "annonceur",
   }],
+  tokens: {
+    token: {
+      type: String,
+      default: "",
+    },
+    expireAt: {
+      type: Date,
+      default: Date.now() + 24 * 60 * 60 * 5000,
+    },
+  },
   image: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Image",
@@ -64,3 +74,14 @@ const profilSchema = mongoose.Schema({
 });
 profilSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("Profil", profilSchema);
+profilSchema.pre("save", async function (next) {
+  this.tokens = await this.getToken()
+  next();
+});
+profilSchema.methods.getToken = function () { // returns the token for the authenticated
+  return { token: jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: Date.now() + 24 * 60 * 60 * 5000,
+  }),
+  expireAt: Date.now() + 24 * 60 * 60 * 5000,
+}
+};

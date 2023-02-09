@@ -1,4 +1,4 @@
-const Image =require("../models/colis")
+const Image =require("../../models/colis")
 
 
 
