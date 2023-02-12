@@ -42,7 +42,6 @@ const createReview =async (req, res) => {
     }
     const profilFound = await Profil.findByID(idProfil);
     const colisFound = await Colis.findByID(idColis);
-  
  
 
     if (!profilFound || !colisFound ) {
@@ -60,7 +59,19 @@ const createReview =async (req, res) => {
     })
 
     const savedReview = await review.save();
+
+    try {
+      const transporteur= await Profil.findOne({'listColis':colisFound._id });
+      await transporteur.insertReview(review._id);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: "something went wrong, fail to review in profil",
+      });
+    }
   
+
       return res.status(201).json({
         success: true,
         data: {
@@ -71,7 +82,7 @@ const createReview =async (req, res) => {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "something went wrong, fail to create proposition",
+        message: "something went wrong, fail to create review",
       });
     }
   };

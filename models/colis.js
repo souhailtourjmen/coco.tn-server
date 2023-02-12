@@ -1,15 +1,35 @@
 const mongoose = require("mongoose");
 const colisSchema = mongoose.Schema(
   {
-   id_Annonce:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Annonce" },
-   id_Transporteur:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
-   id_Expediteur:{ type: mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
-   id_Distinataire:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref:"Profil" },
-    statut:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "StatutColis" },
+    id_Annonce: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Annonce",
+    },
+    idExpediteur: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Profil",
+    },
+    idDistinataire: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Profil",
+    },
+    proposition_Accept: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Proposition",
+    },
+    statut: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "StatutColis",
+    },
     created: {
-        type: Date,
-        default: Date.now,
-      },
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
