@@ -25,46 +25,7 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
-  try {
-    const { cin, nom, prenom, addresses, tel, gender, email, password, role,cartegris } =
-      req.body;
-    const rolesFound = await Role.find({ role: { $in: role } });
-    let usert ={
-      cin:cin,
-      nom:nom,
-      prenom:prenom,
-      addresses:addresses,
-      tel:tel,
-      gender:gender,
-      email:email,
-      password:password,
-      roles:rolesFound.map((role) => role._id),
-      verified:{
-        cartegris: role ==="transporteur" ? true:false
-      },
-      idcartegris: role ==="transporteur" ? cartegris :null
 
-    }; 
-    
-  const user=role ==="transporteur" ? new Transporteur(usert):new User(usert);
-
-  const savedUser = await user.save();
-
-    return res.status(201).json({
-      success: true,
-      data: {
-        user,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "something went wrong, fail to create user ",
-    });
-  }
-};
 
 const updateUserRoleByEmail = async (req, res) => {  //cette methode qu'il fait le mise a jour le role de module user si le role est transporteur donc on le update et crée new transporteur 
   const { role ,email,cartegris} = req.body;
@@ -163,8 +124,9 @@ const updateUserInfoByEmail = async (req, res) => {
 };
 const deleteUserByEmail = async (req, res) => {
   try {
+    
     const user = await User.deleteOne({
-      _id: req.body.email
+      _id: req.body.idUser
     });
 
     return res.status(200).json({ successful: true, data: user , message: `User delete successfully`, });
@@ -176,7 +138,7 @@ const deleteUserByEmail = async (req, res) => {
 module.exports = {
   getAllUsers,
   getUserByEmail,
-  createUser,
+
   updateUserRoleByEmail,
   updateUserInfoByEmail,
   deleteUserByEmail,

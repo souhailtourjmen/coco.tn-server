@@ -90,53 +90,10 @@ const getAllProfils = async (req, res) => {
 
   /* cette methode pour le test mais son emplacement dans le controller authController.js */
 
-const createProfil = async (req, res) => {
-    try {
-      const { email , password } = req.body;
-      if (!email || !password) {
-        return res.status(404).json({ message: 'All fields are required' })
-    }
-      const userFound =  await User.findOne({email: email}).populate(
-        "roles"
-      );
-      if (!userFound) {
-        return res.status(404).json({ success: false, message: "user not found" })
-    }
-   
-    const matchPassword = await userFound.comparePassword( password );
 
-      if (!matchPassword)
-        return res.status(401).json({
-          token: null,
-          message: "Invalid Password",
-        });
-
-      const profil =new Profil({
-        user:userFound._id,
-        statut:userFound.roles.map((role) => role.role),
-        
-      }); 
-  
-    const savedProfil = await profil.save();
-  
-      return res.status(201).json({
-        success: true,
-        data: {
-          profil,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        success: false,
-        message: "something went wrong, fail to create profil ",
-      });
-    }
-  };
 
   module.exports = {
     getAllProfils ,
-    createProfil,
     getProfilByID,
     getProfilListReviewByID,
     getProfilListColisByID,

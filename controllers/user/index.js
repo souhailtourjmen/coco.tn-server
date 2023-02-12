@@ -1,6 +1,5 @@
 const {
   getAllProfils,
-  createProfil,
   getProfilByID,
   getProfilListReviewByID,
   getProfilListColisByID,
@@ -10,7 +9,6 @@ const {
 const {
   getAllUsers,
   getUserByEmail,
-  createUser,
   updateUserRoleByEmail,
   updateUserInfoByEmail,
   deleteUserByEmail,
@@ -23,7 +21,7 @@ module.exports = {
 
   getAllUsers,
   getUserByEmail,
-  createUser,
+
   updateUserRoleByEmail,
   updateUserInfoByEmail,
   deleteUserByEmail,
@@ -33,14 +31,11 @@ module.exports = {
   /* controller profil */
 
   getAllProfils,
-  createProfil,
   getProfilByID,
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-  insertReviewInProfilByID,
-  insertColisInProfilByID,
-  insertAnnonceInProfilByID,
+
 
   /*end controller profil */
 

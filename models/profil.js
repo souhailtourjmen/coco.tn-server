@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-
+const jwt = require("jsonwebtoken");
 const profilSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectID,
@@ -80,20 +80,19 @@ const profilSchema = mongoose.Schema({
   friendshipCount: { type: Number, default: 0 },
 });
 profilSchema.plugin(uniqueValidator);
-module.exports = mongoose.model("Profil", profilSchema);
+
 profilSchema.pre("save", async function (next) {
-  this.tokens = await this.getToken();
+  this.tokens = {
+    token: await this.getToken(),
+    expireAt: Date.now() + 24 * 60 * 60 * 5000,
+  };
   next();
 });
 
 profilSchema.methods.getToken = function () {
-  // returns the token for the authenticated
-  return {
-    token: jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-      expiresIn: Date.now() + 24 * 60 * 60 * 5000,
-    }),
-    expireAt: Date.now() + 24 * 60 * 60 * 5000,
-  };
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 };
 
 profilSchema.methods.insertReview = async function (idReview) {
@@ -161,3 +160,4 @@ profilSchema.methods.removeAnnonce = async function (idAnnonce) {
     return error 
   }
 };
+module.exports = mongoose.model("Profil", profilSchema);

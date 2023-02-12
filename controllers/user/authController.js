@@ -69,11 +69,10 @@ const signUp = async (req, res) => {
       role === "transporteur" ? new Transporteur(usert) : new User(usert);
 
     const savedUser = await user.save();
-
    
     const profil =new Profil({
       user:user._id,
-      statut:user.roles.map((role) => role.role),
+      statut:role,
       
     }); 
 
@@ -87,7 +86,7 @@ const signUp = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-
+   
     return res
       .status(500)
       .json({ successful: false, message: "something went wrong, fail to create user" });
@@ -99,9 +98,11 @@ const login = async (req, res) => {
     if (!email || !password) {
       return res.status(404).json({ message: 'All fields are required' })
   }
+
     const userFound =  await User.findOne({email: email}).populate(
       "roles"
     );
+
     if (!userFound) {
       return res.status(404).json({ success: false, message: "user not found" })
   }
@@ -114,14 +115,14 @@ const login = async (req, res) => {
         message: "Invalid Password",
       });
 
-    const profilFound = await Profil.findOne({user: userFound.id_user})
+    const profilFound = await Profil.findOne({user: userFound._id})
       .populate("user");
       if (!profilFound) {
           return res.status(404).json({ success: false, message: "profil not found" })
       }
     return res
       .status(200)
-      .json({ token: token, roles: userFound.roles, profil: profilFound });
+      .json({ token: profilFound.tokens, roles: userFound.roles, profil: profilFound });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });

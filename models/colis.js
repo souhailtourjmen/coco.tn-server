@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const colisSchema = mongoose.Schema(
   {
-    id_Annonce: {
+    idAnnonce: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Annonce",
@@ -21,11 +21,11 @@ const colisSchema = mongoose.Schema(
       required: true,
       ref: "Proposition",
     },
-    statut: {
+    statut:[ {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "StatutColis",
-    },
+    }],
     created: {
       type: Date,
       default: Date.now,
