@@ -21,6 +21,7 @@ const objetSchema = mongoose.Schema(
         type: String,
         maxlength: 16,
       },
+      images: [{ type: mongoose.Schema.Types.ObjectId, ref: "Image" }],
     
   },
  

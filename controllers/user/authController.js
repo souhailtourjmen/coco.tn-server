@@ -72,8 +72,6 @@ const signUp = async (req, res) => {
    
     const profil =new Profil({
       user:user._id,
-      statut:role,
-      
     }); 
 
   const savedProfil = await profil.save();

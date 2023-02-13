@@ -8,10 +8,33 @@ const {
   getProfilListAnnonceByID,
 } = require("../controllers/user/index");
 
-router.get("/api/getProfilByID/", getProfilByID);
-router.get("/api/getAllProfils/", getAllProfils);
-router.get("/api/getProfilListReviewByID/", getProfilListReviewByID);
-router.get("/api/getProfilListColisByID/", getProfilListColisByID);
-router.get("/api/getProfilListAnnonceByID/", getProfilListAnnonceByID);
+/* Get method getProfilByID
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilByID/", getProfilByID);
+/* Get method getAllProfil
+ * @param null
+ * @return Array[{Objet}]
+ */
+router.get("/getAllProfils/", getAllProfils);
+
+/* Get method getProfilListReviewByID
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListReviewByID/", getProfilListReviewByID);
+
+/* Get method getProfilListColisByID
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListColisByID/", getProfilListColisByID);
+
+/* Get method getProfilListAnnonceByID
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListAnnonceByID/", getProfilListAnnonceByID);
 
 module.exports = router;

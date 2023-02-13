@@ -8,12 +8,7 @@ const profilSchema = mongoose.Schema({
     ref: "User",
     unique: true,
   },
-  statut: [
-    {
-      type: String,
-      default: "annonceur",
-    },
-  ],
+
   tokens: {
     token: {
       type: String,

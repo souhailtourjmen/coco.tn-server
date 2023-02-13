@@ -70,7 +70,7 @@ const createObjet =async (req, res) => {
         if (!req.body.idObjet ) {
             return res.status(404).json({ message: 'All fields are required' })
         }
-    const objetFound = await Objet.findByID(req.body.idImage);
+    const objetFound = await Objet.findByID(req.body.idObjet);
     if (!objetFound  ) {
         return res
           .status(404)

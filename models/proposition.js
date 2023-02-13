@@ -17,7 +17,7 @@ const propositionSchema = mongoose.Schema({
         trim: true,
       },
       prix: {
-        type: double,
+        type: Number,
         required: [true, "Please enter the price"],
       },
       datePickup: {
