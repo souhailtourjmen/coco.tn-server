@@ -17,8 +17,8 @@ const getAllColisByUser = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const listColisExp = await Colis.find({ idExpediteur: idProfil });
-    const listColisRec = await Colis.find({ idDistinataire: idProfil });
+    const listColisExp = await Colis.find({ idExpediteur: profilFound._id});
+    const listColisRec = await Colis.find({ idDistinataire: profilFound._id });
 
     return res
       .status(200)

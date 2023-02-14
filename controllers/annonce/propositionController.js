@@ -1,13 +1,23 @@
 const Annonce =require("../../models/annonce")
 const Proposition =require("../../models/proposition")
 const Profil =require("../../models/profil")
-const PT =require("../../models/pointTrajet")
 
 
-const getAllProposition = async (req, res)  => {
+
+const getAllPropositionbyIdProfil = async (req, res)  => {
 
     try {
-        const propositions = await Proposition.find();
+      const idProfil = req.body.idProfil
+      if (! idProfil ) {
+        return res.status(404).json({ message: 'All fields are required' })
+      }
+      const profilFound = await Profil.findById(idProfil).exec();
+      if (!profilFound  ) {
+        return res
+          .status(404)
+          .json({ success: false, message: "profil not found" });
+      }
+        const propositions = await Proposition.find({"profil":profilFound ._id});
         return res.status(200).json(propositions);
         
     } catch (error) {
@@ -36,31 +46,30 @@ const getPropositionById = async (req, res) => {
   
 const createProposition =async (req, res) => {
     try {
-      const { idProfil , idAnnonce ,text,prix,datePickup ,idPointPickup } = req.body;
+      const { idProfil , idAnnonce ,text,prix,datePickup ,PointPickup } = req.body;
+      console.log(idProfil , idAnnonce ,text,prix,datePickup ,PointPickup);
 
-      if (!idProfil || !idAnnonce || !idPointPickup || !text || !prix || !datePickup|| !idPointPickup) {
+      if (!idProfil || !idAnnonce || !PointPickup || !text || !prix || !datePickup) {
         return res.status(404).json({ message: 'All fields are required' })
     }
-    const profilFound = await Profil.findByID(idProfil);
-    const annonceFound = await Annonce.findByID(idAnnonce);
-    const pointPickupFound = await PT.findByID(idPointPickup);
- 
+    const profilFound = await Profil.findById(idProfil).exec();
 
-    if (!profilFound || !annonceFound || !pointPickupFound ) {
+    const annonceFound = await Annonce.findById(idAnnonce).exec();
+
+    if (!profilFound || !annonceFound  ) {
       return res
         .status(404)
         .json({ success: false, message: "profils or annonce or pointPickup  not found" });
     }
     
     const proposition =new Proposition({
-        profil:idProfil,
-        annonce:idAnnonce,
+        profil:profilFound._id,
         text:text,
         prix:prix,
         datePickup:datePickup,
-        pointPickup:idPointPickup,
+        pointPickup:PointPickup,
     })
-
+    await annonceFound.insertPropositions(proposition._id);
     const savedProposition = await proposition.save();
   
       return res.status(201).json({
@@ -101,7 +110,7 @@ const createProposition =async (req, res) => {
 
   module.exports = {
 
-    getAllProposition,
+    getAllPropositionbyIdProfil,
     getPropositionById,
     createProposition,
     deletePropositionById

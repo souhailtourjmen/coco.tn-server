@@ -20,7 +20,7 @@ const getObjetById = async (req, res) => {
           return res.status(404).json({ message: 'All fields are required' })
       }
 
-      const objetFound = await Proposition.findById(req.body.idObjet)
+      const objetFound = await Objet.findById(req.body.idObjet).populate("images")
 
       if (!objetFound) {
           return res.status(404).json({ success: false, message: "objet not found" })
@@ -32,39 +32,7 @@ const getObjetById = async (req, res) => {
     }
   };
   
-const createObjet =async (req, res) => {
-    try {
-      const { nom , taile,langeur,hauteur,poids   } = req.body;
 
-      if (!nom || !taile || !langeur || !hauteur || !poids) {
-        return res.status(404).json({ message: 'All fields are required' })
-    }
-
-    
-    const objet=new Objet({
-      nom:nom,
-      taile:taile,
-      langeur:langeur,
-      hauteur:hauteur,
-      poids:poids
-    })
-
-    const savedobjet = await objet.save();
-  
-      return res.status(201).json({
-        success: true,
-        data: {
-            objet,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        success: false,
-        message: "something went wrong, fail to create proposition",
-      });
-    }
-  };
   const deleteObjetById = async (req, res) => {
     try {
         if (!req.body.idObjet ) {
@@ -91,7 +59,6 @@ const createObjet =async (req, res) => {
 
     getAllObjets,
     getObjetById,
-    createObjet,
     deleteObjetById
 
  };

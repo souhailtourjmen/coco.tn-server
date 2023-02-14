@@ -6,11 +6,6 @@ const propositionSchema = mongoose.Schema({
         ref: "Profil",
         required: true,
       },
-      annonce: {
-        type:  mongoose.Schema.Types.ObjectId,
-        ref: "Annonce",
-        required: true,
-      },
       text: {
         type: String,
         required: [true, "Please enter the propostion"],
@@ -24,11 +19,13 @@ const propositionSchema = mongoose.Schema({
         type: Date,
         required: [true, "Please enter the date"]
       },
-      pointPickup:{ type:  mongoose.Schema.Types.ObjectId, required: true, ref: "PointTrajet" },
+      pointPickup:{ type: String, required: true },
       created: {
         type: Date,
         default: Date.now,
       },
 });
+
+
 
 module.exports = mongoose.model('Proposition', propositionSchema);

@@ -1,6 +1,4 @@
-const Image =require("../../models/colis")
-
-
+const Image =require("../../models/image")
 
 const getAllImages = async (req, res)  => {
 
@@ -20,7 +18,7 @@ const getImageById = async (req, res) => {
           return res.status(404).json({ message: 'All fields are required' })
       }
 
-      const imageFound = await Proposition.findById(req.body.idImage)
+      const imageFound = await Image.findById(req.body.idImage)
 
       if (!imageFound) {
           return res.status(404).json({ success: false, message: "image not found" })

@@ -21,3 +21,37 @@ Notifications : Il permet aux utilisateurs de recevoir des notifications lorsqu'
 
 
 
+
+## Environment variables
+
+PORT=
+url_dev
+url_staging
+url_prod
+DATABASE_URI
+JWT_SECRET
+JWT_EXPIRE
+
+
+## Backend
+
+### tecnologies:
+
+- Node.js/ Express
+- MongoDB / Mongoose
+- Json WTK
+
+### Features:
+
+- Authentication using Json Web Tokens
+
+- password encryption using bcrypt library
+
+
+
+- **request supported** : GET, PUT, POST, DELETE
+
+- **routes:** USERS ,PROFIL, ANNONCE, PROPOSITION ,  AUTH (Login/SingUp),
+
+- initial mongoose set up with :  roles (admin transporteur annonceur).
+

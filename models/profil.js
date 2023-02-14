@@ -23,7 +23,7 @@ const profilSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Image",
   },
-  listAnnonce_save: [
+  listAnnonce: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Annonce",
@@ -68,10 +68,10 @@ const profilSchema = mongoose.Schema({
     type: Date,
     default: Date.now() + 24 * 60 * 60 * 1000,
   },
-  friendship: {
+  friendship: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Profil",
-  },
+  }],
   friendshipCount: { type: Number, default: 0 },
 });
 profilSchema.plugin(uniqueValidator);
@@ -95,7 +95,7 @@ profilSchema.methods.insertReview = async function (idReview) {
   try {
     if (this.listReview.indexOf(idReview) === -1) {
       this.listReview.push(idReview);
-      this.reviewCount=listColis.length;
+      this.reviewCount=this.listReview.length;
     }
     
     return await this.save();
@@ -138,8 +138,8 @@ profilSchema.methods.insertColis = async function (idColis) {
 profilSchema.methods.insertAnnonce = async function (idAnnonce) {
   // methode ajoute nouveau annonce pour permettre le user sauvgarder un annonce pour retulise comme template
   try {
-    if (this.listAnnonce_save.indexOf(idAnnonce) === -1) {
-      this.listAnnonce_save.push(idAnnonce);
+    if (this.listAnnonce.indexOf(idAnnonce) === -1) {
+      this.listAnnonce.push(idAnnonce);
     }
     return await this.save();
   } catch (error) {
@@ -149,7 +149,7 @@ profilSchema.methods.insertAnnonce = async function (idAnnonce) {
 profilSchema.methods.removeAnnonce = async function (idAnnonce) {
   // methode supprimer un annonce
   try {
-    this.listAnnonce_save.remove(idAnnonce);
+    this.listAnnonce.remove(idAnnonce);
     return await this.save();
   } catch (error) {
     return error 

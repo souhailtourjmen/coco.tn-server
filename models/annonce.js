@@ -45,7 +45,6 @@ const annonceSchema = mongoose.Schema(
 
     idProfilDist: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "Profil",
     },
 
@@ -71,5 +70,18 @@ const annonceSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+annonceSchema.methods.insertPropositions = async function (idProposition) {
+  // methode ajoute nouveau proposition
+  try {
+    if (this. listPropositions.indexOf(idProposition) === -1) {
+      this.listPropositions.push(idProposition);
+      this.propositionCount=this.listPropositions.length;
+    }
+    
+    return await this.save();
+  } catch (error) {
+    return error 
+  }
+};
 
 module.exports = mongoose.model("Annonce", annonceSchema);

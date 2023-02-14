@@ -11,7 +11,7 @@ const {
   deleteImageById,
 } = require("./imageController");
 const {
-  getAllProposition,
+  getAllPropositionbyIdProfil,
   getPropositionById,
   createProposition,
   deletePropositionById,
@@ -19,7 +19,6 @@ const {
 const {
   getAllObjets,
   getObjetById,
-  createObjet,
   deleteObjetById,
 } = require("./objetController");
 
@@ -37,7 +36,7 @@ module.exports = {
   deleteImageById,
   /* end controller image */
   /* controller proposition */
-  getAllProposition,
+  getAllPropositionbyIdProfil,
   getPropositionById,
   createProposition,
   deletePropositionById,
@@ -45,7 +44,6 @@ module.exports = {
   /* controller objet */
   getAllObjets,
   getObjetById,
-  createObjet,
   deleteObjetById,
   /* end controller objet */
 };

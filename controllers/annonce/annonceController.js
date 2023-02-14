@@ -1,18 +1,27 @@
 const Annonce = require("../../models/annonce");
 const Objet = require("../../models/objet");
 const Profil = require("../../models/profil");
-const Image = require("../../models/image");
-const PT = require("../../models/pointTrajet"); /// PT => point trajectory
 const Proposition = require("../../models/proposition");
+const Image = require("../../models/image");
 const {
   createAllObject,
   deleteObjetByArray,
 } = require("../../utils/objet/objetMethod");
 
-
 const getAllAnnonces = async (req, res) => {
   try {
-    const annonce = await Annonce.find().populate("profil").populate("objets");
+    const limit = 10;
+    const annonce = await Annonce.find().populate({
+      path: "objets",
+      populate: {
+        path: "images",
+
+      },
+    })
+    .populate({path:"listPropositions"})
+    .limit(Number(limit))
+    .sort({createdAt: 'desc'})
+    .exec();
 
     return res.status(200).json(annonce);
   } catch (error) {
@@ -28,8 +37,17 @@ const getAnnonceById = async (req, res) => {
     }
 
     const annonceFound = await Annonce.findById(req.body.idAnnonce)
-      .populate("profil")
-      .populate("objets");
+    populate({
+      path: "objets",
+      populate: {
+        path: "images",
+
+      },
+
+    })
+    .limit(Number(limit))
+    .sort({createdAt: 'desc'})
+    .exec();
     if (!annonceFound) {
       return res
         .status(404)
@@ -46,6 +64,7 @@ const getAnnonceById = async (req, res) => {
 const createAnnonce = async (req, res) => {
   try {
     const {
+      idProfil,
       statut,
       idProfilDist,
       description,
@@ -55,7 +74,7 @@ const createAnnonce = async (req, res) => {
       prix,
     } = req.body;
     if (
-      !idProfilDist ||
+      !idProfil ||
       !statut ||
       !description ||
       !objets ||
@@ -67,23 +86,31 @@ const createAnnonce = async (req, res) => {
         message: `All fields are required ${idProfilDist} \n ${statut} \n ${description} \n ${pointExp} \n ${pointDist}\n ${objets} \n ${prix} `,
       });
     }
+    let profilDistFound =null;
+    if(idProfilDist){
+         profilDistFound = await Profil.findById(idProfilDist).exec() ;
+         if (!profilDistFound ) {
+          return res
+            .status(404)
+            .json({ success: false, message: "profils  not found" });
+        }
+    }
+    
+    const profilFound = await Profil.findById(idProfil).exec();
 
-    const profilDistFound = await Profil.findById(idProfilDist).exec();
-
-    if (!profilDistFound) {
+    if ( !profilFound) {
       return res
         .status(404)
-        .json({ success: false, message: "profils or trajectory  not found" });
+        .json({ success: false, message: "profils  not found" });
     }
 
     /*    end block verification  */
 
     /* cette block pour cree la list des objets qui reçu  */
 
-    const { success,message,dataObjet } = await createAllObject(objets);
-    console.log(message ,dataObjet ,success);
+    const { success, message, dataObjet } = await createAllObject(objets);
+    console.log(message, dataObjet, success);
     /* end block cree des objets */
-   
 
     const annonce = new Annonce({
       statut: statut,
@@ -94,12 +121,12 @@ const createAnnonce = async (req, res) => {
         pointExp: pointExp,
         pointDist: pointDist,
       },
-      idProfilDist: idProfilDist,
+      idProfilDist:idProfilDist ||null,
       prix: prix,
     });
 
     const savedAnnonce = await annonce.save();
-
+    profilFound.insertAnnonce(annonce._id);
     return res.status(201).json({
       success: true,
       data: {

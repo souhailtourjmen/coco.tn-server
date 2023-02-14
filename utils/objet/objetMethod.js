@@ -10,7 +10,7 @@ const createObjet = async (objet) => {
         }
          /* block  create list  images  */
          
-        const { dataImages } = await createAllImage(images);
+        const { dataImages } = images? await createAllImage(images) : null ;
         /* end block list images */
         const newobjet = new Objet({
         nom: nom,
