@@ -25,12 +25,12 @@ Notifications : Il permet aux utilisateurs de recevoir des notifications lorsqu'
 ## Environment variables
 
 PORT=
-url_dev
-url_staging
-url_prod
-DATABASE_URI
-JWT_SECRET
-JWT_EXPIRE
+- url_dev
+- url_staging
+- url_prod
+- DATABASE_URI
+- JWT_SECRET
+- JWT_EXPIRE
 
 
 ## Backend
