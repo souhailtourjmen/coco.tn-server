@@ -135,6 +135,15 @@ profilSchema.methods.insertColis = async function (idColis) {
     return error 
   }
 };
+profilSchema.methods.removeColis = async function (idColis) {
+  // methode supprimer un colis
+  try {
+    this.listColis.remove(idColis);
+    return await this.save();
+  } catch (error) {
+    return error 
+  }
+};
 profilSchema.methods.insertAnnonce = async function (idAnnonce) {
   // methode ajoute nouveau annonce pour permettre le user sauvgarder un annonce pour retulise comme template
   try {

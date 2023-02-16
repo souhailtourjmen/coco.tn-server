@@ -6,16 +6,6 @@ const colisSchema = mongoose.Schema(
       required: true,
       ref: "Annonce",
     },
-    idExpediteur: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Profil",
-    },
-    idDistinataire: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Profil",
-    },
     proposition_Accept: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

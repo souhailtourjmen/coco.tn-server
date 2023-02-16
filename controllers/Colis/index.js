@@ -3,7 +3,7 @@ const {
   getAllColisById,
   createColis,
   updateStatutColis,
-  deleteUserByID,
+
 } = require("./ColisController");
 const {
   getAllReview,
@@ -18,7 +18,7 @@ module.exports = {
   getAllColisById,
   createColis,
   updateStatutColis,
-  deleteUserByID,
+
   /* controller review */
   getAllReview,
   getReviewById,

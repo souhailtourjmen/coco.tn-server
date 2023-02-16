@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const annonceSchema = mongoose.Schema(
   {
-    statut: {
-      type: String,
-      required: [true, "Please enter the statut"],
-      trim: true,
-      default: "exp",
-    },
+    profilexp: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Profil",
+      },
+      profilDest: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Profil",
+      },
     description: {
       type: String,
       required: [true, "Please enter the caption"],
@@ -41,13 +43,9 @@ const annonceSchema = mongoose.Schema(
         trim: true,
       },
     },
+
+   
     
-
-    idProfilDist: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Profil",
-    },
-
     listPropositions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Proposition" },
     ],
@@ -73,14 +71,14 @@ const annonceSchema = mongoose.Schema(
 annonceSchema.methods.insertPropositions = async function (idProposition) {
   // methode ajoute nouveau proposition
   try {
-    if (this. listPropositions.indexOf(idProposition) === -1) {
+    if (this.listPropositions.indexOf(idProposition) === -1) {
       this.listPropositions.push(idProposition);
-      this.propositionCount=this.listPropositions.length;
+      this.propositionCount = this.listPropositions.length;
     }
-    
+
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
 

@@ -2,7 +2,7 @@ const {
   getAllAnnonces,
   createAnnonce,
   getAnnonceById,
-  insertPropositionInAnnonceByID,
+
 } = require("./annonceController");
 const {
   getAllImages,
@@ -27,7 +27,7 @@ module.exports = {
   getAllAnnonces,
   createAnnonce,
   getAnnonceById,
-  insertPropositionInAnnonceByID,
+
   /* end controller annonce */
   /* controller image */
   getAllImages,
