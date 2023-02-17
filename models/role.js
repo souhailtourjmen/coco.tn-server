@@ -5,7 +5,7 @@ const roleSchema = mongoose.Schema(
   {
     role: {
       type: String,
-      enum: ['transporteur','annonceur','visteur','admin'],
+      enum: ['Transporter','annonceur','visteur','admin'],
       default: 'annonceur'
     },
   },

@@ -28,7 +28,7 @@ const getAllColisByUser = async (req, res) => {
   }
 };
 const getAllColisById = async (req, res) => {
-  const { idColis } = req.body.idProfil;
+  const { idColis } = req.body.idColis;
 
   try {
     if (!idColis) {
@@ -62,8 +62,7 @@ const createColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "annonce not found" });
     }
-  
-   
+
     const propositionFound = await Proposition.findById(idProposition);
     if (!propositionFound) {
       //  check id propositions
@@ -90,7 +89,7 @@ const createColis = async (req, res) => {
     /* creation nouveau colis  */
     const colis = new Colis({
       idAnnonce: annonceFound._id,
-      idProposition: idProposition,
+      proposition_Accept: idProposition,
       statut: statutColisDefault.map((item) => item._id),
     });
     const savedColis = await colis.save();
@@ -109,7 +108,15 @@ const createColis = async (req, res) => {
     });
   }
 };
-
+/*
+ ***les statut disponibles ***
+ * enregistré
+ * en transit
+ * recupérer
+ * non livré
+ * livré
+ * retour'
+ */
 const updateStatutColis = async (req, res) => {
   const { statut, idColis } = req.body;
 
@@ -120,10 +127,10 @@ const updateStatutColis = async (req, res) => {
       //check all fields
       return res.status(404).json({ message: "All fields are required" });
     }
-    const statutColis = await StatutColis.find({
+    const newStatuts = await StatutColis.find({
       statut: { $in: statut },
     });
-    if (!statutColis)
+    if (!newStatuts)
       return res
         .status(404)
         .json({ success: false, message: "not statut provided" });
@@ -135,12 +142,28 @@ const updateStatutColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "colis not found" });
 
+  /* check duplcate colis */
+  let x;
+  newStatuts.map((item)=>x=item._id );
+  let check ;
+  colisFound.statut.map((item)=>{check=item._id.equals(x)})
+    if(check)
+       return res
+        .status(404)
+        .json({
+          success: false,
+          message: "statut exist", 
+
+        });
+    /* end dplicate  */
     const colis = await Colis.findByIdAndUpdate(
       colisFound._id,
-      { $set: { statut: statutColis._id } },
+      { $push: { statut: { $each: newStatuts } } },
       { new: true }
     );
-    return res.status(200).json({ success: true, data: colis });
+    return res
+      .status(200)
+      .json({ success: true, data: colis, statut: newStatuts });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error });
@@ -166,13 +189,11 @@ const deleteColisByID = async (req, res) => {
       _id: colisFound._id,
     });
 
-    return res
-      .status(200)
-      .json({
-        successful: true,
-        data: colisdeleted,
-        message: `colis delete successfully`,
-      });
+    return res.status(200).json({
+      successful: true,
+      data: colisdeleted,
+      message: `colis delete successfully`,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -186,5 +207,4 @@ module.exports = {
   getAllColisById,
   createColis,
   updateStatutColis,
-
 };

@@ -33,6 +33,13 @@ router.get("/getAllColisById/", getAllColisById);
  * @param statut, idColis
  * @return {Object}
  * @response colis
+ * *** les statut disponibles *** 
+  * enregistré 
+  * en transit
+  * recupérer
+  * non livré
+  * livré
+  * retour'
  */
 router.put("/updateStatutColis/",updateStatutColis);
 

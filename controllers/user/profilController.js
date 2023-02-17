@@ -1,5 +1,5 @@
 const Profil = require("../../models/profil");
-const { User, Transporteur } = require("../../models/user");
+const { User, Transporter } = require("../../models/user");
 const Role = require("../../models/role");
 const Review = require("../../models/review");
 const Colis = require("../../models/colis");
@@ -17,13 +17,12 @@ const getAllProfils = async (req, res) => {
 };
 const getProfilByID = async (req, res) => {
   try {
-    if (!req.body.idProfil) {
+    const idProfil=req.auth.idProfil;
+    if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const profilFound = await Profil.findOne({
-      user: req.body.idProfil,
-    }).populate("user");
+    const profilFound = await Profil.findById(idProfil).populate("user");
     if (!profilFound) {
       return res
         .status(404)
@@ -38,13 +37,12 @@ const getProfilByID = async (req, res) => {
 // return list review  search by id profl
 const getProfilListReviewByID = async (req, res) => {
   try {
-    if (!req.body.idProfil) {
+    const idProfil=req.auth.idProfil;
+    if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const profilFound = await Profil.findOne({
-      user: req.body.idProfil,
-    }).populate("listReview");
+    const profilFound = await Profil.findById(idProfil).populate("listReview");
     if (!profilFound) {
       return res
         .status(404)
@@ -59,13 +57,11 @@ const getProfilListReviewByID = async (req, res) => {
 //return list colis  search by id profl
 const getProfilListColisByID = async (req, res) => {
   try {
-    if (!req.body.idProfil) {
+    const idProfil=req.auth.idProfil;
+    if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
-
-    const profilFound = await Profil.findOne({
-      user: req.body.idProfil,
-    }).populate("listColis");
+    const profilFound = await Profil.findById(idProfil).populate("listColis");
     if (!profilFound) {
       return res
         .status(404)
@@ -80,13 +76,13 @@ const getProfilListColisByID = async (req, res) => {
 //return list annonce  search by id profl
 const getProfilListAnnonceByID = async (req, res) => {
   try {
-    if (!req.body.idProfil) {
+    const idProfil=req.auth.idProfil;
+    if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const profilFound = await Profil.findOne({
-      user: req.body.idProfil,
-    }).populate("listAnnonce");
+
+    const profilFound = await Profil.findById(idProfil).populate("listAnnonce");
     if (!profilFound) {
       return res
         .status(404)

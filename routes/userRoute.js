@@ -1,12 +1,12 @@
 const express = require('express');
 const router =express.Router();
-const {getAllUsers ,getUserByEmail,updateUserRoleByEmail,updateUserInfoByEmail,deleteUserByEmail}= require('../controllers/user/index');
+const {getAllUsers ,getUserById,updateUserRoleById,updateUserInfoById,deleteUserById}= require('../controllers/user/index');
 
 
-router.get("/getUserByEmail/", getUserByEmail);
+router.get("/getUserByEmail/", getUserById);
 router.get("/getAllUsers/", getAllUsers);
-router.put("/updateUserInfoByEmail/", updateUserInfoByEmail);
-router.put("/updateUserRoleByEmail/", updateUserRoleByEmail);
-router.delete("/deleteUserByEmail/", deleteUserByEmail);
+router.put("/updateUserInfoByEmail/", updateUserInfoById);
+router.put("/updateUserRoleByEmail/", updateUserRoleById);
+router.delete("/deleteUserByEmail/", deleteUserById);
 
 module.exports =router;

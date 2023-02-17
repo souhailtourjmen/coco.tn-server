@@ -1,7 +1,7 @@
-const {User,Transporteur} = require("../../models/user");
+const { User, Transporter } = require("../../models/user");
 const Role = require("../../models/role");
 const Image = require("../../models/image");
-
+const Profil = require("../../models/profil");
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().populate("roles");
@@ -12,12 +12,20 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const getUserByEmail = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
-    const user = await User.findOne({email: req.body.email}).populate(
-      "roles"
-    );
-        
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+    const profilFound = await Profil.findById(idProfil);
+    if (!profilFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "profil not found" });
+    }
+    const user = await User.findById(profilFound.user).populate("roles");
+
     return res.status(200).json({ successful: true, data: user });
   } catch (error) {
     console.log(error);
@@ -25,19 +33,29 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-
-
-const updateUserRoleByEmail = async (req, res) => {  //cette methode qu'il fait le mise a jour le role de module user si le role est transporteur donc on le update et crée new transporteur 
-  const { role ,email,cartegris} = req.body;
+const updateUserRoleById = async (req, res) => {
+  //cette methode qu'il fait le mise a jour le role de module user si le role est Transporter donc on le update et crée new Transporter
 
   try {
-    let roleFound = await Role.findOne({ role: role });
+    const idProfil = req.auth.idProfil;
+    const { role, cardGris } = req.body;
+
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+    const profilFound = await Profil.findById(idProfil);
+    if (!profilFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "profil not found" });
+    }
+    const roleFound = await Role.findOne({ role: role });
     if (!roleFound)
       return res
         .status(404)
         .json({ success: false, message: "not role provided" });
 
-    let userFound = await User.findOne({"email": email});
+    const userFound = await User.findById(profilFound.user);
 
     if (!userFound)
       return res
@@ -49,27 +67,48 @@ const updateUserRoleByEmail = async (req, res) => {  //cette methode qu'il fait 
       { $set: { roles: roleFound._id } },
       { new: true }
     );
-   
-    if(role==="transporteur"){   // cree new transporteur car on a changer son role pour ça on ajoute cette block
-      const transporteur = new Transporteur(user);   
-      transporteur.idcartegris=cartegris;
-      const insertTransporteur = await transporteur.save();
-      return res.status(200).json({ success: true, data: insertTransporteur });
-    }/*else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role transporteur 
+
+    if (role === "Transporter") {
+      // cree new Transporter car on a changer son role pour ça on ajoute cette block
+      const Transporter = new Transporter(user);
+      Transporter.idCardGris = cardGris;
+      const insertTransporter = await Transporter.save();
+      return res.status(200).json({ success: true, data: insertTransporter });
+    } /*else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter 
       const updatedUser = await user.save();
       return res.status(200).json({ success: true, data: updatedUser }); 
-    }*/ 
+    }*/
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error });
   }
 };
-const updateUserInfoByEmail = async (req, res) => {
-  const { password, newPassword,  cin, nom, prenom, addresses, tel, gender, email,role,cartegris } = req.body;
-  console.log(req.body);
-
+const updateUserInfoById = async (req, res) => {
   try {
-    let userFound = await User.findOne({"email":email});
+    const {
+      password,
+      newPassword,
+      cin,
+      lastName,
+      firstName,
+      adresses,
+      phone,
+      gender,
+      email,
+      role,
+      CardGris,
+    } = req.body;
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+    const profilFound = await Profil.findById(idProfil);
+    if (!profilFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "profil not found" });
+    }
+    let userFound = await User.findById(profilFound.user);
 
     if (!userFound)
       return res
@@ -79,7 +118,7 @@ const updateUserInfoByEmail = async (req, res) => {
     let encodedPassword;
 
     if (newPassword && password) {
-      const matchPassword = await userFound.comparePassword( password );
+      const matchPassword = await userFound.comparePassword(password);
 
       if (!matchPassword)
         return res.status(401).json({
@@ -88,22 +127,21 @@ const updateUserInfoByEmail = async (req, res) => {
         });
 
       encodedPassword = await userFound.encryptPassword(newPassword);
-    } 
-  
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userFound.id,
       {
         cin: cin || userFound.cin,
-        nom: nom || userFound.nom,
-        prenom: prenom || userFound.prenom,
-        addresses: addresses || userFound.addresses,
+        lastName: lastName || userFound.lastName ,
+        firstName: firstName || userFound.firstName,
+        adresses: adresses || userFound.adresses,
         password: encodedPassword || userFound.password,
         email: email || userFound.email,
         roles: role || userFound.roles,
-        tel: tel || userFound.tel,
+        phone: phone || userFound.phone,
         gender: gender || userFound.gender,
-        cartegris:cartegris || userFound.cartegris,
-        tokens:await userFound.getToken()
+        idCardGris: CardGris || userFound.idCardGris,
       },
       {
         new: true,
@@ -122,24 +160,40 @@ const updateUserInfoByEmail = async (req, res) => {
       .json({ success: false, message: "server side error" });
   }
 };
-const deleteUserByEmail = async (req, res) => {
+const deleteUserById = async (req, res) => {
   try {
-    
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+    const profilFound = await Profil.findById(idProfil);
+    if (!profilFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "profil not found" });
+    }
     const user = await User.deleteOne({
-      _id: req.body.idUser
+      _id: profilFound.user,
     });
-
-    return res.status(200).json({ successful: true, data: user , message: `User delete successfully`, });
+    const profil = await Profil.deleteOne({
+      _id: profilFound._id,
+    });
+    return res.status(200).json({
+      successful: true,
+      data: user,
+      message: `User delete successfully`,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ success: false,message: "server side error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "server side error" });
   }
 };
 module.exports = {
   getAllUsers,
-  getUserByEmail,
-
-  updateUserRoleByEmail,
-  updateUserInfoByEmail,
-  deleteUserByEmail,
+  getUserById,
+  updateUserRoleById,
+  updateUserInfoById,
+  deleteUserById,
 };

@@ -9,10 +9,10 @@ const {
 
 const {
   getAllUsers,
-  getUserByEmail,
-  updateUserRoleByEmail,
-  updateUserInfoByEmail,
-  deleteUserByEmail,
+  getUserById,
+  updateUserRoleById,
+  updateUserInfoById,
+  deleteUserById,
 } = require("./usersController");
 
 const { signUp, login } = require("./authController");
@@ -21,11 +21,10 @@ module.exports = {
     /* controller user */
 
   getAllUsers,
-  getUserByEmail,
-
-  updateUserRoleByEmail,
-  updateUserInfoByEmail,
-  deleteUserByEmail,
+  getUserById,
+  updateUserRoleById,
+  updateUserInfoById,
+  deleteUserById,
 
   /*end controller user */
 

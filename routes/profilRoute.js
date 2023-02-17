@@ -1,4 +1,6 @@
 const express = require("express");
+const { verifyToken } = require('../middleware/auth.Jwt');
+
 const router = express.Router();
 const {
   getAllProfils,
@@ -12,7 +14,7 @@ const {
  * @param idProfil
  * @return {Object}
  */
-router.get("/getProfilByID/", getProfilByID);
+router.get("/getProfilByID/",verifyToken, getProfilByID);
 /* Get method getAllProfil
  * @param null
  * @return Array[{Objet}]

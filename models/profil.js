@@ -33,45 +33,49 @@ const profilSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
-  listColis: [
+  listColisLiv: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Colis",
     },
   ],
-  colisCount: {
-    type: Number,
-    default: 0,
-  },
+  listColisDest: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Colis",
+    },
+  ],
+  listColisExp: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Colis",
+    },
+  ],
+
   listReview: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Annonce",
     },
   ],
-  reviewCount: {
-    type: Number,
-    default: 0,
-  },
+
   listChanel: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",
     },
   ],
-  channelCount: {
-    type: Number,
-    default: 0,
-  },
   createdAt: { type: Date, default: Date.now },
   expireAt: {
     type: Date,
     default: Date.now() + 24 * 60 * 60 * 1000,
   },
-  friendship: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Profil",
-  }],
+  friendship: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profil",
+    },
+  ],
   friendshipCount: { type: Number, default: 0 },
 });
 profilSchema.plugin(uniqueValidator);
@@ -95,53 +99,75 @@ profilSchema.methods.insertReview = async function (idReview) {
   try {
     if (this.listReview.indexOf(idReview) === -1) {
       this.listReview.push(idReview);
-      this.reviewCount=this.listReview.length;
+      this.reviewCount = this.listReview.length;
     }
-    
+
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
 
 profilSchema.methods.insertFreind = async function (idFriend) {
-  // methode ajoute nouveau amis 
+  // methode ajoute nouveau amis
   try {
     if (this.friendship.indexOf(idFriend) === -1) {
       this.friendship.push(idFriend);
     }
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
 profilSchema.methods.removeFreind = async function (idFriend) {
-  // methode supprimer un amis 
+  // methode supprimer un amis
   try {
     this.friendship.remove(idFriend);
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
-profilSchema.methods.insertColis = async function (idColis) {
-  // methode ajoute nouveau colis pour transporteur
+profilSchema.methods.insertColis = async function (idColis, statut) {
+  // methode ajoute nouveau colis pour Transporter
   try {
-    if (this.listColis.indexOf(idColis) === -1) {
-      this.listColis.push(idColis);
+    switch (statut) {
+      case "Liv":
+        if (this.listColisLiv.indexOf(idColis) === -1) {
+          this.listColisLiv.push(idColis);
+        }
+        return await this.save();
+      case "Exp":
+        if (this.listColisExp.indexOf(idColis) === -1) {
+          this.listColisExp.push(idColis);
+        }
+        return await this.save();
+      default:
+        if (this.listColisDest.indexOf(idColis) === -1) {
+          this.listColisDest.push(idColis);
+        }
+        return await this.save();
     }
-    return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
-profilSchema.methods.removeColis = async function (idColis) {
+profilSchema.methods.removeColis = async function (idColis, statut) {
   // methode supprimer un colis
   try {
-    this.listColis.remove(idColis);
-    return await this.save();
+    switch (statut) {
+      case "Liv":
+        this.listColisLiv.remove(idColis);
+        return await this.save();
+      case "Exp":
+        this.listColisExp.remove(idColis);
+        return await this.save();
+      default:
+        this.listColisDest.remove(idColis);
+        return await this.save();
+    }
   } catch (error) {
-    return error 
+    return error;
   }
 };
 profilSchema.methods.insertAnnonce = async function (idAnnonce) {
@@ -152,7 +178,7 @@ profilSchema.methods.insertAnnonce = async function (idAnnonce) {
     }
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
 profilSchema.methods.removeAnnonce = async function (idAnnonce) {
@@ -161,7 +187,7 @@ profilSchema.methods.removeAnnonce = async function (idAnnonce) {
     this.listAnnonce.remove(idAnnonce);
     return await this.save();
   } catch (error) {
-    return error 
+    return error;
   }
 };
 module.exports = mongoose.model("Profil", profilSchema);

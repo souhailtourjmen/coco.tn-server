@@ -2,22 +2,22 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const transporteurSchema = require("./transporteur");
+const TransporterSchema = require("./Transporter");
 const userSchema = mongoose.Schema(
   {
     cin: {
       type: String,
       required: true,
     },
-    nom: {
+    lastName: {
       type: String,
       required: true,
     },
-    prenom: {
+    firstName: {
       type: String,
       required: true,
     },
-    addresses: [
+    adresses: [
         {
         address: {
           type: String,
@@ -27,13 +27,13 @@ const userSchema = mongoose.Schema(
           type: String,
           maxlength: 255,
         },
-        code_postal: {
+       zipCode: {
           type: String,
           maxlength: 4,
         },
       },
     ],
-    tel: {
+    phone: {
       type: String,
       maxlength: 13,
       required: true,
@@ -63,11 +63,11 @@ const userSchema = mongoose.Schema(
         type: Boolean,
         default: false,
       },
-      tel: {
+      phone: {
         type: Boolean,
         default: false,
       },
-      cartegris: {
+      cardGris: {
         type: Boolean,
         default: false,
       },
@@ -95,13 +95,13 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-/* cette code pour faire extend model transporteur par model user 
+/* cette code pour faire extend model Transporter par model user 
 et je utilise cette façon le cas j'ajout un autre acteur
  comme en future ajoute option à l'annonceur   */
 
 const User = mongoose.model("User", userSchema); 
-const Transporteur = User.discriminator("Transporteur",transporteurSchema);
+const Transporter = User.discriminator("Transporter",TransporterSchema);
 module.exports = {
   User,
-  Transporteur,
+  Transporter,
 };

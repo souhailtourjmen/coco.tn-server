@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const objetSchema = mongoose.Schema(
   {
-    nom: {
+    name: {
         type: String,
         maxlength: 54,
       },

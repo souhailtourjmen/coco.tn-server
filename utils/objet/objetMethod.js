@@ -3,9 +3,9 @@ const { createAllImage} = require("../image/imageMethodes");
 const createObjet = async (objet) => {
     return new Promise(async(resolve, reject) => {
     try {
-        const { nom, taile, langeur, hauteur, poids ,images } = objet;
+        const { name, taile, langeur, hauteur, poids ,images } = objet;
 
-        if (!nom || !taile || !langeur || !hauteur || !poids ) {
+        if (!name || !taile || !langeur || !hauteur || !poids ) {
         return reject({ success: false, message: "All fields are required" });
         }
          /* block  create list  images  */
@@ -13,7 +13,7 @@ const createObjet = async (objet) => {
         const { dataImages } = images? await createAllImage(images) : null ;
         /* end block list images */
         const newobjet = new Objet({
-        nom: nom,
+       name:name,
         taile: taile,
         langeur: langeur,
         hauteur: hauteur,
