@@ -7,7 +7,7 @@ const verifyToken = async (req, res, next) => {
 
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
+      req.headers?.authorization?.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
     }
@@ -23,7 +23,7 @@ const verifyToken = async (req, res, next) => {
 
     const profilFound = await Profil.findById(req.auth.idProfil , { password: 0 });
 
-    if (!profilFound ) return res.status(404).json({ message: "No user found lehna" });
+    if (!profilFound ) return res.status(404).json({ message: "No user found " });
 
     next();
   } catch (err) {
