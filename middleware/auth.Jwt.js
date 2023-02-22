@@ -19,7 +19,6 @@ const verifyToken = async (req, res, next) => {
     req.auth = {
         idProfil:decoded.id
     }
-    console.log(req.auth)
 
     const profilFound = await Profil.findById(req.auth.idProfil , { password: 0 });
 

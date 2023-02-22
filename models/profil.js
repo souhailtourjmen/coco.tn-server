@@ -66,10 +66,7 @@ const profilSchema = mongoose.Schema({
     },
   ],
   createdAt: { type: Date, default: Date.now },
-  expireAt: {
-    type: Date,
-    default: Date.now() + 24 * 60 * 60 * 1000,
-  },
+ 
   friendship: [
     {
       type: mongoose.Schema.Types.ObjectId,

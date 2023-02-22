@@ -4,7 +4,6 @@ const User = require("../../models/user");
 const checkLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     if (!email || !password) {
       return res.status(404).json({ message: "All fields are required" });
     }
