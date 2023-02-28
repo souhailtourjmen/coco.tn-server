@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {
-    getAllPropositionbyIdProfil,
-    getPropositionById,
-    createProposition,
-    deletePropositionById
+    getAllProposalbyIdProfil,
+    getProposalById,
+    createProposal,
+    deleteProposalById
 } = require("../controllers/annonce/index");
-
-/* Post method createProposition
+const {verifyToken} =require('../middleware/auth.Jwt')
+/* Post method createProposal
 * @param  
     idProfil 
     idAnnonce 
@@ -18,20 +18,20 @@ const {
 * @return {Object}
 * @response data proposition
 */
-router.post("/createProposition/", createProposition);
+router.post("/createProposal/",verifyToken, createProposal);
 
-/* Get method getAllPropositionbyIdProfil
+/* Get method getAllProposalbyIdProfil
  * @param ,
  * @return {Object}
  * @response AllProposition
  */
-router.get("/getAllPropositionbyIdProfil/", getAllPropositionbyIdProfil);
+router.get("/getAllProposalbyIdProfil/", getAllProposalbyIdProfil);
 
 /* Get method getPropositionById
  * @param idProposition ,
  * @return {Object}
  * @response Proposition
  */
-router.get("/getPropositionById/", getPropositionById);
+router.get("/getProposalById/", getProposalById);
 
 module.exports = router;

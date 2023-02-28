@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const propositionSchema = mongoose.Schema({
+const proposalSchema = mongoose.Schema({
     profil: {
         type:  mongoose.Schema.Types.ObjectId,
         ref: "Profil",
@@ -11,7 +11,7 @@ const propositionSchema = mongoose.Schema({
         required: [true, "Please enter the propostion"],
         trim: true,
       },
-      prix: {
+      price: {
         type: Number,
         required: [true, "Please enter the price"],
       },
@@ -28,4 +28,4 @@ const propositionSchema = mongoose.Schema({
 
 
 
-module.exports = mongoose.model('Proposition', propositionSchema);
+module.exports = mongoose.model('Proposal', proposalSchema);

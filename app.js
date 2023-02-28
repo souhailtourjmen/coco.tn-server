@@ -5,7 +5,7 @@ const userRoute = require("./routes/userRoute");
 const profilRoute = require("./routes/profilRoute");
 const authRoute = require("./routes/auth");
 const annonceRoute = require("./routes/annonceRoute");
-const propositionRouter = require("./routes/propositionRouter");
+const proposalRouter = require("./routes/proposalRouter");
 const colisRouter = require("./routes/colisRouter");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
@@ -35,7 +35,7 @@ app.use("/api/auth", authRoute);
 app.use("/api", userRoute);
 app.use("/api", profilRoute);
 app.use("/api/annonce", annonceRoute);
-app.use("/api/proposition", propositionRouter);
+app.use("/api/proposal", proposalRouter);
 app.use("/api/colis", colisRouter);
 
 module.exports = app;

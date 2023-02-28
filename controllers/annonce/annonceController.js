@@ -1,7 +1,7 @@
 const Annonce = require("../../models/annonce");
 const Content = require("../../models/content");
 const Profil = require("../../models/profil");
-const Proposition = require("../../models/proposition");
+const Proposal= require("../../models/proposal");
 const Image = require("../../models/image");
 const {
   createAllContent,

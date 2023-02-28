@@ -1,6 +1,6 @@
 const Colis = require("../../models/colis");
 const Profil = require("../../models/profil");
-const Proposition = require("../../models/proposition");
+const Proposal = require("../../models/proposal");
 const StatutColis = require("../../models/statutColis");
 const Annonce = require("../../models/annonce");
 
@@ -48,10 +48,10 @@ const getAllColisById = async (req, res) => {
 };
 const createColis = async (req, res) => {
   try {
-    const { idAnnonce, idProposition } = req.body;
+    const { idAnnonce, idProposal } = req.body;
     /* block check id  */
 
-    if (!idAnnonce || !idProposition) {
+    if (!idAnnonce || !idProposal) {
       //check all fields
       return res.status(404).json({ message: "All fields are required" });
     }
@@ -63,12 +63,12 @@ const createColis = async (req, res) => {
         .json({ success: false, message: "annonce not found" });
     }
 
-    const propositionFound = await Proposition.findById(idProposition);
-    if (!propositionFound) {
-      //  check id propositions
+    const proposalFound = await Proposal.findById(idProposal);
+    if (!proposalFound) {
+      //  check id proposals
       return res
         .status(404)
-        .json({ success: false, message: "proposition not found" });
+        .json({ success: false, message: "proposal not found" });
     }
 
     /* end check id */
@@ -89,7 +89,7 @@ const createColis = async (req, res) => {
     /* creation nouveau colis  */
     const colis = new Colis({
       idAnnonce: annonceFound._id,
-      proposition_Accept: idProposition,
+      proposal_Accept: idProposal,
       statut: statutColisDefault.map((item) => item._id),
     });
     const savedColis = await colis.save();
@@ -177,7 +177,7 @@ const deleteColisByID = async (req, res) => {
       return res.status(404).json({ message: "All fields are required" });
     }
     const colisFound = await Colis.findById(idColis).populate({
-      path: "proposition_Accept",
+      path: "proposal_Accept",
     });
 
     if (!colisFound)

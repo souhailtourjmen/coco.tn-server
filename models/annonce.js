@@ -42,13 +42,9 @@ const annonceSchema = mongoose.Schema(
 
    
     
-    listPropositions: [
+    listProposal: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Proposition" },
     ],
-    propositionCount: {
-      type: Number,
-      default: 0,
-    },
     price: {
       type: Number,
       default: 0,
@@ -64,11 +60,11 @@ const annonceSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
-annonceSchema.methods.insertPropositions = async function (idProposition) {
-  // methode ajoute nouveau proposition
+annonceSchema.methods.insertProposal = async function (idProposal) {
+  // methode ajoute nouveau proposal
   try {
-    if (this.listPropositions.indexOf(idProposition) === -1) {
-      this.listPropositions.push(idProposition);
+    if (this.listProposal.indexOf(idProposal) === -1) {
+      this.listProposal.push(idProposal);
     
     }
 
