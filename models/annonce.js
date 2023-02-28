@@ -14,17 +14,13 @@ const annonceSchema = mongoose.Schema(
       required: [true, "Please enter the caption"],
       trim: true,
     },
-    objets: [
+    contents: [
       {
         type: mongoose.Schema.Types.ObjectId,
         required: [true, "Please enter the Objet "],
-        ref: "Objet",
+        ref: "Content",
       },
     ],
-    objetCount: {
-      type: Number,
-      default: 1,
-    },
     dateExp: {
       type: Date,
     },
@@ -53,7 +49,7 @@ const annonceSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    prix: {
+    price: {
       type: Number,
       default: 0,
     },
@@ -73,7 +69,7 @@ annonceSchema.methods.insertPropositions = async function (idProposition) {
   try {
     if (this.listPropositions.indexOf(idProposition) === -1) {
       this.listPropositions.push(idProposition);
-      this.propositionCount = this.listPropositions.length;
+    
     }
 
     return await this.save();

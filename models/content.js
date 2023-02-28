@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
-const objetSchema = mongoose.Schema(
+const contentSchema = mongoose.Schema(
   {
     name: {
         type: String,
         maxlength: 54,
       },
-      taile: {
+      size: {
         type: String,
         maxlength: 16,
       },
-      langeur: {
+      blender: {
         type: String,
         maxlength: 16,
       },
-      hauteur: {
+      height: {
         type: String,
         maxlength: 16,
       },
-      poids: {
+      weight: {
         type: String,
         maxlength: 16,
       },
@@ -26,4 +26,4 @@ const objetSchema = mongoose.Schema(
   },
  
 );
-module.exports = mongoose.model("Objet", objetSchema);
+module.exports = mongoose.model("Content", contentSchema);

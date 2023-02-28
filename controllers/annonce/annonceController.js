@@ -1,19 +1,19 @@
 const Annonce = require("../../models/annonce");
-const Objet = require("../../models/objet");
+const Content = require("../../models/content");
 const Profil = require("../../models/profil");
 const Proposition = require("../../models/proposition");
 const Image = require("../../models/image");
 const {
-  createAllObject,
-  deleteObjetByArray,
-} = require("../../utils/objet/objetMethod");
+  createAllContent,
+  deleteContentByArray,
+} = require("../../utils/content/contentMethod");
 
 const getAllAnnonces = async (req, res) => {
   try {
     const limit = 10;
     const annonce = await Annonce.find()
       .populate({
-        path: "objets",
+        path: "contents",
         populate: {
           path: "images",
         },
@@ -28,7 +28,7 @@ const getAllAnnonces = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-/* cette methode retourne objet par id avec remplissage les champs profil objets pointTrajets et poropositions  */
+/* cette methode retourne content par id avec remplissage les champs profil contents pointTrajets et poropositions  */
 
 const getAnnonceById = async (req, res) => {
   try {
@@ -38,7 +38,7 @@ const getAnnonceById = async (req, res) => {
 
     const annonceFound = await Annonce.findById(req.body.idAnnonce);
     populate({
-      path: "objets",
+      path: "contents",
       populate: {
         path: "images",
       },
@@ -66,7 +66,7 @@ const createAnnonce = async (req, res) => {
       statut,
       secondidProfil,
       description,
-      objets,
+      contents,
       pointExp,
       pointDist,
       prix,
@@ -78,13 +78,13 @@ const createAnnonce = async (req, res) => {
       !statut ||
       !secondidProfil ||
       !description ||
-      !objets ||
+      !contents ||
       !pointExp ||
       !pointDist ||
       !prix
     ) {
       return res.status(404).json({
-        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statut} \n ${description} \n ${pointExp} \n ${pointDist}\n ${objets} \n ${prix} `,
+        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statut} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${prix} `,
       });
     }
     const secondProfilFound = await Profil.findById(secondidProfil).exec();
@@ -98,11 +98,10 @@ const createAnnonce = async (req, res) => {
 
     /*    end block verification  */
 
-    /* cette block pour cree la list des objets qui reçu  */
-
-    const { success, message, dataObjet } = await createAllObject(objets);
-    console.log(message, dataObjet, success);
-    /* end block cree des objets */
+    /* cette block pour cree la list des contents qui reçu  */
+    const { success, message, dataContent } = await createAllContent(contents);
+    console.log(message, dataContent, success);
+    /* end block cree des contents */
 
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
 
@@ -110,8 +109,7 @@ const createAnnonce = async (req, res) => {
       profilexp: statut === "exp" ? profilFound._id : secondProfilFound.id, // si le statut equals "exp" donc qu'il ecrire l'annonce c'est l'expediteur si non destinataire
       profilDest: statut === "exp" ? secondProfilFound.id : profilFound._id, // si le statut different a mot "exp" donc qu'il ecrire l'annonce c'est l'destinataire
       description: description,
-      objets: dataObjet.map((objet) => objet._id) || null,
-      objetCount: dataObjet.length || 0,
+      contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
         pointExp: pointExp,
         pointDist: pointDist,

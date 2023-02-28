@@ -90,6 +90,13 @@ profilSchema.methods.getToken = function () {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
+profilSchema.methods.refreshToken =async function () {
+  this.tokens = {
+    token: await this.getToken(),
+    expireAt: Date.now() + 24 * 60 * 60 * 5000,
+  };
+  return await this.save();
+};
 
 profilSchema.methods.insertReview = async function (idReview) {
   // methode ajoute nouveau review

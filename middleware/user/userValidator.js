@@ -16,7 +16,7 @@ const checkIsValidUser = (req, res, next) => {
     !cin ||
     !lastName ||
     !firstName ||
-    !adresses ||
+
     !phone ||
     !gender ||
     !email ||

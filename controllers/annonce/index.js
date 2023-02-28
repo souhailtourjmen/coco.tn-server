@@ -17,10 +17,10 @@ const {
   deletePropositionById,
 } = require("./propositionController");
 const {
-  getAllObjets,
-  getObjetById,
-  deleteObjetById,
-} = require("./objetController");
+  getAllContents,
+  getContentById,
+  deleteContentById,
+} = require("./contentController");
 
 module.exports = {
   /* controller annonce  */
@@ -41,9 +41,9 @@ module.exports = {
   createProposition,
   deletePropositionById,
   /**  end controller proposition */
-  /* controller objet */
-  getAllObjets,
-  getObjetById,
-  deleteObjetById,
-  /* end controller objet */
+  /* controller Content */
+  getAllContents,
+  getContentById,
+  deleteContentById,
+  /* end controller Content */
 };

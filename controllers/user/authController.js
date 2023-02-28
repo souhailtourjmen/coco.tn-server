@@ -26,7 +26,7 @@ const signUp = async (req, res) => {
       cin: cin,
       lastName: lastName,
       firstName: firstName,
-      adresses: adresses,
+      adresses: adresses || [],
       phone: phone,
       gender: gender,
       email: email,
@@ -93,12 +93,15 @@ const login = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
+    profilFound.refreshToken();
+
     return res
       .status(200)
       .json({
         token: profilFound.tokens,
         roles: userFound.roles,
         profil: profilFound,
+        successful: true,
       });
   } catch (error) {
     console.log(error);

@@ -21,7 +21,7 @@ const verifyToken = async (req, res, next) => {
     }
 
     const profilFound = await Profil.findById(req.auth.idProfil , { password: 0 });
-
+    
     if (!profilFound ) return res.status(404).json({ message: "No user found " });
 
     next();

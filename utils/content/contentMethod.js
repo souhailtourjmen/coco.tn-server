@@ -1,29 +1,29 @@
-const Objet = require("../../models/objet");
+const Content = require("../../models/content");
 const { createAllImage} = require("../image/imageMethodes");
-const createObjet = async (objet) => {
+const createContent = async (content) => {
     return new Promise(async(resolve, reject) => {
     try {
-        const { name, taile, langeur, hauteur, poids ,images } = objet;
-
-        if (!name || !taile || !langeur || !hauteur || !poids ) {
-        return reject({ success: false, message: "All fields are required" });
+        const { name, size, blender, height, weight ,images } = content;
+       
+        if (!name || !size || !blender || !height || !weight ) {
+        return reject({ success: false, message: "content All fields are required" });
         }
          /* block  create list  images  */
          
         const { dataImages } = images? await createAllImage(images) : null ;
         /* end block list images */
-        const newobjet = new Objet({
+        const newcontent = new Content({
        name:name,
-        taile: taile,
-        langeur: langeur,
-        hauteur: hauteur,
-        poids: poids,
+        size: size,
+        blender: blender,
+        height: height,
+        weight: weight,
         images :dataImages.map((image) =>image._id) || null,
         });
 
-    const savedobjet = await newobjet.save();
+    const savedcontent = await newcontent.save();
 
-    return resolve(newobjet) ;
+    return resolve(newcontent) ;
 
   } catch (error) {
     console.log(error);
@@ -35,27 +35,29 @@ const createObjet = async (objet) => {
 });
 };
 
-const createAllObject =async(objets)=>{
+const createAllContent =async(contents)=>{
     try {
-    if (!objets) {
+    if (!contents) {
         return Promise.reject({
         success: false,
         message: 'All fields are required'
         });
     }   
-    const objetPromises =await objets.map(objet => createObjet(objet));
-    return Promise.all(objetPromises)
-    .then(createdObjets => {
+    const contentPromises =await contents.map(content => createContent(content));
+    return Promise.all(contentPromises)
+    .then(createdContents => {
+    
       return {
         success: true,
-        message: 'Objets created successfully',
-        dataObjet: createdObjets
+        message: 'Contents created successfully',
+        dataContent: createdContents
       };
     })
     .catch(error => {
+      console.log(error);
         return {
           success: false,
-          message: 'Objets created faild ',
+          message: 'Contents created faild ',
           error: error
         };
     });
@@ -67,20 +69,20 @@ const createAllObject =async(objets)=>{
         });
       }
 }
-const deleteObjetByArray = async (objets) => {
-  if (!objets) {
+const deleteContentByArray = async (contents) => {
+  if (!contents) {
     return { success: false, message: "All fields are required" };
   }
   return new Promise(async (resolve, reject) => {
     try {
-      const promisesDeleteObjet = await objets.forEach(async (objet) => {
-        await Objet.deleteOne({
-          _id: objet._id,
+      const promisesDeleteContent = await contents.forEach(async (content) => {
+        await Content.deleteOne({
+          _id: content._id,
         });
       });
       return resolve({ 
         success: true,
-         message: "objets delete successfully"
+         message: "Contents delete successfully"
          });
     } catch (error) {
       return reject({
@@ -92,7 +94,7 @@ const deleteObjetByArray = async (objets) => {
   });
 };
 module.exports = {
-    createObjet,
-    createAllObject,
-    deleteObjetByArray
+    createContent,
+    createAllContent,
+    deleteContentByArray
 };

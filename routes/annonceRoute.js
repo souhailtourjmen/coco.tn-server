@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {verifyToken} =require('../middleware/auth.Jwt')
 const {
   getAllAnnonces,
   createAnnonce,
@@ -28,13 +29,13 @@ router.post("/createAnnonce/", createAnnonce);
  * @return {Object}
  * @response AllAnnonces
  */
-router.get("/getAllAnnonces/", getAllAnnonces);
+router.get("/fetchAllAnnonces/",verifyToken, getAllAnnonces);
 
 /* Get method getAllAnnonces
  * @param idAnnonce ,
  * @return {Object}
  * @response Annonces
  */
-router.get("/getAnnonceById/", getAnnonceById);
+router.get("/fetchAnnonceById/", getAnnonceById);
 
 module.exports = router;
