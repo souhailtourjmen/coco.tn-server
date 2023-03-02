@@ -62,7 +62,7 @@ const createColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "annonce not found" });
     }
-
+    
     const proposalFound = await Proposal.findById(idProposal);
     if (!proposalFound) {
       //  check id proposals
@@ -92,6 +92,7 @@ const createColis = async (req, res) => {
       proposal_Accept: idProposal,
       statut: statutColisDefault.map((item) => item._id),
     });
+
     const savedColis = await colis.save();
 
     return res.status(201).json({
