@@ -43,7 +43,7 @@ const annonceSchema = mongoose.Schema(
    
     
     listProposal: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Proposition" },
+      { type: mongoose.Schema.Types.ObjectId, ref: "Proposal" },
     ],
     price: {
       type: Number,

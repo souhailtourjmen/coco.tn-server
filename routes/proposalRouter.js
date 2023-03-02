@@ -12,7 +12,7 @@ const {verifyToken} =require('../middleware/auth.Jwt')
     idProfil 
     idAnnonce 
     text
-    prix
+    price
     datePickup 
     PointPickup
 * @return {Object}

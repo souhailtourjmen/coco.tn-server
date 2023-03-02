@@ -40,8 +40,11 @@ const updateUserRoleById = async (req, res) => {
     const idProfil = req.auth.idProfil;
     const { role, cardGris } = req.body;
 
-    if (!idProfil) {
-      return res.status(404).json({ message: "All fields are required" });
+    if (!role) {
+      if(role ==="63d9" && !cardGris){
+        return res.status(404).json({ message: "cardGris  are required" });
+      }
+      return res.status(404).json({ message: "role are required" });
     }
     const profilFound = await Profil.findById(idProfil);
     if (!profilFound) {
@@ -49,35 +52,35 @@ const updateUserRoleById = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const roleFound = await Role.findOne({ role: role });
+    const roleFound = await Role.findOne({ code: role });
     if (!roleFound)
       return res
         .status(404)
         .json({ success: false, message: "not role provided" });
 
-    const userFound = await User.findById(profilFound.user);
+ 
 
-    if (!userFound)
+    const user = await User.findByIdAndUpdate(
+      profilFound.user,
+      { $set: { roles: roleFound._id } },
+      
+    );
+    if (!user)
       return res
         .status(404)
         .json({ success: false, message: "user not found" });
 
-    const user = await User.findByIdAndUpdate(
-      userFound._id,
-      { $set: { roles: roleFound._id } },
-      { new: true }
-    );
 
-    if (role === "Transporter") {
+    if (role === "63d9") {
       // cree new Transporter car on a changer son role pour ça on ajoute cette block
-      const Transporter = new Transporter(user);
-      Transporter.idCardGris = cardGris;
-      const insertTransporter = await Transporter.save();
+      const transporter = new Transporter(user);
+      transporter.idCardGris = cardGris;
+      const insertTransporter = await transporter.save();
       return res.status(200).json({ success: true, data: insertTransporter });
-    } /*else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter 
-      const updatedUser = await user.save();
-      return res.status(200).json({ success: true, data: updatedUser }); 
-    }*/
+    }else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter 
+     updatedUser = await user.save();
+    }
+    return res.status(200).json({ success: true, data: updatedUser }); 
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error });

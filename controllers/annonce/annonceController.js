@@ -18,7 +18,7 @@ const getAllAnnonces = async (req, res) => {
           path: "images",
         },
       })
-      .populate({ path: "listPropositions" })
+      .populate({ path: "listProposal" })
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();

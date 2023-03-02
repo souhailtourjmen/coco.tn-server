@@ -17,7 +17,7 @@ const signUp = async (req, res) => {
       cardGris,
     } = req.body;
 
-    const rolesFound = await Role.find({ role: { $in: role } });
+    const rolesFound = await Role.find({ code: { $in: role } });
     const userFound = await User.findOne({ email: email });
     if (userFound)
       return res.status(400).json({ message: "The email already exists" });
@@ -33,13 +33,13 @@ const signUp = async (req, res) => {
       password: password,
       roles: rolesFound.map((role) => role._id),
       verified: {
-        cardGris: role === "Transporter" ? true : false,
+        cardGris: role === "63d9" ? true : false,
       },
-      idCardGris: role === "Transporter" ? cardGris : null,
+      idCardGris: role === "63d9" ? cardGris : null,
     };
 
     const user =
-      role === "Transporter" ? new Transporter(usert) : new User(usert);
+      role === "63d9" ? new Transporter(usert) : new User(usert);
 
     const savedUser = await user.save();
 

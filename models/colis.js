@@ -8,10 +8,10 @@ const colisSchema = mongoose.Schema(
       ref: "Annonce",
       unique: true,
     },
-    proposition_Accept: {
+    proposal_Accept: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Proposition",
+      ref: "Proposal",
     },
     statut:[ {
       type: mongoose.Schema.Types.ObjectId,

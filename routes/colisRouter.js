@@ -34,7 +34,7 @@ router.get("/getAllColisById/", getAllColisById);
  * @return {Object}
  * @response colis
  * *** les statut disponibles *** 
-  * enregistré 
+  * enregistré  
   * en transit
   * recupérer
   * non livré
