@@ -19,13 +19,13 @@ const checkDuplicatedEmail = async (req, res, next) => {
 
 const checkRolesExisted =async (req, res, next) => {
   if (req.body.role) {
-    const rolesFound = await Role.find({ role: { $in: req.body.role} });
+    const rolesFound = await Role.find({ code: { $in: req.body.role} });
     if (!rolesFound) {
       return res
         .status(404)
         .json({ success: false, message: "role not found" });
     }
-    console.log('ana et3dite men ahna')
+   
 }
   next();
 };

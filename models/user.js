@@ -82,7 +82,7 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(uniqueValidator);
 
 userSchema.pre("save", async function (next) {
-  this.password = await this.encryptPassword (this.password);
+  this.password = await this.encryptPassword (this.password);  //🐞 bug  in update role user with this methode
   next();
 });
 
