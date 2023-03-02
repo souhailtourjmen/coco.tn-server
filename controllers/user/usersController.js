@@ -58,12 +58,9 @@ const updateUserRoleById = async (req, res) => {
         .status(404)
         .json({ success: false, message: "not role provided" });
 
- 
-
     const user = await User.findByIdAndUpdate(
       profilFound.user,
-      { $set: { roles: roleFound._id } },
-      
+      { $set: { roles: roleFound._id  }},
     );
     if (!user)
       return res
@@ -76,11 +73,16 @@ const updateUserRoleById = async (req, res) => {
       const transporter = new Transporter(user);
       transporter.idCardGris = cardGris;
       const insertTransporter = await transporter.save();
+      await User.findByIdAndUpdate(
+        insertTransporter._id,
+        { $set: { password:user.password  }},
+      );
+      console.log("New transporter",insertTransporter ,"passowrd" ,user.password ,"userUpdatePassword" ,userUpdatePassword);
       return res.status(200).json({ success: true, data: insertTransporter });
-    }else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter 
-     updatedUser = await user.save();
-    }
-    return res.status(200).json({ success: true, data: updatedUser }); 
+     }//else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter 
+    //  updatedUser = await user.save();
+    //  return res.status(200).json({ success: true, data: updatedUser }); 
+    // }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error });
