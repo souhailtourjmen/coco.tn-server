@@ -82,7 +82,8 @@ const getProfilListAnnonceByID = async (req, res) => {
     }
 
 
-    const profilFound = await Profil.findById(idProfil).populate("listAnnonce");
+    const profilFound = await Profil.findById(idProfil)
+    .populate("listAnnonce");
     if (!profilFound) {
       return res
         .status(404)

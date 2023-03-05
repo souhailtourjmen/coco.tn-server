@@ -41,6 +41,7 @@ const signUp = async (req, res) => {
     const user =
       role === "63d9" ? new Transporter(usert) : new User(usert);
 
+    
     const savedUser = await user.save();
 
     const profil = new Profil({
