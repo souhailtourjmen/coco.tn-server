@@ -22,7 +22,7 @@ const {
 * @return {Object}
 * @response data annonce
 */
-router.post("/createAnnonce/", createAnnonce);
+router.post("/createAnnonce/",verifyToken, createAnnonce);
 
 /* Get method getAllAnnonces
  * @param ,
@@ -36,6 +36,6 @@ router.get("/fetchAllAnnonces/",verifyToken, getAllAnnonces);
  * @return {Object}
  * @response Annonces
  */
-router.get("/fetchAnnonceById/", getAnnonceById);
+router.get("/fetchAnnonceById/",verifyToken, getAnnonceById);
 
 module.exports = router;

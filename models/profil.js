@@ -29,6 +29,12 @@ const profilSchema = mongoose.Schema({
       ref: "Annonce",
     },
   ],
+  listProposal: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Proposal",
+    },
+  ],
   listColisLiv: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -95,7 +101,24 @@ profilSchema.methods.refreshToken =async function () {
 profilSchema.methods.insertReview = async function (idReview) {
   // methode ajoute nouveau review
   try {
-    this.listReview=insertItemInList(this.listReview, idReview);
+    if (this.listReview.indexOf(idReview) === -1) {
+      this.listReview.push(idReview);
+    
+    }
+
+    return await this.save();
+  } catch (error) {
+    return error;
+  }
+};
+profilSchema.methods.insertProposal = async function (idProposal) {
+  // methode ajoute nouveau Proposal
+  try {
+    if (this.listProposal.indexOf(idProposal) === -1) {
+      this.listProposal.push(idProposal);
+     
+    }
+
     return await this.save();
   } catch (error) {
     return error;
@@ -105,7 +128,9 @@ profilSchema.methods.insertReview = async function (idReview) {
 profilSchema.methods.insertFreind = async function (idFriend) {
   // methode ajoute nouveau amis
   try {
-    this.friendship=insertItemInList(this.friendship, idFriend);
+    if (this.friendship.indexOf(idFriend) === -1) {
+      this.friendship.push(idFriend);
+    }
     return await this.save();
   } catch (error) {
     return error;
@@ -114,7 +139,7 @@ profilSchema.methods.insertFreind = async function (idFriend) {
 profilSchema.methods.removeFreind = async function (idFriend) {
   // methode supprimer un amis
   try {
-    this.friendship= removeItemInList(this.friendship, idFriend);
+    this.friendship.remove(idFriend);
     return await this.save();
   } catch (error) {
     return error;
@@ -125,13 +150,21 @@ profilSchema.methods.insertColis = async function (idColis, statut) {
   try {
     switch (statut) {
       case "Liv":
-          this.listColisLiv=insertItemInList(this.listColisLiv, idColis);
+        if (this.listColisLiv.indexOf(idColis) === -1) {
+          this.listColisLiv.push(idColis);
+        }
+        return await this.save();
       case "Exp":
-        this.listColisExp=insertItemInList(this.listColisExp, idColis);
+        if (this.listColisExp.indexOf(idColis) === -1) {
+          this.listColisExp.push(idColis);
+        }
+        return await this.save();
       default:
-        this.listColisDest=insertItemInList(this.listColisDest, idColis);
-      }
-      return await this.save();
+        if (this.listColisDest.indexOf(idColis) === -1) {
+          this.listColisDest.push(idColis);
+        }
+        return await this.save();
+    }
   } catch (error) {
     return error;
   }
@@ -141,13 +174,15 @@ profilSchema.methods.removeColis = async function (idColis, statut) {
   try {
     switch (statut) {
       case "Liv":
-        this.listColisLiv=removeItemInList(this.listColisLiv, idColis);
+        this.listColisLiv.remove(idColis);
+        return await this.save();
       case "Exp":
-        this.listColisExp=removeItemInList(this.listColisExp, idColis);
+        this.listColisExp.remove(idColis);
+        return await this.save();
       default:
-        this.listColisDest=removeItemInList(this.listColisDest, idColis);
-      }
-    return await this.save();
+        this.listColisDest.remove(idColis);
+        return await this.save();
+    }
   } catch (error) {
     return error;
   }
@@ -155,7 +190,9 @@ profilSchema.methods.removeColis = async function (idColis, statut) {
 profilSchema.methods.insertAnnonce = async function (idAnnonce) {
   // methode ajoute nouveau annonce pour permettre le user sauvgarder un annonce pour retulise comme template
   try {
-    this.listAnnonce=insertItemInList(this.listAnnonce, idAnnonce);
+    if (this.listAnnonce.indexOf(idAnnonce) === -1) {
+      this.listAnnonce.push(idAnnonce);
+    }
     return await this.save();
   } catch (error) {
     return error;
@@ -164,7 +201,7 @@ profilSchema.methods.insertAnnonce = async function (idAnnonce) {
 profilSchema.methods.removeAnnonce = async function (idAnnonce) {
   // methode supprimer un annonce
   try {
-    this.listAnnonce=removeItemInList(this.listAnnonce, idAnnonce);
+    this.listAnnonce.remove(idAnnonce);
     return await this.save();
   } catch (error) {
     return error;

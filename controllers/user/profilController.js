@@ -17,7 +17,7 @@ const getAllProfils = async (req, res) => {
 };
 const getProfilByID = async (req, res) => {
   try {
-    const idProfil=req.auth.idProfil;
+    const idProfil = req.auth.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
@@ -37,7 +37,7 @@ const getProfilByID = async (req, res) => {
 // return list review  search by id profl
 const getProfilListReviewByID = async (req, res) => {
   try {
-    const idProfil=req.auth.idProfil;
+    const idProfil = req.auth.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
@@ -57,7 +57,7 @@ const getProfilListReviewByID = async (req, res) => {
 //return list colis  search by id profl
 const getProfilListColisByID = async (req, res) => {
   try {
-    const idProfil=req.auth.idProfil;
+    const idProfil = req.auth.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
@@ -76,14 +76,83 @@ const getProfilListColisByID = async (req, res) => {
 //return list annonce  search by id profl
 const getProfilListAnnonceByID = async (req, res) => {
   try {
-    const idProfil=req.auth.idProfil;
+    const limit = 10; // limit the number of documents to 10
+    const fields =
+      "-_id listAnnonce "; // select only the listAnnonce fields
+
+    const idProfil = req.auth.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-
+    const listAnnonceFound = await Profil.findById(idProfil)
+      .populate({
+        path: "listAnnonce",
+        populate: {
+          path: "listProposal",
+          populate: {
+            path: "profil",
+            select:" user listReview ", // select only the user and listReview fields in profil
+            populate: {
+              path: "user",
+              select:" lastName firstName email phone verified",   // select only the lastName firstName email phone and verified fields in profil
+              populate: {
+                path: "listReview",
+              },
+            },
+          },
+        },
+      })
+      .populate({
+        path: "listAnnonce",
+        populate: {
+          path: "contents",
+        },
+      })
+      .limit(limit)
+      .select(fields)
+      .sort({ createdAt: "desc" })
+      .exec();
+    if (!listAnnonceFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "profil not found" });
+    }
+    return res.status(200).json({ successful: true, data: listAnnonceFound });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+const getProfilListActivity = async (req, res) => {
+  try {
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
     const profilFound = await Profil.findById(idProfil)
-    .populate("listAnnonce");
+      .populate({
+        path: "listAnnonce",
+        populate: {
+          path: "listProposal",
+          populate: {
+            path: "profil",
+          },
+        },
+      })
+      .populate("listProposal")
+      .populate("listColisLiv")
+      .populate("listColisDest")
+      .populate("listColisExp");
+    populate({
+      path: "contents",
+      populate: {
+        path: "images",
+      },
+    })
+      .limit(Number(limit))
+      .sort({ createdAt: "desc" })
+      .exec();
     if (!profilFound) {
       return res
         .status(404)
@@ -96,13 +165,11 @@ const getProfilListAnnonceByID = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   getAllProfils,
   getProfilByID,
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-
+  getProfilListActivity,
 };

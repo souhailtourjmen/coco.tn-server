@@ -18,7 +18,7 @@ const {
       email,
       password,
       role,
-      cartegris,
+      cardGris,
 * @return {Object}
 * @response token , message
 */

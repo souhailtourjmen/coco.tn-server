@@ -1,7 +1,7 @@
 const Annonce = require("../../models/annonce");
 const Content = require("../../models/content");
 const Profil = require("../../models/profil");
-const Proposal= require("../../models/proposal");
+const Proposal = require("../../models/proposal");
 const Image = require("../../models/image");
 const {
   createAllContent,
@@ -62,7 +62,6 @@ const getAnnonceById = async (req, res) => {
 const createAnnonce = async (req, res) => {
   try {
     const {
-      idProfil,
       statut,
       secondidProfil,
       description,
@@ -73,6 +72,7 @@ const createAnnonce = async (req, res) => {
       dateExp,
       dateLiv,
     } = req.body;
+    const idProfil = req.auth.idProfil;
     if (
       !idProfil ||
       !statut ||
@@ -120,7 +120,7 @@ const createAnnonce = async (req, res) => {
     });
 
     const savedAnnonce = await annonce.save();
-
+    console.log(profilFound);
     profilFound.insertAnnonce(annonce._id);
 
     return res.status(201).json({

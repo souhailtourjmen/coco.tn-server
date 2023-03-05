@@ -75,7 +75,8 @@ const createProposal =async (req, res) => {
         datePickup:datePickup,
         pointPickup:PointPickup,
     })
-    await annonceFound.insertProposal(proposal._id);
+    await annonceFound.insertProposal(proposal._id);// add proposal in Annonce
+    await profilFound.insertProposal(proposal._id); // add proposal in Propasal
     const savedProposal = await proposal.save();
   
       return res.status(201).json({
