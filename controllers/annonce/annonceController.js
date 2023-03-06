@@ -18,7 +18,25 @@ const getAllAnnonces = async (req, res) => {
           path: "images",
         },
       })
-      .populate({ path: "listProposal" })
+      .populate({
+        path: "profilexp profilDest",
+        select:" user  ",
+        populate: {
+          path: "user",
+          select:" -_id lastName firstName email phone verified ", 
+        },
+      })
+      .populate({ path: "listProposal" ,
+      populate: {
+        path: "profil",
+        select:" user listReview ",
+        populate: {
+          path: "user listReview",
+          select:" -_id lastName firstName email phone verified note",   // select only the lastName firstName email phone and verified fields in profil
+        },
+      },
+
+    })
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();
@@ -106,9 +124,10 @@ const createAnnonce = async (req, res) => {
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
 
     const annonce = new Annonce({
-      profilexp: statut === "exp" ? profilFound._id : secondProfilFound.id, // si le statut equals "exp" donc qu'il ecrire l'annonce c'est l'expediteur si non destinataire
-      profilDest: statut === "exp" ? secondProfilFound.id : profilFound._id, // si le statut different a mot "exp" donc qu'il ecrire l'annonce c'est l'destinataire
+      profilexp:  profilFound._id , 
+      profilDest: secondProfilFound.id , 
       description: description,
+      statut:statut,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
         pointExp: pointExp,

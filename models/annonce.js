@@ -14,6 +14,14 @@ const annonceSchema = mongoose.Schema(
       required: [true, "Please enter the caption"],
       trim: true,
     },
+    statut: {
+      type: String,
+      required: [true, "Please enter the statut"],
+      trim: true,
+      maxLength: 16,
+      enum: ['sender','recipient'],
+      default: 'sender'
+    },
     contents: [
       {
         type: mongoose.Schema.Types.ObjectId,
