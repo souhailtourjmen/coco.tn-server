@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 const annonceSchema = mongoose.Schema(
   {
@@ -14,13 +15,19 @@ const annonceSchema = mongoose.Schema(
       required: [true, "Please enter the caption"],
       trim: true,
     },
-    statut: {
+    statutProfile: {
       type: String,
       required: [true, "Please enter the statut"],
       trim: true,
       maxLength: 16,
       enum: ['sender','recipient'],
       default: 'sender'
+    },
+    statut: {
+      type: String,
+      maxLength: 16,
+      enum: ['in progress','Colis','archives'],
+      default: 'in progress'
     },
     contents: [
       {

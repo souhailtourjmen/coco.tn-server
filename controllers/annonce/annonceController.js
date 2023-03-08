@@ -20,23 +20,23 @@ const getAllAnnonces = async (req, res) => {
       })
       .populate({
         path: "profilexp profilDest",
-        select:" user  ",
+        select: " user  ",
         populate: {
           path: "user",
-          select:" -_id lastName firstName email phone verified ", 
+          select: " -_id lastName firstName email phone verified ",
         },
       })
-      .populate({ path: "listProposal" ,
-      populate: {
-        path: "profil",
-        select:" user listReview ",
+      .populate({
+        path: "listProposal",
         populate: {
-          path: "user listReview",
-          select:" -_id lastName firstName email phone verified note",   // select only the lastName firstName email phone and verified fields in profil
+          path: "profil",
+          select: " user listReview ",
+          populate: {
+            path: "user listReview",
+            select: " -_id lastName firstName email phone verified note", // select only the lastName firstName email phone and verified fields in profil
+          },
         },
-      },
-
-    })
+      })
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();
@@ -80,7 +80,7 @@ const getAnnonceById = async (req, res) => {
 const createAnnonce = async (req, res) => {
   try {
     const {
-      statut,
+      statutProfile,
       secondidProfil,
       description,
       contents,
@@ -93,7 +93,7 @@ const createAnnonce = async (req, res) => {
     const idProfil = req.auth.idProfil;
     if (
       !idProfil ||
-      !statut ||
+      !statutProfile ||
       !secondidProfil ||
       !description ||
       !contents ||
@@ -102,7 +102,7 @@ const createAnnonce = async (req, res) => {
       !prix
     ) {
       return res.status(404).json({
-        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statut} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${prix} `,
+        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${prix} `,
       });
     }
     const secondProfilFound = await Profil.findById(secondidProfil).exec();
@@ -124,10 +124,10 @@ const createAnnonce = async (req, res) => {
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
 
     const annonce = new Annonce({
-      profilexp:  profilFound._id , 
-      profilDest: secondProfilFound.id , 
+      profilexp: profilFound._id,
+      profilDest: secondProfilFound.id,
       description: description,
-      statut:statut,
+      statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
         pointExp: pointExp,
