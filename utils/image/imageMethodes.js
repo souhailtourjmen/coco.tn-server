@@ -2,14 +2,14 @@ const Image = require("../../models/image");
 const createImage = async (image) => {
     return new Promise(async(resolve, reject) => {
     try {
-        const { path , thumbnail   } = image;
+        const { _path , _thumbnail   } = image;
 
-        if (!path || !thumbnail  ) {
+        if (!_path || !_thumbnail  ) {
         return reject({ success: false, message: "All fields are required" });
         }
         const newimage=new Image({
-            path:path,
-            thumbnail:thumbnail
+            path:_path,
+            thumbnail:_thumbnail
           })
       
           const savedImage = await newimage.save();

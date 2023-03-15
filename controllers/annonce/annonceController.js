@@ -79,6 +79,7 @@ const getAnnonceById = async (req, res) => {
 
 const createAnnonce = async (req, res) => {
   try {
+    console.log(req.body);
     const {
       statutProfile,
       secondidProfil,
@@ -86,7 +87,7 @@ const createAnnonce = async (req, res) => {
       contents,
       pointExp,
       pointDist,
-      prix,
+      price,
       dateExp,
       dateLiv,
     } = req.body;
@@ -99,10 +100,10 @@ const createAnnonce = async (req, res) => {
       !contents ||
       !pointExp ||
       !pointDist ||
-      !prix
+      !price
     ) {
       return res.status(404).json({
-        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${prix} `,
+        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${price} `,
       });
     }
     const secondProfilFound = await Profil.findById(secondidProfil).exec();
@@ -133,7 +134,7 @@ const createAnnonce = async (req, res) => {
         pointExp: pointExp,
         pointDist: pointDist,
       },
-      prix: prix,
+      price: price,
       dateExp: dateExp,
       dateLiv: dateLiv,
     });

@@ -5,11 +5,11 @@ const contentSchema = mongoose.Schema(
         type: String,
         maxlength: 54,
       },
-      size: {
+      width: {
         type: String,
         maxlength: 16,
       },
-      blender: {
+      length: {
         type: String,
         maxlength: 16,
       },

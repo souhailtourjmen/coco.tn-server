@@ -3,19 +3,18 @@ const { createAllImage} = require("../image/imageMethodes");
 const createContent = async (content) => {
     return new Promise(async(resolve, reject) => {
     try {
-        const { name, size, blender, height, weight ,images } = content;
+        const { name, width , length, height, weight ,images } = content;
        
-        if (!name || !size || !blender || !height || !weight ) {
+        if (!name || !width  || !length || !height || !weight ) {
         return reject({ success: false, message: "content All fields are required" });
         }
          /* block  create list  images  */
-         
         const { dataImages } = images? await createAllImage(images) : null ;
         /* end block list images */
         const newcontent = new Content({
        name:name,
-        size: size,
-        blender: blender,
+        size: width ,
+        length: length,
         height: height,
         weight: weight,
         images :dataImages.map((image) =>image._id) || null,
