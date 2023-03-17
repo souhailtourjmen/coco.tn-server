@@ -1,8 +1,7 @@
 const Annonce = require("../../models/annonce");
-const Content = require("../../models/content");
 const Profil = require("../../models/profil");
-const Proposal = require("../../models/proposal");
-const Image = require("../../models/image");
+const {getAnnouce} = require("../../utils/annouce/getAnnouce")
+const {actualizationAnnouce} = require('../../config/io');
 const {
   createAllContent,
   deleteContentByArray,
@@ -40,7 +39,7 @@ const getAllAnnonces = async (req, res) => {
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();
-
+    //  io.emit('AllAnnonces', annonce); // Emit a newAnnonce event when a new announcement is added
     return res.status(200).json(annonce);
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -79,7 +78,6 @@ const getAnnonceById = async (req, res) => {
 
 const createAnnonce = async (req, res) => {
   try {
-    console.log(req.body);
     const {
       statutProfile,
       secondidProfil,
@@ -140,14 +138,10 @@ const createAnnonce = async (req, res) => {
     });
 
     const savedAnnonce = await annonce.save();
-    console.log(profilFound);
     profilFound.insertAnnonce(annonce._id);
-
+    actualizationAnnouce(await getAnnouce(savedAnnonce._id));
     return res.status(201).json({
-      success: true,
-      data: {
-        annonce,
-      },
+      success: true, message:'create annonce'
     });
   } catch (error) {
     console.log(error);

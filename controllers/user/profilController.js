@@ -99,6 +99,7 @@ const getProfilListAnnonceByID = async (req, res) => {
             },
           },
         },
+        options: { sort: { createdAt: -1 } },
       })
       .populate({
         path: "listAnnonce",
@@ -107,7 +108,8 @@ const getProfilListAnnonceByID = async (req, res) => {
             populate: {
               path: "images",
             },
-        },
+          },
+          options: { sort: { createdAt: -1 } },
       })
       .populate({
         path: "listAnnonce",
@@ -119,10 +121,10 @@ const getProfilListAnnonceByID = async (req, res) => {
             select:" -_id lastName firstName email phone verified ", 
           }, 
         },
+        options: { sort: { createdAt: -1 } },
       })
       .limit(limit)
       .select(fields)
-      .sort({ createdAt: "desc" })
       .exec();
     if (!listAnnonceFound) {
       return res
