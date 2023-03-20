@@ -6,8 +6,7 @@ const signUp = async (req, res) => {
   try {
     const {
       cin,
-      lastName,
-      firstName,
+      name,
       adresses,
       phone,
       gender,
@@ -24,8 +23,7 @@ const signUp = async (req, res) => {
 
     let usert = {
       cin: cin,
-      lastName: lastName,
-      firstName: firstName,
+      name: name,
       adresses: adresses || [],
       phone: phone,
       gender: gender,
