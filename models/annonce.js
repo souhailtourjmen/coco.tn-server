@@ -1,15 +1,14 @@
-
 const mongoose = require("mongoose");
 const annonceSchema = mongoose.Schema(
   {
     profilexp: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Profil",
-      },
-      profilDest: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Profil",
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profil",
+    },
+    profilDest: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profil",
+    },
     description: {
       type: String,
       required: [true, "Please enter the caption"],
@@ -20,14 +19,14 @@ const annonceSchema = mongoose.Schema(
       required: [true, "Please enter the statut"],
       trim: true,
       maxLength: 16,
-      enum: ['sender','recipient'],
-      default: 'sender'
+      enum: ["sender", "recipient"],
+      default: "sender",
     },
     statut: {
       type: String,
       maxLength: 16,
-      enum: ['in progress','Colis','archives'],
-      default: 'in progress'
+      enum: ["in progress", "Colis", "archives"],
+      default: "in progress",
     },
     contents: [
       {
@@ -44,22 +43,18 @@ const annonceSchema = mongoose.Schema(
     },
     pointTrajets: {
       pointExp: {
-        type: String,
-        required: [true, "Please enter the caption"],
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "Please enter the Address pointExp "],
+        ref: "Address",
       },
       pointDist: {
-        type: String,
-        required: [true, "Please enter the caption"],
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "Please enter the Address pointDist"],
+        ref: "Address",
       },
     },
 
-   
-    
-    listProposal: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Proposal" },
-    ],
+    listProposal: [{ type: mongoose.Schema.Types.ObjectId, ref: "Proposal" }],
     price: {
       type: Number,
       default: 0,
@@ -80,7 +75,6 @@ annonceSchema.methods.insertProposal = async function (idProposal) {
   try {
     if (this.listProposal.indexOf(idProposal) === -1) {
       this.listProposal.push(idProposal);
-    
     }
 
     return await this.save();

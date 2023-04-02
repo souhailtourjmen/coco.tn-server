@@ -8,6 +8,7 @@ const {
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
+  refreshTokenController
 } = require("../controllers/user/index");
 
 /* Get method getProfilByID
@@ -38,6 +39,13 @@ router.get("/getProfilListColisByID/", verifyToken, getProfilListColisByID);
  * @return {Object}
  */
 router.get("/getProfilListAnnonceByID/", verifyToken, getProfilListAnnonceByID);
+
+
+/* Get method refreshTokenController
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/refreshToken/",  refreshTokenController);
 
 module.exports = router;
 

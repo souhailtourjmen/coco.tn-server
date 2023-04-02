@@ -95,7 +95,7 @@ const getProfilListAnnonceByID = async (req, res) => {
             select:" user listReview ", // select only the user and listReview fields in profil
             populate: {
               path: "user listReview",
-              select:"-_id lastName firstName email phone verified note",   // select only the lastName firstName email phone and verified fields in profil
+              select:"-_id name email phone verified note",   // select only the lastName firstName email phone and verified fields in profil
             },
           },
         },
@@ -118,7 +118,7 @@ const getProfilListAnnonceByID = async (req, res) => {
           select:" user  ",
           populate: {
             path: "user",
-            select:" -_id lastName firstName email phone verified ", 
+            select:" -_id name email phone verified ", 
           }, 
         },
         options: { sort: { createdAt: -1 } },

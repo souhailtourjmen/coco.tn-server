@@ -1,0 +1,27 @@
+const mongoose = require("mongoose");
+const AddressSchema = mongoose.Schema(
+  {
+    place_id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    country: { type: string, required: true },
+    location: {
+      lat: {
+        type: String,
+        required: true,
+      },
+      lng: {
+        type: String,
+        required: true,
+      },
+    },
+  },
+  { timestamps: true }
+);
+module.exports = mongoose.model("Address", AddressSchema);

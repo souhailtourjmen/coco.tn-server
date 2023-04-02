@@ -22,7 +22,7 @@ const getAllAnnonces = async (req, res) => {
         select: " user  ",
         populate: {
           path: "user",
-          select: " -_id lastName firstName email phone verified ",
+          select: " -_id name  email phone verified ",
         },
       })
       .populate({
@@ -39,7 +39,7 @@ const getAllAnnonces = async (req, res) => {
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();
-    //  io.emit('AllAnnonces', annonce); // Emit a newAnnonce event when a new announcement is added
+  
     return res.status(200).json(annonce);
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

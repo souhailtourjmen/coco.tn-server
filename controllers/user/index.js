@@ -17,6 +17,7 @@ const {
 
 const { signUp, login } = require("./authController");
 
+const { refreshTokenController} = require("./refrechTokenController");
 module.exports = {
     /* controller user */
 
@@ -46,4 +47,8 @@ module.exports = {
   login,
   
   /*end controller auth */
+
+  /* refreshTokenController */
+  refreshTokenController
+  /*end refreshTokenController */
 };

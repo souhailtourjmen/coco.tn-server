@@ -19,11 +19,16 @@ const proposalSchema = mongoose.Schema({
         type: Date,
         required: [true, "Please enter the date"]
       },
-      pointPickup:{ type: String, required: true },
+      pointPickup:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "Please enter the Address pointPickup "],
+        ref: "Address",
+      },
+
       status:{ 
         type: String,
-        enum: ['Accepted','Referrals','Archived'],
-        default: 'Referrals',
+        enum: ['Accepted','Sending','Archived'],
+        default: 'Sending',
 
       },
       created: {

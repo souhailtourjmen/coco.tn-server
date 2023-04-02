@@ -6,13 +6,11 @@ let io = {};
 function connectIO(server) {
   io = new Server(server);
 
-  io.on("connection", (socket) => {
-    console.log("a user connected");
-  });
+  // io.on("connection", (socket) => {
+
+  // });
 }
-// setInterval(() => {
-//     io.emit('message', new Date().toISOString());
-//   }, 1000);
+
 const sendAnnouce = (annouce) => {
     io.emit('message', annouce); // Emit a 'annouce' event with the message data
   };
