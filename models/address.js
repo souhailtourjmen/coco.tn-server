@@ -4,13 +4,12 @@ const AddressSchema = mongoose.Schema(
     place_id: {
       type: String,
       required: true,
-      unique: true,
     },
     city: {
       type: String,
       required: true,
     },
-    country: { type: string, required: true },
+    country: { type: String, required: true },
     location: {
       lat: {
         type: String,

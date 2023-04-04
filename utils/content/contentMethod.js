@@ -1,73 +1,76 @@
 const Content = require("../../models/content");
-const { createAllImage} = require("../image/imageMethodes");
+const { createAllImage } = require("../image/imageMethodes");
 const createContent = async (content) => {
-    return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-        const { name, width , length, height, weight ,images } = content;
-       
-        if (!name || !width  || !length || !height || !weight ) {
-        return reject({ success: false, message: "content All fields are required" });
-        }
-         /* block  create list  images  */
-        const { dataImages } = images? await createAllImage(images) : null ;
-        /* end block list images */
-        const newcontent = new Content({
-       name:name,
-        size: width ,
+      const { name, width, length, height, weight, images } = content;
+
+      if (!name || !width || !length || !height || !weight) {
+        return reject({
+          success: false,
+          message: "content All fields are required",
+        });
+      }
+      /* block  create list  images  */
+      const { dataImages } = images ? await createAllImage(images) : null;
+      /* end block list images */
+      const newcontent = new Content({
+        name: name,
+        width: width,
         length: length,
         height: height,
         weight: weight,
-        images :dataImages.map((image) =>image._id) || null,
-        });
+        images: dataImages.map((image) => image._id) || null,
+      });
 
-    const savedcontent = await newcontent.save();
+      const savedcontent = await newcontent.save();
 
-    return resolve(newcontent) ;
-
-  } catch (error) {
-    console.log(error);
-    return reject( {
-      success: false,
-      message: "something went wrong, fail to create proposition",
-    });
-  }
-});
+      return resolve(newcontent);
+    } catch (error) {
+      console.log(error);
+      return reject({
+        success: false,
+        message: "something went wrong, fail to create proposition",
+      });
+    }
+  });
 };
 
-const createAllContent =async(contents)=>{
-    try {
+const createAllContent = async (contents) => {
+  try {
     if (!contents) {
-        return Promise.reject({
+      return Promise.reject({
         success: false,
-        message: 'All fields are required'
-        });
-    }   
-    const contentPromises =await contents.map(content => createContent(content));
+        message: "All fields are required",
+      });
+    }
+    const contentPromises = await contents.map((content) =>
+      createContent(content)
+    );
     return Promise.all(contentPromises)
-    .then(createdContents => {
-    
-      return {
-        success: true,
-        message: 'Contents created successfully',
-        dataContent: createdContents
-      };
-    })
-    .catch(error => {
-      console.log(error);
+      .then((createdContents) => {
+        return {
+          success: true,
+          message: "Contents created successfully",
+          dataContent: createdContents,
+        };
+      })
+      .catch((error) => {
+        console.log(error);
         return {
           success: false,
-          message: 'Contents created faild ',
-          error: error
-        };
-    });
-    } catch (error) {
-        return reject({
-          success: false,
-          message: "server side error",
+          message: "Contents created faild ",
           error: error,
-        });
-      }
-}
+        };
+      });
+  } catch (error) {
+    return reject({
+      success: false,
+      message: "server side error",
+      error: error,
+    });
+  }
+};
 const deleteContentByArray = async (contents) => {
   if (!contents) {
     return { success: false, message: "All fields are required" };
@@ -79,10 +82,10 @@ const deleteContentByArray = async (contents) => {
           _id: content._id,
         });
       });
-      return resolve({ 
+      return resolve({
         success: true,
-         message: "Contents delete successfully"
-         });
+        message: "Contents delete successfully",
+      });
     } catch (error) {
       return reject({
         success: false,
@@ -93,7 +96,7 @@ const deleteContentByArray = async (contents) => {
   });
 };
 module.exports = {
-    createContent,
-    createAllContent,
-    deleteContentByArray
+  createContent,
+  createAllContent,
+  deleteContentByArray,
 };

@@ -12,8 +12,12 @@ const getAnnouce =async(id) => {
         select: " user  ",
         populate: {
           path: "user",
-          select: " -_id lastName firstName email phone verified ",
+          select: " -_id name email phone verified ",
         },
+      })
+      .populate({
+        path: "pointTrajets.pointExp pointTrajets.pointDist",
+        select: " -_id place_id  city country location ",
       })
       .populate({
         path: "listProposal",
@@ -22,7 +26,7 @@ const getAnnouce =async(id) => {
           select: " user listReview ",
           populate: {
             path: "user listReview",
-            select: " -_id lastName firstName email phone verified note", // select only the lastName firstName email phone and verified fields in profil
+            select: " -_id name email phone verified note", // select only the lastName firstName email phone and verified fields in profil
           },
         },
       })

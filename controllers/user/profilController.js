@@ -113,6 +113,14 @@ const getProfilListAnnonceByID = async (req, res) => {
       })
       .populate({
         path: "listAnnonce",
+        populate :{
+          path: "pointTrajets.pointExp pointTrajets.pointDist",
+          select: " -_id place_id  city country location ",
+        }
+          
+      })
+      .populate({
+        path: "listAnnonce",
         populate: {
           path: "profilexp profilDest",
           select:" user  ",

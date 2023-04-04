@@ -1,7 +1,8 @@
 const Annonce = require("../../models/annonce");
 const Profil = require("../../models/profil");
-const {getAnnouce} = require("../../utils/annouce/getAnnouce")
-const {actualizationAnnouce} = require('../../config/io');
+const { getAnnouce } = require("../../utils/annouce/getAnnouce");
+const { actualizationAnnouce } = require("../../config/io");
+const { createAddress } = require("../../services/index");
 const {
   createAllContent,
   deleteContentByArray,
@@ -16,6 +17,9 @@ const getAllAnnonces = async (req, res) => {
         populate: {
           path: "images",
         },
+      }).populate({
+        path: "pointTrajets.pointExp pointTrajets.pointDist",
+        select: " -_id place_id  city country location ",
       })
       .populate({
         path: "profilexp profilDest",
@@ -39,7 +43,7 @@ const getAllAnnonces = async (req, res) => {
       .limit(Number(limit))
       .sort({ createdAt: "desc" })
       .exec();
-  
+
     return res.status(200).json(annonce);
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -90,6 +94,7 @@ const createAnnonce = async (req, res) => {
       dateLiv,
     } = req.body;
     const idProfil = req.auth.idProfil;
+    console.log(req.body)
     if (
       !idProfil ||
       !statutProfile ||
@@ -121,7 +126,7 @@ const createAnnonce = async (req, res) => {
     /* end block cree des contents */
 
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
-
+      
     const annonce = new Annonce({
       profilexp: profilFound._id,
       profilDest: secondProfilFound.id,
@@ -129,8 +134,8 @@ const createAnnonce = async (req, res) => {
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
-        pointExp: pointExp,
-        pointDist: pointDist,
+        pointExp: await createAddress(pointExp),
+        pointDist:await createAddress(pointDist),
       },
       price: price,
       dateExp: dateExp,
@@ -141,7 +146,8 @@ const createAnnonce = async (req, res) => {
     profilFound.insertAnnonce(annonce._id);
     actualizationAnnouce(await getAnnouce(savedAnnonce._id));
     return res.status(201).json({
-      success: true, message:'create annonce'
+      success: true,
+      message: "create annonce",
     });
   } catch (error) {
     console.log(error);
