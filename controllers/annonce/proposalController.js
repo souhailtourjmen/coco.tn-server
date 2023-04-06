@@ -1,7 +1,7 @@
 const Annonce = require("../../models/annonce");
 const Proposal = require("../../models/proposal");
 const Profil = require("../../models/profil");
-
+const { createAddress } = require("../../services/index");
 const getAllProposalbyIdProfil = async (req, res) => {
   try {
     const idProfil = req.body.idProfil;
@@ -14,7 +14,10 @@ const getAllProposalbyIdProfil = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const proposals = await Proposal.find({ profil: profilFound._id });
+    const proposals = await Proposal.find({ profil: profilFound._id }).populate({
+      path: "pointPickup",
+      
+    })
     return res.status(200).json(proposals);
   } catch (error) {
     console.log(error);
@@ -43,18 +46,17 @@ const getProposalById = async (req, res) => {
 
 const createProposal = async (req, res) => {
   try {
-    const { idAnnonce, text, price, datePickup, PointPickup } = req.body;
+    const { idAnnonce, text, price, } = req.body;
 
     const idProfil = req.auth.idProfil;
     if (
       !idProfil ||
       !idAnnonce ||
-      !PointPickup ||
       !text ||
-      !price ||
-      !datePickup
+      !price
+     
     ) {
-      return res.status(404).json({ message: "All fields are required" });
+      return res.status(404).json({ message: `All fields are required idProfil: ${idProfil} idAnnonce ${idAnnonce} text ${text}` });
     }
     const profilFound = await Profil.findById(idProfil).exec();
 
@@ -73,10 +75,9 @@ const createProposal = async (req, res) => {
 
     const proposal = new Proposal({
       profil: profilFound._id,
+      Annonce: annonceFound._id,
       text: text,
       price: price,
-      datePickup: datePickup,
-      pointPickup: PointPickup,
     });
 
     const savedProposal = await proposal.save(annonceFound._id);
@@ -117,13 +118,11 @@ const deleteProposalById = async (req, res) => {
       _id: req.body.idProposal,
     });
 
-    return res
-      .status(200)
-      .json({
-        successful: true,
-        data: proposal,
-        message: `proposal delete successfully`,
-      });
+    return res.status(200).json({
+      successful: true,
+      data: proposal,
+      message: `proposal delete successfully`,
+    });
   } catch (error) {
     console.log(error);
     return res

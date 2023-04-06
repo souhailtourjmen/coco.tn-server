@@ -3,7 +3,7 @@ const Profil = require("../../models/profil");
 const Proposal = require("../../models/proposal");
 const StatutColis = require("../../models/statutColis");
 const Annonce = require("../../models/annonce");
-
+const { updateAnnonceById } = require("../../services");
 const getAllColisByUser = async (req, res) => {
   const { idProfil } = req.body.idProfil;
 
@@ -17,8 +17,6 @@ const getAllColisByUser = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const listColisExp = await Colis.find({ idExpediteur: profilFound._id });
-    const listColisRec = await Colis.find({ idDistinataire: profilFound._id });
 
     return res
       .status(200)
@@ -50,6 +48,7 @@ const createColis = async (req, res) => {
   try {
     const { idAnnonce, idProposal } = req.body;
     /* block check id  */
+    const idProfil = req.auth.idProfil;
 
     if (!idAnnonce || !idProposal) {
       //check all fields
@@ -62,7 +61,7 @@ const createColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "annonce not found" });
     }
-    
+
     const proposalFound = await Proposal.findById(idProposal);
     if (!proposalFound) {
       //  check id proposals
@@ -70,7 +69,8 @@ const createColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "proposal not found" });
     }
-
+    const profilExp = await Profil.findById(idProfil).exec();
+    const profilTrans = await Profil.findById(proposalFound.profil).exec();
     /* end check id */
 
     /* chaque colis est son statut donc on ajoute statut pardefaut enregistré
@@ -92,9 +92,20 @@ const createColis = async (req, res) => {
       proposal_Accept: idProposal,
       statut: statutColisDefault.map((item) => item._id),
     });
+    updateAnnonceById(annonceFound._id, "archives")
+      // check update annonce
+      .catch((error) => {
+        console.error("Error updating Annonce:", error);
+        return res
+          .status(404)
+          .json({ success: false, message: "annonce not updated" });
+      });
 
     const savedColis = await colis.save();
-
+    if (savedColis) {
+      await profilExp.insertColis(savedColis._id, "Exp"); // add colis in ProfileExpiditaire
+      await profilTrans.insertColis(savedColis._id, "Liv"); // add colis in ProfileTransporter
+    }
     return res.status(201).json({
       success: true,
       data: {
@@ -143,19 +154,18 @@ const updateStatutColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "colis not found" });
 
-  /* check duplcate colis */
-  let x;
-  newStatuts.map((item)=>x=item._id );
-  let check ;
-  colisFound.statut.map((item)=>{check=item._id.equals(x)})
-    if(check)
-       return res
-        .status(404)
-        .json({
-          success: false,
-          message: "statut exist", 
-
-        });
+    /* check duplcate colis */
+    let x;
+    newStatuts.map((item) => (x = item._id));
+    let check;
+    colisFound.statut.map((item) => {
+      check = item._id.equals(x);
+    });
+    if (check)
+      return res.status(404).json({
+        success: false,
+        message: "statut exist",
+      });
     /* end dplicate  */
     const colis = await Colis.findByIdAndUpdate(
       colisFound._id,

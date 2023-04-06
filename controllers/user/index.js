@@ -4,7 +4,7 @@ const {
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-
+  getProfilListActivity
 } = require("./profilController");
 
 const {
@@ -36,7 +36,7 @@ module.exports = {
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-
+  getProfilListActivity,
 
 
   /*end controller profil */

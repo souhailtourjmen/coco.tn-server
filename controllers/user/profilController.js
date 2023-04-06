@@ -5,6 +5,11 @@ const Review = require("../../models/review");
 const Colis = require("../../models/colis");
 const Channel = require("../../models/channel");
 const Image = require("../../models/image");
+const {
+  getAllProposal,
+  getAllAnnonce,
+  getAllColis,
+} = require("../../services");
 
 const getAllProfils = async (req, res) => {
   try {
@@ -76,68 +81,22 @@ const getProfilListColisByID = async (req, res) => {
 //return list annonce  search by id profl
 const getProfilListAnnonceByID = async (req, res) => {
   try {
-    const limit = 10; // limit the number of documents to 10
-    const fields =
-      "-_id listAnnonce "; // select only the listAnnonce fields
-
     const idProfil = req.auth.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
+    const profilFound = await Profil.findById(idProfil);
 
-    const listAnnonceFound = await Profil.findById(idProfil)
-      .populate({
-        path: "listAnnonce",
-        populate: {
-          path: "listProposal",
-          populate: {
-            path: "profil",
-            select:" user listReview ", // select only the user and listReview fields in profil
-            populate: {
-              path: "user listReview",
-              select:"-_id name email phone verified note",   // select only the lastName firstName email phone and verified fields in profil
-            },
-          },
-        },
-        options: { sort: { createdAt: -1 } },
-      })
-      .populate({
-        path: "listAnnonce",
-        populate: {
-          path: "contents",
-            populate: {
-              path: "images",
-            },
-          },
-          options: { sort: { createdAt: -1 } },
-      })
-      .populate({
-        path: "listAnnonce",
-        populate :{
-          path: "pointTrajets.pointExp pointTrajets.pointDist",
-          select: " -_id place_id  city country location ",
-        }
-          
-      })
-      .populate({
-        path: "listAnnonce",
-        populate: {
-          path: "profilexp profilDest",
-          select:" user  ",
-          populate: {
-            path: "user",
-            select:" -_id name email phone verified ", 
-          }, 
-        },
-        options: { sort: { createdAt: -1 } },
-      })
-      .limit(limit)
-      .select(fields)
-      .exec();
-    if (!listAnnonceFound) {
+    if (!profilFound) {
       return res
         .status(404)
         .json({ success: false, message: "profil not found" });
+    }
+    const listAnnonceFound = await getAllAnnonce(profilFound._id);
+    if (!listAnnonceFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "listAnnonce not found" });
     }
     return res.status(200).json({ successful: true, data: listAnnonceFound });
   } catch (error) {
@@ -151,35 +110,24 @@ const getProfilListActivity = async (req, res) => {
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const profilFound = await Profil.findById(idProfil)
-      .populate({
-        path: "listAnnonce",
-        populate: {
-          path: "listProposal",
-          populate: {
-            path: "profil",
-          },
-        },
-      })
-      .populate("listProposal")
-      .populate("listColisLiv")
-      .populate("listColisDest")
-      .populate("listColisExp");
-    populate({
-      path: "contents",
-      populate: {
-        path: "images",
-      },
-    })
-      .limit(Number(limit))
-      .sort({ createdAt: "desc" })
-      .exec();
+    const profilFound = await Profil.findById(idProfil);
     if (!profilFound) {
       return res
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    return res.status(200).json({ successful: true, data: profilFound });
+    const allProposals = await getAllProposal(profilFound._id);
+    const AllColis = await getAllColis(profilFound._id);
+    const listAnnonceFound = await getAllAnnonce(profilFound._id);
+   
+    return res
+      .status(200)
+      .json({
+        successful: true,
+        allProposals,
+        AllColis,
+        listAnnonceFound
+      });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
