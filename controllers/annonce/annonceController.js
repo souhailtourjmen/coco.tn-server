@@ -94,7 +94,7 @@ const createAnnonce = async (req, res) => {
       dateLiv,
     } = req.body;
     const idProfil = req.auth.idProfil;
-    console.log(req.body)
+    
     if (
       !idProfil ||
       !statutProfile ||
