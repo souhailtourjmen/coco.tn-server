@@ -12,7 +12,7 @@ function connectIO(server) {
 }
 
 const sendAnnouce = (annouce) => {
-    io.emit('message', annouce); // Emit a 'annouce' event with the message data
-  };
+  io.emit("message", annouce); // Emit a 'annouce' event with the message data
+};
 module.exports.actualizationAnnouce = sendAnnouce;
 module.exports.connectIO = connectIO;
