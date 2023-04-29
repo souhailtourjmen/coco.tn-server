@@ -1,8 +1,19 @@
 const { createAddress } = require("./addressService");
-const { updateAnnonceById } = require("./annouceService");
+const { updateAnnonceById, getAnnouce } = require("./annouceService");
+const {
+  createContent,
+  createAllContent,
+  deleteContentByArray,
+} = require("./contentService");
 module.exports = {
-  /* RefrechTokenService */
+  /* annonceService */
   createAddress,
-  updateAnnonceById
-  /* end RefrechTokenService */
+  getAnnouce,
+  updateAnnonceById,
+  /* end annonceService */
+  /*contentService */
+  createContent,
+  createAllContent,
+  deleteContentByArray,
+  /*end contentService */
 };

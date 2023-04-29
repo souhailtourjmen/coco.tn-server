@@ -13,11 +13,9 @@ const createAddress = async (address) => {
       },
     });
     const addressSave = await address.save();
-    console.log(addressSave);
-    return addressSave._id;
+    return { success: true, data: addressSave._id, message: "server side error" };
   } catch (error) {
-    console.log("5arya", error);
-    return { status: 500, message: "error server", refreshToken: null }; //Forbidden
+    return  { success: false, data: null, message: "server side error" };
   }
 };
 

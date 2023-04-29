@@ -1,12 +1,12 @@
 const Annonce = require("../../models/annonce");
 const Profil = require("../../models/profil");
-const { getAnnouce } = require("../../utils/annouce/getAnnouce");
 const { actualizationAnnouce } = require("../../config/io");
-const { createAddress } = require("../../services/index");
 const {
   createAllContent,
   deleteContentByArray,
-} = require("../../utils/content/contentMethod");
+  getAnnouce,
+  createAddress,
+} = require("../../services/index");
 
 const getAllAnnonces = async (req, res) => {
   try {
@@ -17,7 +17,8 @@ const getAllAnnonces = async (req, res) => {
         populate: {
           path: "images",
         },
-      }).populate({
+      })
+      .populate({
         path: "pointTrajets.pointExp pointTrajets.pointDist",
         select: " -_id place_id  city country location ",
       })
@@ -94,7 +95,7 @@ const createAnnonce = async (req, res) => {
       dateLiv,
     } = req.body;
     const idProfil = req.auth.idProfil;
-    console.log(req.body)
+
     if (
       !idProfil ||
       !statutProfile ||
@@ -126,7 +127,7 @@ const createAnnonce = async (req, res) => {
     /* end block cree des contents */
 
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
-      
+
     const annonce = new Annonce({
       profilexp: profilFound._id,
       profilDest: secondProfilFound.id,
@@ -134,8 +135,8 @@ const createAnnonce = async (req, res) => {
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
-        pointExp: await createAddress(pointExp),
-        pointDist:await createAddress(pointDist),
+        pointExp: (await createAddress(pointExp)).data ,
+        pointDist: (await createAddress(pointDist)).data,
       },
       price: price,
       dateExp: dateExp,
