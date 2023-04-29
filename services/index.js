@@ -3,6 +3,10 @@ const {
   getAllProposal,
   getAllAnnonce,
   getAllColis,
+  getProfilById,
+  getUserById,
+  updateUserInfo,
+  updateUserPassword
 } = require("./userService/");
 const {
   createAddress,
@@ -19,6 +23,10 @@ module.exports = {
   getAllProposal,
   getAllAnnonce,
   getAllColis,
+  getProfilById,
+  getUserById,
+  updateUserInfo,
+  updateUserPassword,
   /* end userService */
   /*imageService */
   createImage,

@@ -93,7 +93,7 @@ profilSchema.methods.getToken = function () {
 profilSchema.methods.refreshToken =async function () {
   this.tokens = {
     token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 5000,
+    expireAt: Date.now() + 24 * 60 * 60 * 15000,
   };
   return await this.save();
 };

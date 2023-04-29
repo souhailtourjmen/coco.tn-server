@@ -1,5 +1,15 @@
 const { handleRefreshToken } = require("./refrechTokenService");
-const {getAllProposal,getAllAnnonce,getAllColis} = require("./profilService")
+const {
+  getProfilById,
+  getAllProposal,
+  getAllAnnonce,
+  getAllColis,
+} = require("./profilService");
+const {
+  getUserById,
+  updateUserInfo,
+  updateUserPassword,
+} = require("./userService");
 module.exports = {
   /* RefrechTokenService */
   handleRefreshToken,
@@ -7,6 +17,14 @@ module.exports = {
   /* end RefrechTokenService */
 
   /*profilService */
-  getAllProposal,getAllAnnonce,getAllColis
+  getProfilById,
+  getAllProposal,
+  getAllAnnonce,
+  getAllColis,
   /*end ProfilService */
+  /* UserService */
+  getUserById,
+  updateUserInfo,
+  updateUserPassword,
+  /* end UserService */
 };

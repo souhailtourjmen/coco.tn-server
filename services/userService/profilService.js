@@ -1,4 +1,12 @@
-const Profil = require("../../models/profil");
+const Profil = require("../../models");
+const getProfilById = async (idProfil) => {
+  const profilFound = await Profil.findById(idProfil);
+  if (!profilFound) {
+    throw new Error("error getting user");
+  } else {
+    return profilFound;
+  }
+};
 const getAllProposal = async (idProfil) => {
   const selectPropsal = "text price pointPickup created Annonce";
   const selectAnnonce =
@@ -195,4 +203,4 @@ const getAllAnnonce = async (idProfil) => {
     console.error("Error getAllAnnonce :", error);
   }
 };
-module.exports = { getAllProposal, getAllAnnonce , getAllColis };
+module.exports = {getProfilById, getAllProposal, getAllAnnonce , getAllColis };

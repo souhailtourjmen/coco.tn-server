@@ -8,7 +8,7 @@ router.post(
 
   async (req, res) => {
     const media = await req.files.map((image, index) => {
-      return `${process.env.host_Server}${process.env.path_Storage}${image.filename}`;
+      return `${process.env.path_Storage}${image.filename}`;
     });
 
     return res.status(202).json({ success: true, media: media });

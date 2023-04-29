@@ -135,8 +135,8 @@ const createAnnonce = async (req, res) => {
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
-        pointExp: await createAddress(pointExp),
-        pointDist: await createAddress(pointDist),
+        pointExp: (await createAddress(pointExp)).data ,
+        pointDist: (await createAddress(pointDist)).data,
       },
       price: price,
       dateExp: dateExp,
