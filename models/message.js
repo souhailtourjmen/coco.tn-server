@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const chatSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
  message:{
     type: String,
     maxLength: 255,
@@ -15,4 +15,4 @@ const chatSchema = mongoose.Schema({
       },
 });
 
-module.exports = mongoose.model('Chat',chatSchema);
+module.exports = mongoose.model('Message',messageSchema);

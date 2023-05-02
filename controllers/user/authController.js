@@ -66,9 +66,10 @@ const signUp = async (req, res) => {
 };
 const login = async (req, res) => {
   try {
+    let i=0;
     const { email, password } = req.body;
-  
-    const userFound = await User.findOne({ email: email }).populate("roles");
+    console.log("test",i++," ",email)
+    const userFound = await User.findOne({ email: email });
 
     if (!userFound) {
       return res
@@ -84,9 +85,14 @@ const login = async (req, res) => {
         message: "Invalid Password",
       });
 
-    const profilFound = await Profil.findOne({ user: userFound._id }).populate(
-      "user"
-    );
+    const profilFound = await Profil.findOne({ user: userFound._id }).populate({
+      path:"user",
+      select:"-_id cin phone gender email name image verified roles adresses",
+      populate: {
+        path: "roles adresses image",
+        select:"_id role place_id city country location path thumbnail"
+      },
+    }).select("tokens user")
     if (!profilFound) {
       return res
         .status(404)
@@ -97,8 +103,6 @@ const login = async (req, res) => {
     return res
       .status(200)
       .json({
-        token: profilFound.tokens,
-        roles: userFound.roles,
         profil: profilFound,
         successful: true,
       });

@@ -1,5 +1,7 @@
+const { Console } = require("console");
 const { User } = require("../../models");
 const { createAddress } = require("../annouceService/addressService");
+const {createImage}= require("../imageService/imageService")
 const getUserById = async (id) => {
   const userFound = await User.findById(id);
   if (!userFound) {
@@ -58,12 +60,18 @@ const updateUserInfo = async (body, userFound) => {
       CardGris,
       password,
       newPassword,
+      image,
     } = body;
-    console.log(body);
+    console.log(body)
     let createdAddress;
+    let createdImage;
     if (adresses) {
       createdAddress = await createAddress(adresses);
     }
+    if (image) {
+        createdImage = await createImage(image[0]);
+        console.log(createdImage._id);
+      }
     if (newPassword && password) {
       const { success, data, message } = await updateUserPassword(
         password,
@@ -80,23 +88,23 @@ const updateUserInfo = async (body, userFound) => {
         status: success ? 202 : 500,
       };
     }
-    if (cin || name || adresses || phone || gender || email || CardGris) {
+    if (cin || name || adresses || phone || gender || email || CardGris || image) {
       const updatedUser = await User.findByIdAndUpdate(
         userFound.id,
         {
           cin: cin || userFound.cin,
           name: name || userFound.name,
-          adresses: createdAddress.data || userFound.adresses,
+          adresses: createdAddress?.data || userFound.adresses,
           email: email || userFound.email,
           phone: phone || userFound.phone,
           gender: gender || userFound.gender,
           idCardGris: CardGris || userFound.idCardGris,
+          image:createdImage?._id || userFound.image,
         },
         {
           new: true,
         }
       );
-
       return {
         success: true,
         data: updatedUser,
@@ -109,7 +117,7 @@ const updateUserInfo = async (body, userFound) => {
     return {
       success: false,
       data: null,
-      message: "server side error",
+      message: "server side error in  updateUserInfo",
       status: 500,
     };
   }

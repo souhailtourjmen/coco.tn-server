@@ -19,10 +19,7 @@ const profilSchema = mongoose.Schema({
       default: Date.now() + 24 * 60 * 60 * 5000,
     },
   },
-  image: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Image",
-  },
+ 
   listAnnonce: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -93,7 +90,7 @@ profilSchema.methods.getToken = function () {
 profilSchema.methods.refreshToken =async function () {
   this.tokens = {
     token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 15000,
+    expireAt: Date.now() + 24 * 60 * 60 * 300000,
   };
   return await this.save();
 };

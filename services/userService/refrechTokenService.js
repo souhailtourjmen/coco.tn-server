@@ -1,4 +1,4 @@
-const Profil = require("../../models/profil");
+const {Profil} = require("../../models");
 const jwt = require("jsonwebtoken");
 const handleRefreshToken = async (token) => {
   // Detected refresh token reuse!

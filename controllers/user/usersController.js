@@ -1,5 +1,5 @@
 const { User, Transporter, Role, Image, Profil } = require("../../models");
-const { updateUserInfo } = require("../../services");
+const { updateUserInfo ,getProfilById} = require("../../services");
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().populate("roles");
@@ -97,11 +97,13 @@ const updateUserInfoById = async (req, res) => {
       req.body,
       userFound
     );
-    console.log(success, data, message);
+   
     if (success) {
+      const profile=await getProfilById(idProfil)
+      console.log(profile);
       return res.status(status).json({
         success: success,
-        data: data,
+        data: profile,
         message: message,
       });
     }

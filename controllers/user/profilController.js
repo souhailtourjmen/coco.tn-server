@@ -3,12 +3,13 @@ const { User, Transporter } = require("../../models/user");
 const Role = require("../../models/role");
 const Review = require("../../models/review");
 const Colis = require("../../models/colis");
-const Channel = require("../../models/channel");
+const Channel = require("../../models/room");
 const Image = require("../../models/image");
 const {
   getAllProposal,
   getAllAnnonce,
   getAllColis,
+  getProfilById
 } = require("../../services");
 
 const getAllProfils = async (req, res) => {
@@ -27,7 +28,7 @@ const getProfilByID = async (req, res) => {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const profilFound = await Profil.findById(idProfil).populate("user");
+    const profilFound = await getProfilById(idProfil);
     if (!profilFound) {
       return res
         .status(404)

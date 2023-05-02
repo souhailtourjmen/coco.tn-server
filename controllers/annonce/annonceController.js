@@ -27,7 +27,11 @@ const getAllAnnonces = async (req, res) => {
         select: " user  ",
         populate: {
           path: "user",
-          select: " -_id name  email phone verified ",
+          select: " -_id name  email phone image roles verified ",
+          populate: {
+            path: "roles image",
+            select: "_id role path thumbnail",
+          },
         },
       })
       .populate({
@@ -37,7 +41,11 @@ const getAllAnnonces = async (req, res) => {
           select: " user listReview ",
           populate: {
             path: "user listReview",
-            select: " -_id lastName firstName email phone verified note", // select only the lastName firstName email phone and verified fields in profil
+            select: " -_id name email phone roles image verified note", // select only the lastName firstName email phone and verified fields in profil
+            populate: {
+              path: "roles image",
+              select: "_id role path thumbnail",
+            },
           },
         },
       })
