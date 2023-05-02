@@ -7,7 +7,7 @@ const roomSchema = mongoose.Schema({
         ref: 'profil',
         required: true
     }],
-    MessageChannel:[{
+    messages:[{
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'Message',
         required: true
@@ -20,4 +20,4 @@ const roomSchema = mongoose.Schema({
 { timestamps: true }
 );
 channelSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('Room', channelSchema);
+module.exports = mongoose.model('Room', roomSchema);
