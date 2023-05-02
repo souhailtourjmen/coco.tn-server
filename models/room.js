@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const roomSchema = mongoose.Schema({
+const chatRoomSchema = mongoose.Schema({
     profils:[{
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'profil',
@@ -9,7 +9,7 @@ const roomSchema = mongoose.Schema({
     }],
     messages:[{
         type:  mongoose.Schema.Types.ObjectId,
-        ref: 'Message',
+        ref: 'Chat',
         required: true
     }],
     created: {
@@ -19,5 +19,5 @@ const roomSchema = mongoose.Schema({
 },
 { timestamps: true }
 );
-channelSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('Room', roomSchema);
+chatRoomSchema.plugin(uniqueValidator);
+module.exports = mongoose.model('ChatRoom', chatRoomSchema);

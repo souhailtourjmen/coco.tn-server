@@ -1,18 +1,23 @@
-const mongoose = require('mongoose');
-const messageSchema = mongoose.Schema({
- message:{
+const mongoose = require("mongoose");
+const ChatSchema = mongoose.Schema({
+  profil: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "profil",
+    required: true,
+  },
+  content: {
     type: String,
     maxLength: 255,
     required: true,
- },
- isRead:{
+  },
+  isRead: {
     type: Boolean,
     default: false,
- },
- created: {
-        type: Date,
-        default: Date.now,
-      },
+  },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Message',messageSchema);
+module.exports = mongoose.model("Chat", ChatSchema);
