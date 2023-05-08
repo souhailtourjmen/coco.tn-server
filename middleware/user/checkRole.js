@@ -6,7 +6,7 @@ const checkIsValidRole = (req, res, next, id) => {
     process.env.roleAnnoncer,
     process.env.roleTransproter,
   ];
-  if (req.body.role) {
+  if (!req.body.role) {
     res
       .status(404)
       .json({ successful: false, message: "role is required" });

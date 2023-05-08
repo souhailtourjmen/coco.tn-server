@@ -5,7 +5,7 @@ const createImage = async (image) => {
         const { _path , _thumbnail   } = image;
 
         if (!_path || !_thumbnail  ) {
-        return reject({ success: false, message: "All fields are required" });
+        return reject({ success: false, message: "All fields are required in file create image" });
         }
         const newimage=new Image({
             path:_path,

@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const channelSchema = mongoose.Schema({
+const chatRoomSchema = mongoose.Schema({
     profils:[{
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'profil',
         required: true
     }],
-    MessageChannel:[{
+    messages:[{
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'Chat',
         required: true
@@ -19,5 +19,5 @@ const channelSchema = mongoose.Schema({
 },
 { timestamps: true }
 );
-channelSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('Channel', channelSchema);
+chatRoomSchema.plugin(uniqueValidator);
+module.exports = mongoose.model('ChatRoom', chatRoomSchema);

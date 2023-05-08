@@ -1,9 +1,9 @@
-const checkIsValidUser = (req, res, next) => {
+const { User, Transporter } = require("../../models");
+require("dotenv").config();
+const checkIsValidUser = async (req, res, next) => {
   const {
     cin,
-    lastName,
-    firstName,
-    adresses,
+    name,
     phone,
     email,
     role,
@@ -14,8 +14,7 @@ const checkIsValidUser = (req, res, next) => {
 
   if (
     !cin ||
-    !lastName ||
-    !firstName ||
+    !name ||
     !phone ||
     !gender ||
     !email ||
@@ -26,30 +25,29 @@ const checkIsValidUser = (req, res, next) => {
       successful: false,
       message: `All fields are required`,
     });
-    if (role === "Transporter" && !cardGris) {
-        return res
-          .status(404)
-          .json({ success: false, message: "cartegris field are required" });
-      }
+  if (role === process.env.roleTransproter && !cardGris) {
+    return res
+      .status(404)
+      .json({ success: false, message: "cartegris field are required" });
+  }
 
-  let reg =
+  const reg =
     /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/;
 
-  let isValidEmail = reg.test(email);
+  const isValidEmail = reg.test(email);
 
   if (!isValidEmail)
     return res
       .status(400)
       .json({ successful: false, message: `Email is not valid` });
+  const user = await User.findOne({ email:email});
+  if (user)
+    return res.status(400).json({ message: "The email already exists" });
 
-
-
-  if (typeof lastName !== "string" || typeof firstName !== "string")
+  if (typeof name !== "string")
     return res
       .status(400)
       .json({ successful: false, message: ` Name is not valid` });
-
-
 
   if (password.length < 8)
     return res
