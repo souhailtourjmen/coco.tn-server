@@ -1,15 +1,10 @@
-const Profil = require("../../models/profil");
-const { User, Transporter } = require("../../models/user");
-const Role = require("../../models/role");
-const Review = require("../../models/review");
-const Colis = require("../../models/colis");
-const Channel = require("../../models/room");
-const Image = require("../../models/image");
+const { Profil } = require("../../models");
 const {
   getAllProposal,
   getAllAnnonce,
-  getAllColis,
-  getProfilById
+  getlistColisExp,
+  getlistColisLiv,
+  getProfilById,
 } = require("../../services");
 
 const getAllProfils = async (req, res) => {
@@ -83,17 +78,13 @@ const getProfilListColisByID = async (req, res) => {
 const getProfilListAnnonceByID = async (req, res) => {
   try {
     const idProfil = req.auth.idProfil;
-    if (!idProfil) {
+    const filter =req.params.filter
+    console.log(idProfil,filter);
+    if (!filter ) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const profilFound = await Profil.findById(idProfil);
-
-    if (!profilFound) {
-      return res
-        .status(404)
-        .json({ success: false, message: "profil not found" });
-    }
-    const listAnnonceFound = await getAllAnnonce(profilFound._id);
+   
+    const listAnnonceFound = await getAllAnnonce(idProfil,filter);
     if (!listAnnonceFound) {
       return res
         .status(404)
@@ -120,21 +111,72 @@ const getProfilListActivity = async (req, res) => {
     const allProposals = await getAllProposal(profilFound._id);
     const AllColis = await getAllColis(profilFound._id);
     const listAnnonceFound = await getAllAnnonce(profilFound._id);
-   
-    return res
-      .status(200)
-      .json({
-        successful: true,
-        allProposals,
-        AllColis,
-        listAnnonceFound
-      });
+
+    return res.status(200).json({
+      successful: true,
+      allProposals,
+      AllColis,
+      listAnnonceFound,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+const getProfilListColisLiv = async (req, res) => {
+  try {
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
 
+    const AllColis = await getlistColisLiv(idProfil);
+
+    return res.status(200).json({
+      successful: true,
+      AllColis,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+const getProfilListColisExp = async (req, res) => {
+  try {
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+
+    const AllColis = await getlistColisExp(idProfil);
+
+    return res.status(200).json({
+      successful: true,
+      AllColis,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+const getProfilListProposal = async (req, res) => {
+  try {
+    const idProfil = req.auth.idProfil;
+    if (!idProfil) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+
+    const allProposals = await getAllProposal(idProfil);
+
+    return res.status(200).json({
+      successful: true,
+      allProposals,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 module.exports = {
   getAllProfils,
   getProfilByID,
@@ -142,4 +184,7 @@ module.exports = {
   getProfilListColisByID,
   getProfilListAnnonceByID,
   getProfilListActivity,
+  getProfilListColisExp,
+  getProfilListColisLiv,
+  getProfilListProposal,
 };

@@ -4,7 +4,10 @@ const {
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-  getProfilListActivity
+  getProfilListActivity,
+  getProfilListProposal,
+  getProfilListColisExp,
+  getProfilListColisLiv,
 } = require("./profilController");
 
 const {
@@ -17,9 +20,9 @@ const {
 
 const { signUp, login } = require("./authController");
 
-const { refreshTokenController} = require("./refrechTokenController");
+const { refreshTokenController } = require("./refrechTokenController");
 module.exports = {
-    /* controller user */
+  /* controller user */
 
   getAllUsers,
   getUserById,
@@ -37,7 +40,9 @@ module.exports = {
   getProfilListColisByID,
   getProfilListAnnonceByID,
   getProfilListActivity,
-
+  getProfilListProposal,
+  getProfilListColisExp,
+  getProfilListColisLiv,
 
   /*end controller profil */
 
@@ -45,10 +50,10 @@ module.exports = {
 
   signUp,
   login,
-  
+
   /*end controller auth */
 
   /* refreshTokenController */
-  refreshTokenController
+  refreshTokenController,
   /*end refreshTokenController */
 };

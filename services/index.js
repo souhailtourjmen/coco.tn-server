@@ -2,11 +2,12 @@ const {
   handleRefreshToken,
   getAllProposal,
   getAllAnnonce,
-  getAllColis,
+  getlistColisExp,
+  getlistColisLiv,
   getProfilById,
   getUserById,
   updateUserInfo,
-  updateUserPassword
+  updateUserPassword,
 } = require("./userService/");
 const {
   createAddress,
@@ -22,7 +23,8 @@ module.exports = {
   handleRefreshToken,
   getAllProposal,
   getAllAnnonce,
-  getAllColis,
+  getlistColisExp,
+  getlistColisLiv,
   getProfilById,
   getUserById,
   updateUserInfo,

@@ -3,7 +3,8 @@ const {
   getProfilById,
   getAllProposal,
   getAllAnnonce,
-  getAllColis,
+  getlistColisExp,
+  getlistColisLiv,
 } = require("./profilService");
 const {
   getUserById,
@@ -20,7 +21,8 @@ module.exports = {
   getProfilById,
   getAllProposal,
   getAllAnnonce,
-  getAllColis,
+  getlistColisExp,
+  getlistColisLiv,
   /*end ProfilService */
   /* UserService */
   getUserById,

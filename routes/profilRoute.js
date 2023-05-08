@@ -1,5 +1,6 @@
 const express = require("express");
 const { verifyToken } = require("../middleware/auth.Jwt");
+const { checkIsValidFilter } = require("../middleware/annonce/index");
 
 const router = express.Router();
 const {
@@ -10,6 +11,9 @@ const {
   getProfilListAnnonceByID,
   refreshTokenController,
   getProfilListActivity,
+  getProfilListProposal,
+  getProfilListColisExp,
+  getProfilListColisLiv,
 } = require("../controllers/user/index");
 
 /* Get method getProfilByID
@@ -39,9 +43,32 @@ router.get("/getProfilListColisByID/", verifyToken, getProfilListColisByID);
  * @param idProfil
  * @return {Object}
  */
-router.get("/getProfilListAnnonceByID/", verifyToken, getProfilListAnnonceByID);
+router.get(
+  "/getProfilListAnnonce/:filter",
+  verifyToken,
+  // checkIsValidFilter,
+  getProfilListAnnonceByID
+);
 
-/* Get method getProfilListAnnonceByID
+/* Get method getProfilListProposal
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListProposal/", verifyToken, getProfilListProposal);
+
+/* Get method getProfilListColisExp
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListColisExp/", verifyToken, getProfilListColisExp);
+
+/* Get method getProfilListColisLiv
+ * @param idProfil
+ * @return {Object}
+ */
+router.get("/getProfilListColisLiv/", verifyToken, getProfilListColisLiv);
+
+/* Get method getProfilListActivity
  * @param idProfil
  * @return {Object}
  */
@@ -54,68 +81,3 @@ router.get("/getProfilListActivity/", verifyToken, getProfilListActivity);
 router.get("/refreshToken/", refreshTokenController);
 
 module.exports = router;
-
-/* Get method getProfilListAnnonceByID
- * @param idProfil
- * @return {
- *        successful type boolean
- *        data  Type Objet
- *          ->listAnnonce type Array
- *                |-> [  "pointTrajets":{
- *             "pointExp":"tunis",
- *             "pointDist":"marsa"
- *           },
- *          "_id":,
- *           "profilexp":,
- *           "profilDest":,
- *           "description":,
- *           "contents":[
- *              {
- *                 "_id":,
- *                 "name":,
- *                 "size":,
- *                 "blender":,
- *                 "height":,
- *                 "weight":,
- *                 "images":
- *              },
- *           ],
- *           "dateExp":,
- *           "dateLiv":,
- *           "listProposal":[
- *              {
- *                 "_id":,
- *                 "profil":{
- *                    "_id":",
- *                    "user":{
- *                      "verified":{
- *                          "cardGris":,
- *                          "email":,
- *                          "phone":
- *                       },
- *                       "_id":,
- *                       "lastName":,
- *                       "firstName":,
- *                       "phone":,
- *                       "email":,
- *                    },
- *                    "listReview":[
- *
- *                    ]
- *                 },
- *                 "text":,
- *                 "price":,
- *                 "datePickup":,
- *                 "pointPickup":,
- *                 "status":,
- *                 "created":,
- *              },
- *           ],
- *           "price":,
- *           "expire":,
- *           "createdAt":,
- *           "updatedAt":,
- *        }
- *                  ]
- * }
- */
