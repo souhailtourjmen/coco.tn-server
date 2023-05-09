@@ -1,6 +1,6 @@
 const express = require("express");
-const { verifyToken } = require("../middleware/auth.Jwt");
-const { checkIsValidFilter } = require("../middleware/annonce/index");
+const { verifyToken } = require("../middleware/auth");
+const { checkIsValidFilter } = require("../middleware/annonce");
 
 const router = express.Router();
 const {
@@ -45,8 +45,8 @@ router.get("/getProfilListColisByID/", verifyToken, getProfilListColisByID);
  */
 router.get(
   "/getProfilListAnnonce/:filter",
+  checkIsValidFilter,
   verifyToken,
-  // checkIsValidFilter,
   getProfilListAnnonceByID
 );
 

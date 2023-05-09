@@ -7,7 +7,6 @@ const ChatSchema = mongoose.Schema({
   },
   content: {
     type: String,
-    maxLength: 255,
     required: true,
   },
   isRead: {

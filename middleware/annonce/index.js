@@ -1,19 +1,16 @@
-
 const checkIsValidFilter = (req, res, next) => {
   const isValid = ["in progress", "Colis", "archives"];
-  console.log(req?.params)
-  const filter =req?.params?.filter
+  const filter = req?.params?.filter;
+  console.log(filter);
   if (!filter) {
-    res
+    return res
       .status(404)
       .json({ successful: false, message: "filter is required" });
   }
-  if (!isValid.includes(filter)) {
-    res
-      .status(404)
-      .json({ successful: false, message: "Not found, invalid filter" });
+  if (isValid.includes(filter)) {
+    next();
   }
 
-  next();
+ 
 };
-module.exports = {checkIsValidFilter};
+module.exports = { checkIsValidFilter };

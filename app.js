@@ -10,7 +10,8 @@ const annonceRoute = require("./routes/annonceRoute");
 const proposalRouter = require("./routes/proposalRouter");
 const colisRouter = require("./routes/colisRouter");
 const corsOptions = require("./config/corsOptions");
-const uploadRoute = require("./routes/uploadRoute")
+const uploadRoute = require("./routes/uploadRoute");
+const chatRouter = require("./routes/chatRouter");
 const connectDB = require("./config/dbConn");
 
 app.use(cors(corsOptions));
@@ -33,13 +34,17 @@ if (process.env.NODE_ENV === "development") {
     })
   );
 }
-app.use("/api/img",uploadRoute);
-app.use("/storage/media", express.static(path.join(__dirname, "storage", "media")));
+app.use("/api/img", uploadRoute);
+app.use(
+  "/storage/media",
+  express.static(path.join(__dirname, "storage", "media"))
+);
 app.use("/api/auth", authRoute);
 app.use("/api", userRoute);
 app.use("/api", profilRoute);
 app.use("/api/annonce", annonceRoute);
 app.use("/api/proposal", proposalRouter);
 app.use("/api/colis", colisRouter);
+app.use("/api/chat", chatRouter);
 
 module.exports = app;

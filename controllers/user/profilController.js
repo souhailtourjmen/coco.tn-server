@@ -109,13 +109,12 @@ const getProfilListActivity = async (req, res) => {
         .json({ success: false, message: "profil not found" });
     }
     const allProposals = await getAllProposal(profilFound._id);
-    const AllColis = await getAllColis(profilFound._id);
+  
     const listAnnonceFound = await getAllAnnonce(profilFound._id);
 
     return res.status(200).json({
       successful: true,
       allProposals,
-      AllColis,
       listAnnonceFound,
     });
   } catch (error) {

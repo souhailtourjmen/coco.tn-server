@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken } = require("../middleware/auth.Jwt");
+const { verifyToken } = require("../middleware/auth");
 const {
   getAllColisByUser,
   getAllColisById,

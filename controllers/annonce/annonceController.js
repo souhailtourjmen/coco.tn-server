@@ -10,7 +10,8 @@ const {
 
 const getAllAnnonces = async (req, res) => {
   try {
-    const limit = 10;
+    const pageSize = 10; // number of documents per page
+    const pageNumber = 1; // page number to retrieve
     const annonce = await Annonce.find()
       .populate({
         path: "contents",
@@ -49,7 +50,8 @@ const getAllAnnonces = async (req, res) => {
           },
         },
       })
-      .limit(Number(limit))
+      .skip((pageNumber - 1) * pageSize) // calculate the number of documents to skip
+      .limit(pageSize) // limit the number of documents returned to the page size
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -143,7 +145,7 @@ const createAnnonce = async (req, res) => {
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
       pointTrajets: {
-        pointExp: (await createAddress(pointExp)).data ,
+        pointExp: (await createAddress(pointExp)).data,
         pointDist: (await createAddress(pointDist)).data,
       },
       price: price,

@@ -1,7 +1,7 @@
 const express = require('express');
 const router =express.Router();
 const {getAllUsers ,getUserById,updateUserRoleById,updateUserInfoById,deleteUserById}= require('../controllers/user/index');
-const {verifyToken} =require('../middleware/auth.Jwt')
+const { verifyToken } = require("../middleware/auth");
 
 router.get("/getUser/",verifyToken, getUserById);
 router.get("/getAllUsers/", getAllUsers);

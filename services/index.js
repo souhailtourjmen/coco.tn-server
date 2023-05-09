@@ -10,6 +10,14 @@ const {
   updateUserPassword,
 } = require("./userService/");
 const {
+  createChatRoom,
+  getChatRoomById,
+  getChatRoomsByProfile,
+  updatedChatRoom,
+  createChat,
+  getChatById,
+} = require("./chatSevice");
+const {
   createAddress,
   updateAnnonceById,
   getAnnouce,
@@ -42,4 +50,12 @@ module.exports = {
   createAllContent,
   deleteContentByArray,
   /* end annouceService */
+  /*Chat Service */
+  createChatRoom,
+  getChatRoomById,
+  getChatRoomsByProfile,
+  updatedChatRoom,
+  createChat,
+  getChatById,
+  /* end Service  */
 };

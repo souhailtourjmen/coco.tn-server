@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Profil = require("../models/profil") ;
+const { Profil } = require("../../models");
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -14,14 +14,17 @@ const verifyToken = async (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: "No token provided" });
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET )
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.auth = {
-        idProfil:decoded.id
-    }
+      idProfil: decoded.id,
+    };
 
-    const profilFound = await Profil.findById(req.auth.idProfil , { password: 0 });
-    
-    if (!profilFound ) return res.status(404).json({ message: "No user found " });
+    const profilFound = await Profil.findById(req.auth.idProfil, {
+      password: 0,
+    });
+
+    if (!profilFound)
+      return res.status(404).json({ message: "No user found " });
 
     next();
   } catch (err) {
@@ -29,4 +32,4 @@ const verifyToken = async (req, res, next) => {
     res.status(401).json({ message: "Unauthorized" });
   }
 };
-module.exports={verifyToken};
+module.exports = { verifyToken };

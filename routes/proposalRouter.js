@@ -6,7 +6,7 @@ const {
     createProposal,
     deleteProposalById
 } = require("../controllers/annonce/index");
-const {verifyToken} =require('../middleware/auth.Jwt')
+const { verifyToken } = require("../middleware/auth");
 /* Post method createProposal
 * @param  
     idProfil 

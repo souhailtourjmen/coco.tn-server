@@ -8,6 +8,8 @@ const Content = require("./content");
 const Role = require("./role");
 const Review = require("./review");
 const StatutColis = require("./statutColis");
+const Chat = require("./message");
+const ChatRoom = require("./room");
 module.exports = {
   User,
   Transporter,
@@ -20,4 +22,6 @@ module.exports = {
   Role,
   Review,
   StatutColis,
+  ChatRoom,
+  Chat,
 };

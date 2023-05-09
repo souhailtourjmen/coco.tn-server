@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const chatRoomSchema = mongoose.Schema({
-    profils:[{
+    profiles:[{
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'profil',
         required: true

@@ -20,7 +20,7 @@ const createImage = async (image) => {
     console.log(error);
     return reject( {
       success: false,
-      message: "something went wrong, fail to create proposition",
+      message: "something went wrong, fail to create image",
     });
   }
 });
@@ -53,7 +53,7 @@ const createAllImage =async(images)=>{
     } catch (error) {
         return reject({
           success: false,
-          message: "server side error",
+          message: "server side error in image",
           error: error,
         });
       }
