@@ -7,18 +7,15 @@ const {
 } = require("../../services");
 const createChatRoomController = async (req, res) => {
   const idProfil = req.auth.idProfil;
-  const { _profiles, _message } = req.body;
+  const { _profiles } = req.body;
   try {
-    if (!_profiles || !_message) {
+    if (!_profiles) {
       return res.status(404).json({
         success: false,
         message: "All fields are required for create ChatRoom",
       });
     }
-    const { success, data, message } = await createChatRoom({
-      _profiles,
-      _message,
-    });
+    const { success, data, message } = await createChatRoom(_profiles);
     if (success) {
       return res
         .status(201)
@@ -29,22 +26,22 @@ const createChatRoomController = async (req, res) => {
   }
 };
 const updatedChatRoomController = async (req, res) => {
-  const idProfil = req.auth.idProfil;
-  const { _message, chatRoomId } = req.body;
+  const { _chat, chatRoomId } = req.body;
   try {
-    if (!_message?._profil || !_message?._content || !chatRoomId) {
+    if (!_chat?._profile || !_chat?._content || !chatRoomId) {
       return res.status(404).json({
         success: false,
         message: "All fields are required for update ChatRoom",
       });
     }
-    const { success, data, message } = await updatedChatRoom(
-      chatRoomId,
-      _message
-    );
+    const { success, data, message } = await updatedChatRoom(chatRoomId, _chat);
     if (success) {
       return res
         .status(202)
+        .json({ success: success, data: data, message: message });
+    } else {
+      return res
+        .status(304)
         .json({ success: success, data: data, message: message });
     }
   } catch (error) {
@@ -65,8 +62,8 @@ const getChatRoomsByProfileController = async (req, res) => {
   }
 };
 const getChatRoomByIdController = async (req, res) => {
-  const idProfil = req.auth.idProfil;
-  const { chatRoomId } = req.body;
+    const chatRoomId =req.params.chatRoomId
+
   try {
     if (!chatRoomId) {
       return res.status(404).json({

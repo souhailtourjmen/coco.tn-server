@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const ChatSchema = mongoose.Schema({
-  profil: {
+  profile: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "profil",
+    ref: "Profil",
     required: true,
   },
   content: {

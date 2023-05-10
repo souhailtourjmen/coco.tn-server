@@ -24,7 +24,7 @@ router.get(
  * @return {Object}
  * @response getChatRoom
  */
-router.get("/getChatRoomById/", verifyToken, getChatRoomByIdController);
+router.get("/getChatRoomById/:chatRoomId", verifyToken, getChatRoomByIdController);
 
 /* Post method createChatRoom
 * @param  

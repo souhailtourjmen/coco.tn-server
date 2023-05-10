@@ -2,16 +2,16 @@ const { Chat } = require("../../models");
 const createChat = async (chat) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { _profil, _content } = chat;
+      const { _profile, _content } = chat;
 
-      if (!_profil || !_content) {
+      if (!_profile || !_content) {
         return reject({
           success: false,
           message: "All fields are required for create Chat",
         });
       }
       const newChat = new Chat({
-        profil: _profil,
+        profile: _profile,
         content: _content,
       });
 

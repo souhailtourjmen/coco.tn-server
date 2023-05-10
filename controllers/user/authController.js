@@ -104,7 +104,8 @@ const login = async (req, res) => {
       .status(200)
       .json({
         profil: profilFound,
-        successful: true,
+        success: true,
+        message: "profil found" 
       });
   } catch (error) {
     console.log(error);

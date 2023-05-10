@@ -1,25 +1,19 @@
 const { ChatRoom } = require("../../models");
 const { createChat } = require("./messageService");
-const createChatRoom = async (chatRoom) => {
+const createChatRoom = async (_profiles) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { _profiles, _message } = chatRoom;
+      const newChatRoom = new ChatRoom({
+        profiles: _profiles.map((profil) => profil),
+      });
 
-      const { success, data, message } = await createChat(_message);
-      if (success) {
-        const newChatRoom = new ChatRoom({
-          profiles: _profiles.map((profil) => profil),
-          messages: [data._id],
-        });
+      const savedChatRoom = await newChatRoom.save();
 
-        const savedChatRoom = await newChatRoom.save();
-
-        return resolve({
-          success: true,
-          data: savedChatRoom,
-          message: "create ChatRoom",
-        });
-      }
+      return resolve({
+        success: true,
+        data: savedChatRoom,
+        message: "create ChatRoom",
+      });
     } catch (error) {
       console.log(error);
       return reject({
@@ -30,22 +24,29 @@ const createChatRoom = async (chatRoom) => {
     }
   });
 };
-const updatedChatRoom = async (chatRoomId, _message) => {
+const updatedChatRoom = async (chatRoomId, _chat) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { success, data } = await createChat(_message);
+      const { success, data } = await createChat(_chat);
       if (success) {
         const updated_ChatRoom = await ChatRoom.findOneAndUpdate(
           { _id: chatRoomId },
-          { $push: { messages: data._id } },
+          { $push: { messagesRoom: data._id } },
           { new: true }
         );
-
-        return resolve({
-          success: true,
-          data: updated_ChatRoom,
-          message: "updated ChatRoom",
-        });
+        if (updated_ChatRoom) {
+          return resolve({
+            success: true,
+            data: updated_ChatRoom,
+            message: "updated ChatRoom",
+          });
+        } else {
+          return resolve({
+            success: false,
+            data: null,
+            message: "not update ChatRoom",
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -58,7 +59,25 @@ const updatedChatRoom = async (chatRoomId, _message) => {
   });
 };
 const getChatRoomById = async (idChatRoom) => {
-  const ChatRoomFound = await ChatRoom.findById(idChatRoom).exec();
+  const pageSize = 20;
+  const ChatRoomFound = await ChatRoom.findById(idChatRoom)
+    .populate({
+      path: "messagesRoom",
+      select: "profile content created isRead",
+      populate: {
+        path: "profile",
+        select: "user",
+        populate: {
+          path: "user",
+          select: " -_id name ",
+        },
+      },
+    })
+    .select("messagesRoom")
+    //   .skip((pageNumber - 1) * pageSize) // calculate the number of documents to skip
+    .limit(pageSize) // limit the number of documents returned to the page size
+    .sort({ updatedAt: "desc" })
+    .exec();
   if (!ChatRoomFound) {
     throw new Error("error getting ChatRoom");
   } else {
@@ -69,11 +88,48 @@ const getChatRoomById = async (idChatRoom) => {
     };
   }
 };
-const getChatRoomsByProfile = async (idProfil) => {
-    console.log(idProfil);
+const getChatRoomsByProfile = async (idProfil, pageNumber) => {
+  const pageSize = 10;
   const ChatRoomFound = await ChatRoom.find({
     profiles: { $in: [idProfil] },
-  }).exec();
+  })
+    .populate({
+      path: "profiles",
+      select: " user ",
+      populate: {
+        path: "user",
+        select: " -_id name email phone roles image verified note", // select only the lastName firstName email phone and verified fields in profil
+        populate: {
+          path: "roles image",
+          select: "_id role path thumbnail",
+        },
+      },
+    })
+    .populate({
+      path: "messagesRoom",
+      select: "profile content created isRead",
+
+      populate: {
+        path: "profile",
+        select: "user",
+        populate: {
+          path: "user",
+          select: " -_id name email phone roles image verified note", // select only the lastName firstName email phone and verified fields in profil
+          populate: {
+            path: "roles image",
+            select: "_id role path thumbnail",
+          },
+        },
+      },
+      options: {
+        sort: { created: -1 }, // sort by createdAt field in descending order
+        limit: 1, // retrieve just the last populated document
+      },
+    })
+    //   .skip((pageNumber - 1) * pageSize) // calculate the number of documents to skip
+    .limit(pageSize) // limit the number of documents returned to the page size
+    .sort({ updatedAt: "desc" })
+    .exec();
   console.log(ChatRoomFound);
   if (!ChatRoomFound) {
     throw new Error("error getting ChatRoom");
