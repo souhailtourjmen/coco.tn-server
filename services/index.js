@@ -16,6 +16,7 @@ const {
   updatedChatRoom,
   createChat,
   getChatById,
+  getChatRoom,
 } = require("./chatSevice");
 const {
   createAddress,
@@ -57,5 +58,6 @@ module.exports = {
   updatedChatRoom,
   createChat,
   getChatById,
+  getChatRoom,
   /* end Service  */
 };

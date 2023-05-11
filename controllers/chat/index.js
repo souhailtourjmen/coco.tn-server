@@ -4,7 +4,9 @@ const {
   getChatRoomById,
   getChatRoomsByProfile,
   updatedChatRoom,
+  getChatRoom,
 } = require("../../services");
+
 const createChatRoomController = async (req, res) => {
   const idProfil = req.auth.idProfil;
   const { _profiles } = req.body;
@@ -17,6 +19,7 @@ const createChatRoomController = async (req, res) => {
     }
     const { success, data, message } = await createChatRoom(_profiles);
     if (success) {
+      const { success, data, message } = await getChatRoom(_profiles);
       return res
         .status(201)
         .json({ success: success, data: data, message: message });
@@ -35,6 +38,7 @@ const updatedChatRoomController = async (req, res) => {
       });
     }
     const { success, data, message } = await updatedChatRoom(chatRoomId, _chat);
+
     if (success) {
       return res
         .status(202)
@@ -61,8 +65,25 @@ const getChatRoomsByProfileController = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+const getChatRoomController = async (req, res) => {
+  const idProfil = req.auth.idProfil;
+  const secondidProfil = req?.params.secondidProfil;
+  try {
+    const { success, data, message } = await getChatRoom([
+      idProfil,
+      secondidProfil,
+    ]);
+    if (success) {
+      return res
+        .status(200)
+        .json({ success: success, data: data, message: message });
+    }
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 const getChatRoomByIdController = async (req, res) => {
-    const chatRoomId =req.params.chatRoomId
+  const chatRoomId = req.params.chatRoomId;
 
   try {
     if (!chatRoomId) {
@@ -86,4 +107,5 @@ module.exports = {
   updatedChatRoomController,
   getChatRoomsByProfileController,
   getChatRoomByIdController,
+  getChatRoomController,
 };

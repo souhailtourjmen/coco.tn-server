@@ -7,6 +7,7 @@ const {
   updatedChatRoomController,
   getChatRoomsByProfileController,
   getChatRoomByIdController,
+  getChatRoomController
 } = require("../controllers/chat");
 
 /* Get method getChatRoomByProfile
@@ -25,6 +26,13 @@ router.get(
  * @response getChatRoom
  */
 router.get("/getChatRoomById/:chatRoomId", verifyToken, getChatRoomByIdController);
+
+/* Get method getChatRoomById
+ * @param secondidProfil ,
+ * @return {Object}
+ * @response getChatRoom
+ */
+router.get("/getChatRoom/:secondidProfil", verifyToken, getChatRoomController);
 
 /* Post method createChatRoom
 * @param  

@@ -16,7 +16,7 @@ const createChat = async (chat) => {
       });
 
       const savedChat = await newChat.save();
-      
+
       return resolve({
         success: true,
         data: savedChat,
@@ -33,7 +33,17 @@ const createChat = async (chat) => {
   });
 };
 const getChatById = async (idChat) => {
-  const chatFound = await Chat.findById(idChat).exec();
+  const chatFound = await Chat.findById(idChat)
+    .populate({
+        path: "profile",
+        select: "user",
+        populate: {
+          path: "user",
+          select: " -_id name ",
+        },
+    })
+    .select("profile content created isRead")
+    .exec();
   if (!chatFound) {
     throw new Error("error getting chat");
   } else {

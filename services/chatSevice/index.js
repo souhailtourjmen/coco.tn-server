@@ -2,7 +2,8 @@ const {
   createChatRoom,
   getChatRoomById,
   getChatRoomsByProfile,
-  updatedChatRoom
+  updatedChatRoom,
+  getChatRoom,
 } = require("./roomService");
 const { createChat, getChatById } = require("./messageService");
 module.exports = {
@@ -10,6 +11,7 @@ module.exports = {
   getChatRoomById,
   getChatRoomsByProfile,
   updatedChatRoom,
+  getChatRoom,
   createChat,
   getChatById,
 };
