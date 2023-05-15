@@ -1,26 +1,42 @@
 const mongoose = require("mongoose");
 const notificationSchema = mongoose.Schema(
   {
-    message: {
+    notification: {
+      body: {
         type: String,
-        required: true,
       },
-      isRead: {
-        type: Boolean,
-        required: true,
+      screen: {
+        type: String,
       },
-      to: {
-        type:  mongoose.Schema.Types.ObjectId,
-        ref: 'Profil',
+      subtitle: {
+        type: String,
       },
-      from: {
-        type:  mongoose.Schema.Types.ObjectId,
-        ref: 'Profil',
+      title: {
+        type: String,
       },
-      created: {
-        type: Date,
-        default: Date.now,
+      icon: {
+        type: String,
       },
+    },
+    data: {
+      type: Object,
+    },
+    isRead: {
+      type: Boolean,
+      required: true,
+    },
+    to: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profil",
+    },
+    from: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Profil",
+    },
+    created: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

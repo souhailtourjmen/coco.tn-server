@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware/auth");
 const {
-  getAllColisByUser,
-  getAllColisById,
-  createColis,
-  updateStatutColis,
+  getAllColisByUserController,
+  getColisByIdControllers,
+  createColisControllers,
+  updateStatutColisController,
+  deleteColisByIDController,
 } = require("../controllers/Colis/index");
 
 /* Post method createColis
@@ -14,21 +15,21 @@ const {
 * @return {Object}
 * @response data colis
 */
-router.post("/createColis/", verifyToken, createColis);
+router.post("/createColis/", verifyToken, createColisControllers);
 
 /* Get method getAllColisByUse
  * @param ,idProfil
  * @return {Object}
  * @response Allcolis
  */
-router.get("/getAllColisByUser/", verifyToken, getAllColisByUser);
+router.get("/getAllColisByUser/", verifyToken, getAllColisByUserController);
 
 /* Get method getAllColisById
  * @param idColis,
  * @return {Object}
  * @response colis
  */
-router.get("/getAllColisById/", verifyToken, getAllColisById);
+router.get("/getColisById/", verifyToken, getColisByIdControllers);
 
 /* put method updateStatutColis
  * @param statut, idColis
@@ -42,6 +43,6 @@ router.get("/getAllColisById/", verifyToken, getAllColisById);
  * livré
  * retour'
  */
-router.put("/updateStatutColis/", verifyToken, updateStatutColis);
+router.put("/updateStatutColis/", verifyToken, updateStatutColisController);
 
 module.exports = router;

@@ -3,16 +3,20 @@ const app = express();
 const path = require("path");
 app.use(express.urlencoded({ extended: false }));
 const cors = require("cors");
+const connectDB = require("./config/dataBase");
+const corsOptions = require("./config/corsOption");
+
 const userRoute = require("./routes/userRoute");
 const profilRoute = require("./routes/profilRoute");
 const authRoute = require("./routes/auth");
 const annonceRoute = require("./routes/annonceRoute");
 const proposalRouter = require("./routes/proposalRouter");
 const colisRouter = require("./routes/colisRouter");
-const corsOptions = require("./config/corsOptions");
 const uploadRoute = require("./routes/uploadRoute");
 const chatRouter = require("./routes/chatRouter");
-const connectDB = require("./config/dbConn");
+/* test route */
+const testRoute = require("./test/routes/testFCM");
+/*end test */
 
 app.use(cors(corsOptions));
 
@@ -46,5 +50,6 @@ app.use("/api/annonce", annonceRoute);
 app.use("/api/proposal", proposalRouter);
 app.use("/api/colis", colisRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/test", testRoute);
 
 module.exports = app;

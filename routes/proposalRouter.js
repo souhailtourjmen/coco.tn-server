@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const {
-    getAllProposalbyIdProfil,
-    getProposalById,
-    createProposal,
-    deleteProposalById
+    getAllProposalbyIdProfilController,
+  getProposalByIdController,
+  createProposalController,
+  deleteProposalByIdController,
 } = require("../controllers/annonce/index");
 const { verifyToken } = require("../middleware/auth");
 /* Post method createProposal
@@ -18,20 +18,20 @@ const { verifyToken } = require("../middleware/auth");
 * @return {Object}
 * @response data proposition
 */
-router.post("/createProposal/",verifyToken, createProposal);
+router.post("/createProposal/",verifyToken, createProposalController);
 
 /* Get method getAllProposalbyIdProfil
  * @param ,
  * @return {Object}
  * @response AllProposition
  */
-router.get("/getAllProposalbyIdProfil/", getAllProposalbyIdProfil);
+router.get("/getAllProposalbyIdProfil/", getAllProposalbyIdProfilController);
 
 /* Get method getPropositionById
  * @param idProposition ,
  * @return {Object}
  * @response Proposition
  */
-router.get("/getProposalById/", getProposalById);
+router.get("/getProposalById/", getProposalByIdController);
 
 module.exports = router;

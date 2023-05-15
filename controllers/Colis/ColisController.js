@@ -1,10 +1,22 @@
-const Colis = require("../../models/colis");
-const Profil = require("../../models/profil");
-const Proposal = require("../../models/proposal");
-const StatutColis = require("../../models/statutColis");
-const Annonce = require("../../models/annonce");
-const { updateAnnonceById } = require("../../services");
-const getAllColisByUser = async (req, res) => {
+const {
+  Colis,
+  Profil,
+  Proposal,
+  StatutColis,
+  Annonce,
+} = require("../../models");
+const { path } = require("../../models/Transporter");
+
+const {
+  createColis,
+  updateStatutColis,
+  deleteColisByID,
+  getColisById,
+  updateAnnonceById,
+  updateStatutProposal,
+} = require("../../services");
+require("dotenv").config();
+const getAllColisByUserController = async (req, res) => {
   const { idProfil } = req.body.idProfil;
 
   try {
@@ -25,14 +37,13 @@ const getAllColisByUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const getAllColisById = async (req, res) => {
-  const { idColis } = req.body.idColis;
-
+const getColisByIdControllers = async (req, res) => {
   try {
-    if (!idColis) {
+    if (!req.body?.idColis) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const colisFound = await Colis.findById(idColis);
+    const colisFound = await getColisById(req.body?.idColis);
+
     if (!colisFound) {
       return res
         .status(404)
@@ -44,9 +55,10 @@ const getAllColisById = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const createColis = async (req, res) => {
+const createColisControllers = async (req, res) => {
   try {
     const { idAnnonce, idProposal } = req.body;
+
     /* block check id  */
     const idProfil = req.auth.idProfil;
 
@@ -55,6 +67,7 @@ const createColis = async (req, res) => {
       return res.status(404).json({ message: "All fields are required" });
     }
     const annonceFound = await Annonce.findById(idAnnonce);
+
     if (!annonceFound) {
       // check id annonce
       return res
@@ -63,6 +76,7 @@ const createColis = async (req, res) => {
     }
 
     const proposalFound = await Proposal.findById(idProposal);
+
     if (!proposalFound) {
       //  check id proposals
       return res
@@ -83,40 +97,57 @@ const createColis = async (req, res) => {
   * retour'
   
   */
-    const statutColisDefault = await StatutColis.find({
-      statut: { $in: "enregistré" },
-    });
-    /* creation nouveau colis  */
-    const colis = new Colis({
-      idAnnonce: annonceFound._id,
-      proposal_Accept: idProposal,
-      statut: statutColisDefault.map((item) => item._id),
-    });
-    updateAnnonceById(annonceFound._id, "archives")
-      // check update annonce
-      .catch((error) => {
-        console.error("Error updating Annonce:", error);
-        return res
-          .status(404)
-          .json({ success: false, message: "annonce not updated" });
-      });
 
-    const savedColis = await colis.save();
-    if (savedColis) {
-      await profilExp.insertColis(savedColis._id, "Exp"); // add colis in ProfileExpiditaire
-      await profilTrans.insertColis(savedColis._id, "Liv"); // add colis in ProfileTransporter
+    /* creation nouveau colis  */
+    const { success, data, message } = await createColis(
+      idAnnonce,
+      idProposal,
+      process.env.statutColisDefault
+    );
+    if (success) {
+      await updateAnnonceById(idAnnonce, "archives")
+        //check update annonce
+        .catch((error) => {
+          console.error("Error updating Annonce:", error);
+          return res.status(401).json({
+            success: false,
+            data: null,
+            message:
+              "something went wrong, fail to updating Annonce in create colis",
+          });
+        });
+      await updateStatutProposal("Accepted", idProposal)
+        //check update proposal
+        .catch((error) => {
+          console.error("Error updating propoal:", error);
+          return res.status(401).json({
+            success: false,
+            data: null,
+            message:
+              "something went wrong, fail to updating Proposal in create colis",
+          });
+        });
+      await profilExp.insertColis(data._id, "Exp"); // add colis in ProfileExpiditaire
+      await profilTrans.insertColis(data._id, "Liv"); // add colis in ProfileTransporter
+
+      return res.status(201).json({
+        success: true,
+        data: data,
+        message: "create Colis",
+      });
+    } else {
+      return res.status(500).json({
+        success: success,
+        data: null,
+        message: message,
+      });
     }
-    return res.status(201).json({
-      success: true,
-      data: {
-        colis,
-      },
-    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "something went wrong, fail to create profil ",
+      data: null,
+      message: "something went wrong, fail to create colis in controller ",
     });
   }
 };
@@ -129,24 +160,63 @@ const createColis = async (req, res) => {
  * livré
  * retour'
  */
-const updateStatutColis = async (req, res) => {
-  const { statut, idColis } = req.body;
+const updateStatutColisController = async (req, res) => {
+  const { idStatut, idColis } = req.body;
 
   try {
     /* block check id  */
 
-    if (!idColis || !statut) {
+    if (!idColis || !idStatut) {
       //check all fields
       return res.status(404).json({ message: "All fields are required" });
     }
-    const newStatuts = await StatutColis.find({
-      statut: { $in: statut },
-    });
+    const newStatuts = await StatutColis.findById(idStatut);
+    console.log(newStatuts);
     if (!newStatuts)
       return res
         .status(404)
         .json({ success: false, message: "not statut provided" });
+    console.log(newStatuts);
+    const colisFound = await Colis.findById(idColis);
 
+    if (!colisFound)
+      return res
+        .status(404)
+        .json({ success: false, message: "colis not found" });
+    const statusExists = await colisFound.statut.some(
+      (s) => s.statutColis.toString() === newStatuts._id
+    );
+    if (!statusExists && newStatuts?._id && colisFound?.id) {
+      const { success, data, message } = await updateStatutColis(
+        newStatuts._id,
+        colisFound.id
+      );
+      if (success) {
+        return res
+          .status(200)
+          .json({ success: success, data: data, message: message });
+      } else {
+        return res
+          .status(400)
+          .json({ success: success, data: null, message: message });
+      }
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, data: null, message: "status exists" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error });
+  }
+};
+const deleteColisByIDController = async (req, res) => {
+  try {
+    const idColis = req.body.idColis;
+    if (!idColis) {
+      //check all fields
+      return res.status(404).json({ message: "All fields are required" });
+    }
     const colisFound = await Colis.findById(idColis);
 
     if (!colisFound)
@@ -154,57 +224,18 @@ const updateStatutColis = async (req, res) => {
         .status(404)
         .json({ success: false, message: "colis not found" });
 
-    /* check duplcate colis */
-    let x;
-    newStatuts.map((item) => (x = item._id));
-    let check;
-    colisFound.statut.map((item) => {
-      check = item._id.equals(x);
-    });
-    if (check)
-      return res.status(404).json({
-        success: false,
-        message: "statut exist",
+    const { success, data, message } = await deleteColisByID(colisFound._id);
+    if (success) {
+      return res.status(200).json({
+        success: true,
+        data: data,
+        message: message,
       });
-    /* end dplicate  */
-    const colis = await Colis.findByIdAndUpdate(
-      colisFound._id,
-      { $push: { statut: { $each: newStatuts } } },
-      { new: true }
-    );
-    return res
-      .status(200)
-      .json({ success: true, data: colis, statut: newStatuts });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, message: error });
-  }
-};
-const deleteColisByID = async (req, res) => {
-  try {
-    const idColis = req.body.idColis;
-    if (!idColis) {
-      //check all fields
-      return res.status(404).json({ message: "All fields are required" });
-    }
-    const colisFound = await Colis.findById(idColis).populate({
-      path: "proposal_Accept",
-    });
-
-    if (!colisFound)
+    } else {
       return res
-        .status(404)
-        .json({ success: false, message: "colis not found" });
-
-    const colisdeleted = await Colis.deleteOne({
-      _id: colisFound._id,
-    });
-
-    return res.status(200).json({
-      successful: true,
-      data: colisdeleted,
-      message: `colis delete successfully`,
-    });
+        .status(500)
+        .json({ success: false, data: data, message: "server side error" });
+    }
   } catch (error) {
     console.log(error);
     return res
@@ -214,8 +245,9 @@ const deleteColisByID = async (req, res) => {
 };
 
 module.exports = {
-  getAllColisByUser,
-  getAllColisById,
-  createColis,
-  updateStatutColis,
+  getAllColisByUserController,
+  getColisByIdControllers,
+  createColisControllers,
+  updateStatutColisController,
+  deleteColisByIDController,
 };

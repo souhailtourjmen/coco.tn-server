@@ -1,8 +1,15 @@
 const Annonce = require("../../models/annonce");
 const Proposal = require("../../models/proposal");
 const Profil = require("../../models/profil");
-const { createAddress } = require("../../services/index");
-const getAllProposalbyIdProfil = async (req, res) => {
+const {
+  createAddress,
+  updateAnnonceById,
+  createProposal,
+  updateStatutProposal,
+  deleteProposalByID,
+  getProposalById,
+} = require("../../services");
+const getAllProposalbyIdProfilController = async (req, res) => {
   try {
     const idProfil = req.body.idProfil;
     if (!idProfil) {
@@ -14,17 +21,18 @@ const getAllProposalbyIdProfil = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const proposals = await Proposal.find({ profil: profilFound._id }).populate({
-      path: "pointPickup",
-      
-    })
+    const proposals = await Proposal.find({ profil: profilFound._id }).populate(
+      {
+        path: "pointPickup",
+      }
+    );
     return res.status(200).json(proposals);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error });
   }
 };
-const getProposalById = async (req, res) => {
+const getProposalByIdController = async (req, res) => {
   try {
     if (!req.body.idProposal) {
       return res.status(404).json({ message: "All fields are required" });
@@ -44,19 +52,15 @@ const getProposalById = async (req, res) => {
   }
 };
 
-const createProposal = async (req, res) => {
+const createProposalController = async (req, res) => {
   try {
-    const { idAnnonce, text, price, } = req.body;
+    const { idAnnonce, text, price } = req.body;
 
     const idProfil = req.auth.idProfil;
-    if (
-      !idProfil ||
-      !idAnnonce ||
-      !text ||
-      !price
-     
-    ) {
-      return res.status(404).json({ message: `All fields are required idProfil: ${idProfil} idAnnonce ${idAnnonce} text ${text}` });
+    if (!idProfil || !idAnnonce || !text || !price) {
+      return res.status(404).json({
+        message: `All fields are required idProfil: ${idProfil} idAnnonce ${idAnnonce} text ${text}`,
+      });
     }
     const profilFound = await Profil.findById(idProfil).exec();
 
@@ -73,28 +77,40 @@ const createProposal = async (req, res) => {
         .json({ success: false, message: " annonce   not found" });
     }
 
-    const proposal = new Proposal({
-      profil: profilFound._id,
-      Annonce: annonceFound._id,
-      text: text,
-      price: price,
-    });
-
-    const savedProposal = await proposal.save(annonceFound._id);
-    if (savedProposal) {
+    const { success, data, message } = await createProposal(
+      profilFound._id,
+      annonceFound._id,
+      text,
+      price
+    );
+    if (success) {
       if (annonceFound.statut === "in progress") {
-        annonceFound.statut = "Colis"; // update statut annouce
-        await annonceFound.save();
+        await updateAnnonceById(annonceFound._id, "Colis")
+          //check update annonce
+          .catch((error) => {
+            console.error("Error updating Annonce:", error);
+            return res.status(401).json({
+              success: false,
+              data: null,
+              message:
+                "something went wrong, fail to updating Annonce in create propoal",
+            });
+          });
       }
-      await annonceFound.insertProposal(proposal._id); // add proposal in Annonce
-      await profilFound.insertProposal(proposal._id); // add proposal in Propasal
+      await annonceFound.insertProposal(data._id); // add proposal in Annonce
+      await profilFound.insertProposal(data._id); // add proposal in Propasal
+      return res.status(201).json({
+        success: success,
+        data: null,
+        message: message,
+      });
+    } else {
+      return res.status(404).json({
+        success: success,
+        data: data,
+        message: message,
+      });
     }
-    return res.status(201).json({
-      success: true,
-      data: {
-        proposal,
-      },
-    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -103,7 +119,7 @@ const createProposal = async (req, res) => {
     });
   }
 };
-const deleteProposalById = async (req, res) => {
+const deleteProposalByIdController = async (req, res) => {
   try {
     if (!req.body.idProposal) {
       return res.status(404).json({ message: "All fields are required" });
@@ -132,8 +148,8 @@ const deleteProposalById = async (req, res) => {
 };
 
 module.exports = {
-  getAllProposalbyIdProfil,
-  getProposalById,
-  createProposal,
-  deleteProposalById,
+  getAllProposalbyIdProfilController,
+  getProposalByIdController,
+  createProposalController,
+  deleteProposalByIdController,
 };

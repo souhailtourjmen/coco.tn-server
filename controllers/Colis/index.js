@@ -1,9 +1,9 @@
 const {
-  getAllColisByUser,
-  getAllColisById,
-  createColis,
-  updateStatutColis,
-
+  getAllColisByUserController,
+  getColisByIdControllers,
+  createColisControllers,
+  updateStatutColisController,
+  deleteColisByIDController,
 } = require("./ColisController");
 const {
   getAllReview,
@@ -14,10 +14,11 @@ const {
 
 module.exports = {
   /* controller colis  */
-  getAllColisByUser,
-  getAllColisById,
-  createColis,
-  updateStatutColis,
+  getAllColisByUserController,
+  getColisByIdControllers,
+  createColisControllers,
+  updateStatutColisController,
+  deleteColisByIDController,
 
   /* controller review */
   getAllReview,

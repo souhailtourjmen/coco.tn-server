@@ -13,6 +13,11 @@ function connectIO(server) {
     socket.on("startChat", (data) => {
       if (data?.chatRoomId) {
         // Join both users to the private room
+        socket.rooms.forEach((room) => {
+          if (room !== socket.id) {
+            socket.leave(room);
+          }
+        });
         socket.join(data?.chatRoomId);
         console.log(socket.rooms);
       }

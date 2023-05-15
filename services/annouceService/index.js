@@ -1,6 +1,12 @@
 const { createAddress } = require("./addressService");
 const { updateAnnonceById, getAnnouce } = require("./annouceService");
 const {
+  createProposal,
+  updateStatutProposal,
+  deleteProposalByID,
+  getProposalById,
+} = require("./proposalService");
+const {
   createContent,
   createAllContent,
   deleteContentByArray,
@@ -16,4 +22,10 @@ module.exports = {
   createAllContent,
   deleteContentByArray,
   /*end contentService */
+  /* proposal Service  */
+  createProposal,
+  updateStatutProposal,
+  deleteProposalByID,
+  getProposalById,
+  /* end proposalService */
 };

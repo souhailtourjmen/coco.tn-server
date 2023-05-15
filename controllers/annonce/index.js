@@ -11,10 +11,10 @@ const {
   deleteImageById,
 } = require("./imageController");
 const {
-  getAllProposalbyIdProfil,
-  getProposalById,
-  createProposal,
-  deleteProposalById
+  getAllProposalbyIdProfilController,
+  getProposalByIdController,
+  createProposalController,
+  deleteProposalByIdController,
 } = require("./proposalController");
 const {
   getAllContents,
@@ -36,10 +36,10 @@ module.exports = {
   deleteImageById,
   /* end controller image */
   /* controller proposition */
-  getAllProposalbyIdProfil,
-    getProposalById,
-    createProposal,
-    deleteProposalById,
+  getAllProposalbyIdProfilController,
+  getProposalByIdController,
+  createProposalController,
+  deleteProposalByIdController,
   /**  end controller proposition */
   /* controller Content */
   getAllContents,

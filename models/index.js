@@ -10,6 +10,7 @@ const Review = require("./review");
 const StatutColis = require("./statutColis");
 const Chat = require("./message");
 const ChatRoom = require("./room");
+const Proposal =require("./proposal")
 module.exports = {
   User,
   Transporter,
@@ -24,4 +25,5 @@ module.exports = {
   StatutColis,
   ChatRoom,
   Chat,
+  Proposal
 };

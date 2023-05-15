@@ -19,8 +19,7 @@ const getProfilById = async (idProfil) => {
 };
 const getAllProposal = async (idProfil) => {
   const selectPropsal = "text price pointPickup created Annonce";
-  const selectAnnonce =
-    "profilexp  pointTrajets description contents";
+  const selectAnnonce = "profilexp  pointTrajets description contents";
   const selectTotal = "listProposal";
   try {
     return await Profil.findById(idProfil)
@@ -83,7 +82,6 @@ const getAllProposal = async (idProfil) => {
   }
 };
 const getlistColisLiv = async (idProfil) => {
- 
   const selectTotal = "listColisLiv";
   try {
     return await Profil.findById(idProfil)
@@ -99,8 +97,7 @@ const getlistColisLiv = async (idProfil) => {
             populate: {
               path: "user",
               select: " -_id name email phone  verified ",
-              
-                        },
+            },
           },
         },
         options: { sort: { createdAt: -1 } },
@@ -133,12 +130,12 @@ const getlistColisLiv = async (idProfil) => {
         },
         options: { sort: { createdAt: -1 } },
       })
-    
+
       .populate({
         path: "listColisLiv",
         select: "statut created ",
         populate: {
-          path: "statut",
+          path: "statut.statutColis",
         },
         options: { sort: { createdAt: -1 } },
       })
@@ -151,28 +148,26 @@ const getlistColisLiv = async (idProfil) => {
   }
 };
 const getlistColisExp = async (idProfil) => {
- 
   const selectTotal = "listColisExp";
   try {
     return await Profil.findById(idProfil)
-      .populate({
-        path: "listColisExp",
-        select: "idAnnonce",
-        populate: {
-          path: "idAnnonce",
-          select: "profilexp profilDest",
-          populate: {
-            path: "profilexp profilDest",
-            select: "user",
-            populate: {
-              path: "user",
-              select: " -_id name email phone  verified ",
-              
-                        },
-          },
-        },
-        options: { sort: { createdAt: -1 } },
-      })
+      // .populate({
+      //   path: "listColisExp",
+      //   select: "idAnnonce",
+      //   populate: {
+      //     path: "idAnnonce",
+      //     select: "profilexp profilDest",
+      //     populate: {
+      //       path: "profilexp profilDest",
+      //       select: "user",
+      //       populate: {
+      //         path: "user",
+      //         select: " -_id name email phone  verified ",
+      //       },
+      //     },
+      //   },
+      //   options: { sort: { createdAt: -1 } },
+      // })
       .populate({
         path: "listColisExp",
         select: "idAnnonce",
@@ -201,14 +196,33 @@ const getlistColisExp = async (idProfil) => {
         },
         options: { sort: { createdAt: -1 } },
       })
-    
       .populate({
         path: "listColisExp",
-        select: "statut created ",
+        select: "proposal_Accept",
         populate: {
-          path: "statut",
+          path: "proposal_Accept",
+          select: "profil price",
+          populate: {
+            path: "profil",
+            select: "profil user",
+            populate: {
+              path: "user",
+              select: "verified name image phone",
+              populate: {
+                path: "image",
+                select: "path thumbnail",
+              },
+            },
+          },
         },
-        options: { sort: { createdAt: -1 } },
+      })
+      .populate({
+        path: "listColisExp",
+        select: "statut created  ",
+        populate: {
+          path: "statut.statutColis",
+        },
+        options: { sort: { updatedAt: -1 } },
       })
       .select(selectTotal)
       // .limit(Number(limit))
@@ -218,15 +232,15 @@ const getlistColisExp = async (idProfil) => {
     console.error("Error getAllColis :", error);
   }
 };
-const getAllAnnonce = async (idProfil,filter) => {
+const getAllAnnonce = async (idProfil, filter) => {
   const limit = 10; // limit the number of documents to 10
   const fields = "-_id listAnnonce "; // select only the listAnnonce fields
-  console.log(filter)
+  console.log(filter);
   try {
     return await Profil.findById(idProfil)
       .populate({
         path: "listAnnonce",
-        
+
         populate: {
           path: "listProposal",
           populate: {
@@ -288,4 +302,10 @@ const getAllAnnonce = async (idProfil,filter) => {
     console.error("Error getAllAnnonce :", error);
   }
 };
-module.exports = { getProfilById, getAllProposal, getAllAnnonce, getlistColisExp,getlistColisLiv };
+module.exports = {
+  getProfilById,
+  getAllProposal,
+  getAllAnnonce,
+  getlistColisExp,
+  getlistColisLiv,
+};

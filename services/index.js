@@ -25,7 +25,18 @@ const {
   createContent,
   createAllContent,
   deleteContentByArray,
+  createProposal,
+  updateStatutProposal,
+  deleteProposalByID,
+  getProposalById,
 } = require("./annouceService/");
+
+const {
+  createColis,
+  updateStatutColis,
+  deleteColisByID,
+  getColisById,
+} = require("./colisService/colisServicee");
 const { createImage, createAllImage } = require("./imageService/imageService");
 module.exports = {
   /* userService */
@@ -50,6 +61,10 @@ module.exports = {
   createContent,
   createAllContent,
   deleteContentByArray,
+  createProposal,
+  updateStatutProposal,
+  deleteProposalByID,
+  getProposalById,
   /* end annouceService */
   /*Chat Service */
   createChatRoom,
@@ -60,4 +75,10 @@ module.exports = {
   getChatById,
   getChatRoom,
   /* end Service  */
+  /* Colis Service */
+  createColis,
+  updateStatutColis,
+  deleteColisByID,
+  getColisById,
+  /* end Service */
 };

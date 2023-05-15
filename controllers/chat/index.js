@@ -54,6 +54,7 @@ const updatedChatRoomController = async (req, res) => {
 };
 const getChatRoomsByProfileController = async (req, res) => {
   const idProfil = req.auth.idProfil;
+  console.log("refetch")
   try {
     const { success, data, message } = await getChatRoomsByProfile(idProfil);
     if (success) {
