@@ -15,10 +15,10 @@ const checkDuplicatedEmail = async (req, res, next) => {
   }
 };
 
-const checkRolesExisted = async (req, res, next) => {
+const checkroleExisted = async (req, res, next) => {
   if (req.body.role) {
-    const rolesFound = await Role.find({ code: { $in: req.body.role } });
-    if (!rolesFound) {
+    const roleFound = await Role.find({ code: { $in: req.body.role } });
+    if (!roleFound) {
       return res
         .status(404)
         .json({ success: false, message: "role not found" });
@@ -27,4 +27,4 @@ const checkRolesExisted = async (req, res, next) => {
   next();
 };
 
-module.exports = { checkDuplicatedEmail, checkRolesExisted };
+module.exports = { checkDuplicatedEmail, checkroleExisted };

@@ -8,7 +8,16 @@ const {
   getUserById,
   updateUserInfo,
   updateUserPassword,
+  updateIsrequired,
 } = require("./userService/");
+const {
+  createRequest,
+  getRequestById,
+  updateStatusRequest,
+  createDocument,
+  getDocumentById,
+  getStatusRequestById,
+} = require("./RequestUpgrade");
 const {
   createChatRoom,
   getChatRoomById,
@@ -36,6 +45,7 @@ const {
   updateStatutColis,
   deleteColisByID,
   getColisById,
+  getStatusColisById,
 } = require("./colisService/colisServicee");
 const { createImage, createAllImage } = require("./imageService/imageService");
 module.exports = {
@@ -49,6 +59,7 @@ module.exports = {
   getUserById,
   updateUserInfo,
   updateUserPassword,
+  updateIsrequired,
   /* end userService */
   /*imageService */
   createImage,
@@ -80,5 +91,15 @@ module.exports = {
   updateStatutColis,
   deleteColisByID,
   getColisById,
+  getStatusColisById,
+
   /* end Service */
+  /*RequestUpgrade Role Service  */
+  createRequest,
+  getRequestById,
+  updateStatusRequest,
+  createDocument,
+  getDocumentById,
+  getStatusRequestById,
+  /*end RequestUpgrade */
 };

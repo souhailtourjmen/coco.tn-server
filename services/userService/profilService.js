@@ -1,15 +1,16 @@
 const { Profil } = require("../../models");
+
 const getProfilById = async (idProfil) => {
   const profilFound = await Profil.findById(idProfil)
     .populate({
       path: "user",
-      select: "-_id cin phone gender email name image verified roles adresses",
+      select: "-_id cin phone gender email name image verified role adresses",
       populate: {
-        path: "roles adresses image",
-        select: "_id role place_id city country location path thumbnail",
+        path: "role adresses image",
+        select: "_id code place_id city country location path thumbnail",
       },
     })
-    .select("tokens user")
+    .select("tokens user isRequired")
     .exec();
   if (!profilFound) {
     throw new Error("error getting user");
@@ -33,9 +34,9 @@ const getAllProposal = async (idProfil) => {
             select: "user",
             populate: {
               path: "user",
-              select: " -_id name email phone image roles verified ",
+              select: " -_id name email phone image role verified ",
               populate: {
-                path: "image roles",
+                path: "image role",
                 select: "role path thumbnail",
               },
             },
@@ -82,26 +83,26 @@ const getAllProposal = async (idProfil) => {
   }
 };
 const getlistColisLiv = async (idProfil) => {
-  const selectTotal = "listColisLiv";
+  const selectTotal = "-_id listColisLiv";
   try {
     return await Profil.findById(idProfil)
-      .populate({
-        path: "listColisLiv",
-        select: "idAnnonce",
-        populate: {
-          path: "idAnnonce",
-          select: "profilexp profilDest",
-          populate: {
-            path: "profilexp profilDest",
-            select: "user",
-            populate: {
-              path: "user",
-              select: " -_id name email phone  verified ",
-            },
-          },
-        },
-        options: { sort: { createdAt: -1 } },
-      })
+      // .populate({
+      //   path: "listColisLiv",
+      //   select: "idAnnonce",
+      //   populate: {
+      //     path: "idAnnonce",
+      //     select: "profilexp profilDest",
+      //     populate: {
+      //       path: "profilexp profilDest",
+      //       select: "user",
+      //       populate: {
+      //         path: "user",
+      //         select: " -_id name email phone  verified ",
+      //       },
+      //     },
+      //   },
+      //   options: { sort: { createdAt: -1 } },
+      // })
       .populate({
         path: "listColisLiv",
         select: "idAnnonce",
@@ -148,7 +149,7 @@ const getlistColisLiv = async (idProfil) => {
   }
 };
 const getlistColisExp = async (idProfil) => {
-  const selectTotal = "listColisExp";
+  const selectTotal = "-_id listColisExp";
   try {
     return await Profil.findById(idProfil)
       // .populate({
@@ -235,22 +236,21 @@ const getlistColisExp = async (idProfil) => {
 const getAllAnnonce = async (idProfil, filter) => {
   const limit = 10; // limit the number of documents to 10
   const fields = "-_id listAnnonce "; // select only the listAnnonce fields
-  console.log(filter);
+console.log(filter)
   try {
     return await Profil.findById(idProfil)
       .populate({
         path: "listAnnonce",
-
         populate: {
           path: "listProposal",
           populate: {
             path: "profil",
-            select: " user listReview ", // select only the user and listReview fields in profil
+            select: "user", // select only the user and listReview fields in profil
             populate: {
-              path: "user listReview",
-              select: "-_id name email phone image roles verified note", // select only the lastName firstName email phone and verified fields in profil
+              path: "user",
+              select: "-_id name email phone image role verified ", // select only the lastName firstName email phone and verified fields in profil
               populate: {
-                path: "image roles",
+                path: "image role",
                 select: "role path thumbnail",
               },
             },
@@ -261,7 +261,7 @@ const getAllAnnonce = async (idProfil, filter) => {
 
       .populate({
         path: "listAnnonce",
-        match: { statut: filter }, // ajouter le filtre pour le statut "en attente"
+        match: filter ? { statut: filter } : {}, // ajouter le filtre pour le statut "en attente"
         populate: {
           path: "contents",
           populate: {
@@ -272,7 +272,7 @@ const getAllAnnonce = async (idProfil, filter) => {
       })
       .populate({
         path: "listAnnonce",
-        match: { statut: filter }, // ajouter le filtre pour le statut "en attente"
+        match: filter ? { statut: filter } : {}, // ajouter le filtre pour le statut "en attente"
         populate: {
           path: "pointTrajets.pointExp pointTrajets.pointDist",
           select: " -_id place_id  city country location ",
@@ -280,15 +280,15 @@ const getAllAnnonce = async (idProfil, filter) => {
       })
       .populate({
         path: "listAnnonce",
-        match: { statut: filter }, // ajouter le filtre pour le statut "en attente"
+        match: filter ? { statut: filter } : {}, // ajouter le filtre pour le statut "en attente"
         populate: {
-          path: "profilexp profilDest",
-          select: " user  ",
+          path: "profilexp",
+          select: "user",
           populate: {
             path: "user",
-            select: " -_id name email phone image roles verified ",
+            select: " -_id name email phone image role verified ",
             populate: {
-              path: "image roles",
+              path: "image role",
               select: "role path thumbnail",
             },
           },
@@ -302,10 +302,24 @@ const getAllAnnonce = async (idProfil, filter) => {
     console.error("Error getAllAnnonce :", error);
   }
 };
+
+const updateIsrequired = async (idProfil, value) => {
+  Profil.findOneAndUpdate({ _id: idProfil }, { isRequired: value })
+    .then((doc) => {
+      console.log("Profil updated successfully:");
+      return { success: true };
+    })
+    .catch((error) => {
+      console.error("Error updating Profil:", error);
+      return { success: false };
+    });
+    return getProfilById(idProfil);
+};
 module.exports = {
   getProfilById,
   getAllProposal,
   getAllAnnonce,
   getlistColisExp,
   getlistColisLiv,
+  updateIsrequired,
 };

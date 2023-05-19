@@ -39,5 +39,5 @@ PORT=
 
 - **routes:** USERS ,PROFIL, ANNONCE, PROPOSITION ,  AUTH (Login/SingUp),
 
-- initial mongoose set up with :  roles (admin transporteur annonceur).
+- initial mongoose set up with :  role (admin transporteur annonceur).
 

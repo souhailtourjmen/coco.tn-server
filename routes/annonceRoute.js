@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware/auth");
 const {
-  getAllAnnonces,
-  createAnnonce,
-  getAnnonceById,
+  getAllAnnoncesController,
+  createAnnonceController,
+  getAnnonceByIdController,
 } = require("../controllers/annonce/index");
 
 /* Post method createAnnonce
@@ -22,20 +22,20 @@ const {
 * @return {Object}
 * @response data annonce
 */
-router.post("/createAnnonce/", verifyToken, createAnnonce);
+router.post("/createAnnonce/", verifyToken, createAnnonceController);
 
 /* Get method getAllAnnonces
  * @param ,
  * @return {Object}
  * @response AllAnnonces
  */
-router.get("/fetchAllAnnonces/", verifyToken, getAllAnnonces);
+router.get("/fetchAllAnnonces/", verifyToken, getAllAnnoncesController);
 
 /* Get method getAllAnnonces
  * @param idAnnonce ,
  * @return {Object}
  * @response Annonces
  */
-router.get("/fetchAnnonceById/", verifyToken, getAnnonceById);
+router.get("/fetchAnnonceById/:idAnnonce", verifyToken, getAnnonceByIdController);
 
 module.exports = router;

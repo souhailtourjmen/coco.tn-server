@@ -5,6 +5,7 @@ const {
   getAllAnnonce,
   getlistColisExp,
   getlistColisLiv,
+  updateIsrequired
 } = require("./profilService");
 const {
   getUserById,
@@ -23,6 +24,7 @@ module.exports = {
   getAllAnnonce,
   getlistColisExp,
   getlistColisLiv,
+  updateIsrequired,
   /*end ProfilService */
   /* UserService */
   getUserById,

@@ -1,7 +1,7 @@
 const {
-  getAllAnnonces,
-  createAnnonce,
-  getAnnonceById,
+  getAllAnnoncesController,
+  createAnnonceController,
+  getAnnonceByIdController,
 
 } = require("./annonceController");
 const {
@@ -24,9 +24,9 @@ const {
 
 module.exports = {
   /* controller annonce  */
-  getAllAnnonces,
-  createAnnonce,
-  getAnnonceById,
+  getAllAnnoncesController,
+  createAnnonceController,
+  getAnnonceByIdController,
 
   /* end controller annonce */
   /* controller image */

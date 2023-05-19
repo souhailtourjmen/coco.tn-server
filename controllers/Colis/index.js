@@ -4,6 +4,7 @@ const {
   createColisControllers,
   updateStatutColisController,
   deleteColisByIDController,
+  getStatusColisByIdController
 } = require("./ColisController");
 const {
   getAllReview,
@@ -19,6 +20,7 @@ module.exports = {
   createColisControllers,
   updateStatutColisController,
   deleteColisByIDController,
+  getStatusColisByIdController,
 
   /* controller review */
   getAllReview,

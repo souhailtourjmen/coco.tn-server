@@ -3,8 +3,8 @@ const AddressSchema = mongoose.Schema(
   {
     place_id: {
       type: String,
-      required: true,
-      index: true
+      // required: true,
+      // index: true
     },
     city: {
       type: String,

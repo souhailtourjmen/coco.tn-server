@@ -20,13 +20,13 @@ const getAnnouce =async(id) => {
       },
     })
     .populate({
-      path: "profilexp profilDest",
+      path: "profilexp",
       select: " user  ",
       populate: {
         path: "user",
-        select: " -_id name email phone image roles verified ",
+        select: " -_id name email phone image role verified ",
         populate: {
-          path: "image roles",
+          path: "image role",
           select: "role path thumbnail",
         },
       },
@@ -39,12 +39,12 @@ const getAnnouce =async(id) => {
       path: "listProposal",
       populate: {
         path: "profil",
-        select: " user listReview ",
+        select: " user ",
         populate: {
-          path: "user listReview",
-          select: " -_id name email phone image roles verified note", // select only the lastName firstName email phone and verified fields in profil
+          path: "user ",
+          select: " -_id name email phone image role verified", // select only the lastName firstName email phone and verified fields in profil
           populate: {
-            path: "image roles",
+            path: "image role",
             select: "role path thumbnail",
           },
         },
@@ -53,4 +53,5 @@ const getAnnouce =async(id) => {
     .exec();
   
 }
+
 module.exports = { updateAnnonceById,getAnnouce };

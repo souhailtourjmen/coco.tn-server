@@ -3,13 +3,14 @@ const {
   updateAnnonceById,
 } = require("../../services/annouceService/annouceService");
 
-const createColis = async (idAnnonce, idProposal, idStatutColisDefault) => {
+const createColis = async (idAnnonce, idProposal,price, idStatutColisDefault) => {
   try {
     console.log(idAnnonce,idProposal,idStatutColisDefault);
     /* creation nouveau colis  */
     const colis = new Colis({
       idAnnonce: idAnnonce,
       proposal_Accept: idProposal,
+      price:price,
       statut: [
         {
           statutColis: idStatutColisDefault,
@@ -103,9 +104,9 @@ const getColisById = async (idColis) => {
           select: " user",
           populate: {
             path: "user",
-            select: " -_id name   image roles verified", // select only the lastName firstName email phone and verified fields in profil
+            select: " -_id name   image role verified", // select only the lastName firstName email phone and verified fields in profil
             populate: {
-              path: "image roles",
+              path: "image role",
               select: "-_id role path thumbnail",
             },
           },
@@ -130,9 +131,33 @@ const getColisById = async (idColis) => {
     };
   }
 };
+const getStatusColisById = async (idColis) => {
+  try {
+    const colisFound = await Colis.findById(idColis)
+      .populate({ path: "statut.statutColis" })
+      .select(" statut createdAt updatedAt")
+      .exec();
+    if (!colisFound) {
+      return {
+        success: false,
+        data: null,
+        message: "Colis not found.",
+      };
+    }
+
+    return { success: true, data: colisFound, message: "Colis  found." };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      message: "something went wrong, fail to catch service getStatusColisById",
+    };
+  }
+};
 module.exports = {
   createColis,
   updateStatutColis,
   deleteColisByID,
   getColisById,
+  getStatusColisById
 };

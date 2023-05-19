@@ -20,7 +20,9 @@ const proposalSchema = mongoose.Schema({
     type: Number,
     required: [true, "Please enter the price"],
   },
-
+  proposalDate: {
+    type: Date,
+  },
   status: {
     type: String,
     enum: ["Accepted", "Sending", "Archived"],

@@ -14,6 +14,7 @@ const {
   getColisById,
   updateAnnonceById,
   updateStatutProposal,
+  getStatusColisById,
 } = require("../../services");
 require("dotenv").config();
 const getAllColisByUserController = async (req, res) => {
@@ -39,10 +40,10 @@ const getAllColisByUserController = async (req, res) => {
 };
 const getColisByIdControllers = async (req, res) => {
   try {
-    if (!req.body?.idColis) {
+    if (!req.params?.idColis) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const colisFound = await getColisById(req.body?.idColis);
+    const colisFound = await getColisById(req.params?.idColis);
 
     if (!colisFound) {
       return res
@@ -57,7 +58,7 @@ const getColisByIdControllers = async (req, res) => {
 };
 const createColisControllers = async (req, res) => {
   try {
-    const { idAnnonce, idProposal } = req.body;
+    const { idAnnonce, idProposal, price } = req.body;
 
     /* block check id  */
     const idProfil = req.auth.idProfil;
@@ -102,10 +103,11 @@ const createColisControllers = async (req, res) => {
     const { success, data, message } = await createColis(
       idAnnonce,
       idProposal,
+      price,
       process.env.statutColisDefault
     );
     if (success) {
-      await updateAnnonceById(idAnnonce, "archives")
+      await updateAnnonceById(idAnnonce, "Archives")
         //check update annonce
         .catch((error) => {
           console.error("Error updating Annonce:", error);
@@ -212,7 +214,7 @@ const updateStatutColisController = async (req, res) => {
 };
 const deleteColisByIDController = async (req, res) => {
   try {
-    const idColis = req.body.idColis;
+    const idColis = req.params?.idColis;
     if (!idColis) {
       //check all fields
       return res.status(404).json({ message: "All fields are required" });
@@ -243,11 +245,42 @@ const deleteColisByIDController = async (req, res) => {
       .json({ success: false, message: "server side error" });
   }
 };
+const getStatusColisByIdController = async (req, res) => {
+  try {
+    const idColis = req.params?.idColis;
+    if (!idColis) {
+      //check all fields
+      return res.status(404).json({ message: "All fields are required" });
+    }
 
+    const { success, data, message } = await getStatusColisById(idColis);
+    if (success) {
+      return res.status(200).json({
+        success: true,
+        data: data,
+        message: message,
+      });
+    } else {
+      return res
+        .status(500)
+        .json({
+          success: false,
+          data: data,
+          message: "server side error in service",
+        });
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "server side error" });
+  }
+};
 module.exports = {
   getAllColisByUserController,
   getColisByIdControllers,
   createColisControllers,
   updateStatutColisController,
   deleteColisByIDController,
+  getStatusColisByIdController,
 };

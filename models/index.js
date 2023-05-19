@@ -11,6 +11,8 @@ const StatutColis = require("./statutColis");
 const Chat = require("./message");
 const ChatRoom = require("./room");
 const Proposal =require("./proposal")
+const Document = require("./Document");
+const RequestUpgradeRole = require("./RequestUpgradeRole")
 module.exports = {
   User,
   Transporter,
@@ -25,5 +27,7 @@ module.exports = {
   StatutColis,
   ChatRoom,
   Chat,
-  Proposal
+  Proposal,
+  RequestUpgradeRole,
+  Document
 };

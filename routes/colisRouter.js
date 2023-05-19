@@ -7,6 +7,7 @@ const {
   createColisControllers,
   updateStatutColisController,
   deleteColisByIDController,
+  getStatusColisByIdController,
 } = require("../controllers/Colis/index");
 
 /* Post method createColis
@@ -29,7 +30,25 @@ router.get("/getAllColisByUser/", verifyToken, getAllColisByUserController);
  * @return {Object}
  * @response colis
  */
-router.get("/getColisById/", verifyToken, getColisByIdControllers);
+router.get("/getColisById/:idColis", verifyToken, getColisByIdControllers);
+
+/* Get method   getStatusColisById
+ * @param idColis,
+ * @return {Object}
+ * @response colis
+ */
+router.get(
+  "/getStatusColisById/:idColis",
+  verifyToken,
+  getStatusColisByIdController
+);
+
+/* Get method    deleteColisByID,
+ * @param idColis,
+ * @return {Object}
+ * @response colis
+ */
+router.delete("/deleteColisByID/:idColis", verifyToken, deleteColisByIDController);
 
 /* put method updateStatutColis
  * @param statut, idColis

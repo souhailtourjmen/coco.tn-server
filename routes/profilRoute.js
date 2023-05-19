@@ -44,7 +44,7 @@ router.get("/getProfilListColisByID/", verifyToken, getProfilListColisByID);
  * @return {Object}
  */
 router.get(
-  "/getProfilListAnnonce/:filter",
+  "/getProfilListAnnonce/:filter?",
   checkIsValidFilter,
   verifyToken,
   getProfilListAnnonceByID

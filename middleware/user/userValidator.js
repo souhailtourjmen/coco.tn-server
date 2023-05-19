@@ -6,31 +6,20 @@ const checkIsValidUser = async (req, res, next) => {
     name,
     phone,
     email,
-    role,
-    cardGris,
     password,
-    gender,
   } = req.body;
 
   if (
     !cin ||
     !name ||
     !phone ||
-    !gender ||
     !email ||
-    !password ||
-    !role
+    !password
   )
     res.status(400).json({
       successful: false,
       message: `All fields are required`,
     });
-  if (role === process.env.roleTransproter && !cardGris) {
-    return res
-      .status(404)
-      .json({ success: false, message: "cartegris field are required" });
-  }
-
   const reg =
     /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/;
 

@@ -45,12 +45,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Image",
     },
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-      },
-    ],
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+    },
     verified: {
       email: {
         type: Boolean,

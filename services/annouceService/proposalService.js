@@ -1,6 +1,12 @@
 const { Proposal } = require("../../models");
 
-const createProposal = async (idProfil, idAnnonce, text, price) => {
+const createProposal = async (
+  idProfil,
+  idAnnonce,
+  text,
+  price,
+  proposalDate
+) => {
   try {
     /* creation nouveau Proposal  */
     const proposal = new Proposal({
@@ -8,10 +14,11 @@ const createProposal = async (idProfil, idAnnonce, text, price) => {
       Annonce: idAnnonce,
       text: text,
       price: price,
+      proposalDate: proposalDate,
     });
 
     const savedProposal = await proposal.save();
-
+    console.log('5arya proposal',savedProposal);
     return {
       success: true,
       data: savedProposal,
@@ -87,7 +94,7 @@ const deleteProposalByID = async (idProposal) => {
 
 const getProposalById = async (idProposal) => {
   try {
-    const proposalFound = await Proposal.findById(idProposal)
+    const proposalFound = await Proposal.findById(idProposal);
     //   .populate({ path: "statut.statutproposal" })
     //   .populate({
     //     path: "proposal_Accept",
@@ -97,9 +104,9 @@ const getProposalById = async (idProposal) => {
     //       select: " user",
     //       populate: {
     //         path: "user",
-    //         select: " -_id name   image roles verified", // select only the lastName firstName email phone and verified fields in profil
+    //         select: " -_id name   image role verified", // select only the lastName firstName email phone and verified fields in profil
     //         populate: {
-    //           path: "image roles",
+    //           path: "image role",
     //           select: "-_id role path thumbnail",
     //         },
     //       },

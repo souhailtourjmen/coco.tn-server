@@ -25,8 +25,8 @@ const annonceSchema = mongoose.Schema(
     statut: {
       type: String,
       maxLength: 16,
-      enum: ["in progress", "Colis", "archives"],
-      default: "in progress",
+      enum: ["In progress", "Annouce", "Archives"],
+      default: "Annouce",
     },
     contents: [
       {

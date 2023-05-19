@@ -21,11 +21,7 @@ const getAllProposalbyIdProfilController = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const proposals = await Proposal.find({ profil: profilFound._id }).populate(
-      {
-        path: "pointPickup",
-      }
-    );
+    const proposals = await Proposal.find({ profil: profilFound._id })
     return res.status(200).json(proposals);
   } catch (error) {
     console.log(error);
@@ -54,7 +50,7 @@ const getProposalByIdController = async (req, res) => {
 
 const createProposalController = async (req, res) => {
   try {
-    const { idAnnonce, text, price } = req.body;
+    const { idAnnonce, text, price,proposalDate  } = req.body;
 
     const idProfil = req.auth.idProfil;
     if (!idProfil || !idAnnonce || !text || !price) {
@@ -81,11 +77,12 @@ const createProposalController = async (req, res) => {
       profilFound._id,
       annonceFound._id,
       text,
-      price
+      price,
+      proposalDate
     );
     if (success) {
-      if (annonceFound.statut === "in progress") {
-        await updateAnnonceById(annonceFound._id, "Colis")
+      if (annonceFound.statut === "Annouce") {
+        await updateAnnonceById(annonceFound._id, "In progress")
           //check update annonce
           .catch((error) => {
             console.error("Error updating Annonce:", error);

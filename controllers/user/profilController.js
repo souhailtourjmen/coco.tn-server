@@ -78,22 +78,18 @@ const getProfilListColisByID = async (req, res) => {
 const getProfilListAnnonceByID = async (req, res) => {
   try {
     const idProfil = req.auth.idProfil;
-    const filter =req.params.filter
-    console.log(idProfil,filter);
-    if (!filter ) {
-      return res.status(404).json({ message: "All fields are required" });
-    }
-   
+    const filter =req?.params?.filter
+
     const listAnnonceFound = await getAllAnnonce(idProfil,filter);
     if (!listAnnonceFound) {
       return res
         .status(404)
-        .json({ success: false, message: "listAnnonce not found" });
+        .json({ success: false,data:null, message: "listAnnonce not found" });
     }
-    return res.status(200).json({ successful: true, data: listAnnonceFound });
+    return res.status(200).json({ success: true, data: listAnnonceFound,filter:filter });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false,data:null, message: error.message });
   }
 };
 const getProfilListActivity = async (req, res) => {
@@ -113,7 +109,7 @@ const getProfilListActivity = async (req, res) => {
     const listAnnonceFound = await getAllAnnonce(profilFound._id);
 
     return res.status(200).json({
-      successful: true,
+      success: true,
       allProposals,
       listAnnonceFound,
     });
@@ -132,7 +128,7 @@ const getProfilListColisLiv = async (req, res) => {
     const AllColis = await getlistColisLiv(idProfil);
 
     return res.status(200).json({
-      successful: true,
+      success: true,
       AllColis,
     });
   } catch (error) {
@@ -150,7 +146,7 @@ const getProfilListColisExp = async (req, res) => {
     const AllColis = await getlistColisExp(idProfil);
 
     return res.status(200).json({
-      successful: true,
+      success: true,
       AllColis,
     });
   } catch (error) {
@@ -168,8 +164,8 @@ const getProfilListProposal = async (req, res) => {
     const allProposals = await getAllProposal(idProfil);
 
     return res.status(200).json({
-      successful: true,
-      allProposals,
+      success: true,
+      data:allProposals,
     });
   } catch (error) {
     console.log(error);

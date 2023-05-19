@@ -5,15 +5,18 @@ app.use(express.urlencoded({ extended: false }));
 const cors = require("cors");
 const connectDB = require("./config/dataBase");
 const corsOptions = require("./config/corsOption");
+const {
+  userRoute,
+  profilRoute,
+  authRoute,
+  annonceRoute,
+  proposalRouter,
+  colisRouter,
+  uploadRoute,
+  chatRouter,
+  requestRouter,
+} = require("./routes");
 
-const userRoute = require("./routes/userRoute");
-const profilRoute = require("./routes/profilRoute");
-const authRoute = require("./routes/auth");
-const annonceRoute = require("./routes/annonceRoute");
-const proposalRouter = require("./routes/proposalRouter");
-const colisRouter = require("./routes/colisRouter");
-const uploadRoute = require("./routes/uploadRoute");
-const chatRouter = require("./routes/chatRouter");
 /* test route */
 const testRoute = require("./test/routes/testFCM");
 /*end test */
@@ -38,11 +41,15 @@ if (process.env.NODE_ENV === "development") {
     })
   );
 }
-app.use("/api/img", uploadRoute);
 app.use(
   "/storage/media",
   express.static(path.join(__dirname, "storage", "media"))
 );
+app.use(
+  "/storage/documents",
+  express.static(path.join(__dirname, "storage", "documents"))
+);
+app.use("/api/upload", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api", userRoute);
 app.use("/api", profilRoute);
@@ -50,6 +57,7 @@ app.use("/api/annonce", annonceRoute);
 app.use("/api/proposal", proposalRouter);
 app.use("/api/colis", colisRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/requestRole", requestRouter);
 app.use("/api/test", testRoute);
 
 module.exports = app;

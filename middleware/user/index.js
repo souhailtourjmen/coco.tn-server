@@ -1,12 +1,12 @@
 const{
-    checkDuplicatedEmail, checkRolesExisted
+    checkDuplicatedEmail, checkroleExisted
 } =require("./verifySignUp");
 const {checkIsValidRole} = require("./checkRole")
 const {checkLogin}=require("./verifySignIn");
 const { checkIsValidUser}=require("./userValidator")
 module.exports={
     checkDuplicatedEmail,
-     checkRolesExisted,
+     checkroleExisted,
      checkLogin,
      checkIsValidUser,
      checkIsValidRole

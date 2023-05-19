@@ -24,10 +24,10 @@ const fileFilter = (req, file, callback) => {
     callback(null, true);
   }
 };
-const upload = multer({
+const imgMulter = multer({
   storage: storage,
   limits: { fieldSize: 10 * 1024 * 1024 },
   fileFilter: fileFilter,
 });
 
-module.exports = upload;
+module.exports = {imgMulter};

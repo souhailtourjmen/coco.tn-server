@@ -3,7 +3,7 @@ const router = express.Router();
 const { signUp, login } = require("../controllers/user/index");
 const {
   checkDuplicatedEmail,
-  checkRolesExisted,
+  checkroleExisted,
   checkLogin,
   checkIsValidUser,
 } = require("../middleware/user/index");
@@ -22,12 +22,12 @@ const {
 * @return {Object}
 * @response token , message
 */
-router.post("/signup/",checkIsValidUser,checkRolesExisted, signUp);
+router.post("/signup/", signUp);
 
 /* Post method login
  * @param email, password,
  * @return {Object}
- * @response token , roles , profil
+ * @response token , role , profil
  */
 router.post("/login/",checkLogin, login);
 

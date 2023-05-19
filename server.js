@@ -1,6 +1,6 @@
 const http = require('http');
 const app = require('./app');
-const { connectIO } = require("./config/io");
+const { connectIO } = require("./config/websocket");
 require('dotenv').config();
 const normalizePort = val => {
   const port = parseInt(val, 10);

@@ -71,6 +71,10 @@ const profilSchema = mongoose.Schema({
     },
   ],
   friendshipCount: { type: Number, default: 0 },
+  isRequired: {
+    type: Boolean,
+    default: false,
+  },
 });
 profilSchema.plugin(uniqueValidator);
 

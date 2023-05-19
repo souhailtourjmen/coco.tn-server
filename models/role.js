@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
-const roleSchema = mongoose.Schema(
+const rolechema = mongoose.Schema(
   {
     role: {
       type: String,
@@ -17,5 +17,5 @@ const roleSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
-roleSchema.plugin(uniqueValidator);
-module.exports = mongoose.model("Role", roleSchema);
+rolechema.plugin(uniqueValidator);
+module.exports = mongoose.model("Role", rolechema);

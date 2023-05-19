@@ -27,7 +27,13 @@ const colisSchema = mongoose.Schema(
         },
       },
     ],
-
+    datePickup: {
+      type: Date,
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
     created: {
       type: Date,
       default: Date.now,

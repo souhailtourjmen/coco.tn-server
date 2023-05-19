@@ -39,9 +39,9 @@ const getChatById = async (idChat) => {
         select: "user",
         populate: {
           path: "user",
-          select: " -_id name email phone roles image verified note", // select only the lastName firstName email phone and verified fields in profil
+          select: " -_id name email phone role image verified note", // select only the lastName firstName email phone and verified fields in profil
           populate: {
-            path: "roles image",
+            path: "role image",
             select: "_id role path thumbnail",
           },
         },

@@ -1,6 +1,6 @@
 const Annonce = require("../../models/annonce");
 const Profil = require("../../models/profil");
-const { actualizationAnnouce } = require("../../config/io");
+const  {actualizationAnnouce } = require("../../config/websocket/index");
 const {
   createAllContent,
   deleteContentByArray,
@@ -8,7 +8,7 @@ const {
   createAddress,
 } = require("../../services/index");
 
-const getAllAnnonces = async (req, res) => {
+const getAllAnnoncesController = async (req, res) => {
   try {
     const pageSize = 10; // number of documents per page
     const pageNumber = 1; // page number to retrieve
@@ -28,9 +28,9 @@ const getAllAnnonces = async (req, res) => {
         select: " user  ",
         populate: {
           path: "user",
-          select: " -_id name  email phone image roles verified ",
+          select: " -_id name  email phone image role verified ",
           populate: {
-            path: "roles image",
+            path: "role image",
             select: "_id role path thumbnail",
           },
         },
@@ -39,12 +39,12 @@ const getAllAnnonces = async (req, res) => {
         path: "listProposal",
         populate: {
           path: "profil",
-          select: " user listReview ",
+          select: " user ",
           populate: {
-            path: "user listReview",
-            select: " -_id name email phone roles image verified note", // select only the lastName firstName email phone and verified fields in profil
+            path: "user",
+            select: " -_id name email phone role image verified", // select only the lastName firstName email phone and verified fields in profil
             populate: {
-              path: "roles image",
+              path: "role image",
               select: "_id role path thumbnail",
             },
           },
@@ -62,36 +62,30 @@ const getAllAnnonces = async (req, res) => {
 };
 /* cette methode retourne content par id avec remplissage les champs profil contents pointTrajets et poropositions  */
 
-const getAnnonceById = async (req, res) => {
+const getAnnonceByIdController = async (req, res) => {
   try {
-    if (!req.body.idAnnonce) {
+    const idAnnonce = req?.params?.idAnnonce;
+    if (!idAnnonce) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const annonceFound = await Annonce.findById(req.body.idAnnonce);
-    populate({
-      path: "contents",
-      populate: {
-        path: "images",
-      },
-    })
-      .limit(Number(limit))
-      .sort({ createdAt: "desc" })
-      .exec();
+    const annonceFound = await getAnnouce(idAnnonce);
     if (!annonceFound) {
       return res
         .status(404)
-        .json({ success: false, message: "annonce not found" });
+        .json({ success: false, data: null, message: "annonce not found" });
     }
-    return res.status(200).json({ successful: true, data: annonceFound });
+    return res.status(200).json({ success: true, data: annonceFound });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res
+      .status(500)
+      .json({ success: false, data: null, message: error.message });
   }
 };
 /* cette methode cree  un nouveau annonce   */
 
-const createAnnonce = async (req, res) => {
+const createAnnonceController = async (req, res) => {
   try {
     const {
       statutProfile,
@@ -109,7 +103,6 @@ const createAnnonce = async (req, res) => {
     if (
       !idProfil ||
       !statutProfile ||
-      !secondidProfil ||
       !description ||
       !contents ||
       !pointExp ||
@@ -120,10 +113,9 @@ const createAnnonce = async (req, res) => {
         message: `All fields are required ${idProfil} ${secondidProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${price} `,
       });
     }
-    const secondProfilFound = await Profil.findById(secondidProfil).exec();
     const profilFound = await Profil.findById(idProfil).exec();
 
-    if (!profilFound || !secondProfilFound) {
+    if (!profilFound) {
       return res
         .status(404)
         .json({ success: false, message: "profils  not found" });
@@ -140,7 +132,6 @@ const createAnnonce = async (req, res) => {
 
     const annonce = new Annonce({
       profilexp: profilFound._id,
-      profilDest: secondProfilFound.id,
       description: description,
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
@@ -170,7 +161,7 @@ const createAnnonce = async (req, res) => {
 };
 
 module.exports = {
-  getAllAnnonces,
-  createAnnonce,
-  getAnnonceById,
+  getAllAnnoncesController,
+  createAnnonceController,
+  getAnnonceByIdController,
 };

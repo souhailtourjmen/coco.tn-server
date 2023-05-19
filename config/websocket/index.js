@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { Server } = require("socket.io");
-const { updatedChatRoom } = require("../services/chatSevice/roomService");
+const { updatedChatRoom } = require("../../services/");
 const EventEmitter = require("events").EventEmitter;
 const emiter = new EventEmitter();
 let io = {};
