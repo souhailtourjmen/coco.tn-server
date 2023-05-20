@@ -3,22 +3,29 @@ const {
   updateAnnonceById,
 } = require("../../services/annouceService/annouceService");
 
-const createColis = async (idAnnonce, idProposal,price, idStatutColisDefault) => {
+const createColis = async (
+  idAnnonce,
+  idProposal,
+  price,
+  datePickup,
+  idStatutColisDefault
+) => {
   try {
-    console.log(idAnnonce,idProposal,idStatutColisDefault);
+    console.log(idAnnonce, idProposal, idStatutColisDefault);
     /* creation nouveau colis  */
     const colis = new Colis({
       idAnnonce: idAnnonce,
       proposal_Accept: idProposal,
-      price:price,
+      price: price,
       statut: [
         {
           statutColis: idStatutColisDefault,
+          updatedAt: datePickup,
         },
       ],
     });
     const savedColis = await colis.save();
-    
+
     return {
       success: true,
       data: savedColis,
@@ -98,7 +105,7 @@ const getColisById = async (idColis) => {
       .populate({ path: "statut.statutColis" })
       .populate({
         path: "proposal_Accept",
-        select: "profil text price status created",
+        select: "profil text price status proposalDate",
         populate: {
           path: "profil",
           select: " user",
@@ -131,10 +138,12 @@ const getColisById = async (idColis) => {
     };
   }
 };
-const getStatusColisById = async (idColis) => {
+const getStatusColisById = async (idAnnonce) => {
   try {
-    const colisFound = await Colis.findById(idColis)
-      .populate({ path: "statut.statutColis" })
+    const colisFound = await Colis.findOne({ idAnnonce: idAnnonce })
+      .populate({
+        path: "statut.statutColis",
+      })
       .select(" statut createdAt updatedAt")
       .exec();
     if (!colisFound) {
@@ -159,5 +168,5 @@ module.exports = {
   updateStatutColis,
   deleteColisByID,
   getColisById,
-  getStatusColisById
+  getStatusColisById,
 };

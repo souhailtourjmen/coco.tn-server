@@ -33,12 +33,12 @@ router.get("/getAllColisByUser/", verifyToken, getAllColisByUserController);
 router.get("/getColisById/:idColis", verifyToken, getColisByIdControllers);
 
 /* Get method   getStatusColisById
- * @param idColis,
+ * @param idAnnonce,
  * @return {Object}
  * @response colis
  */
 router.get(
-  "/getStatusColisById/:idColis",
+  "/getStatusColisById/:idAnnonce",
   verifyToken,
   getStatusColisByIdController
 );
@@ -48,7 +48,11 @@ router.get(
  * @return {Object}
  * @response colis
  */
-router.delete("/deleteColisByID/:idColis", verifyToken, deleteColisByIDController);
+router.delete(
+  "/deleteColisByID/:idColis",
+  verifyToken,
+  deleteColisByIDController
+);
 
 /* put method updateStatutColis
  * @param statut, idColis

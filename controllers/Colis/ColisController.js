@@ -58,7 +58,7 @@ const getColisByIdControllers = async (req, res) => {
 };
 const createColisControllers = async (req, res) => {
   try {
-    const { idAnnonce, idProposal, price } = req.body;
+    const { idAnnonce, idProposal, price, datePickup } = req.body;
 
     /* block check id  */
     const idProfil = req.auth.idProfil;
@@ -104,6 +104,7 @@ const createColisControllers = async (req, res) => {
       idAnnonce,
       idProposal,
       price,
+      datePickup,
       process.env.statutColisDefault
     );
     if (success) {
@@ -247,13 +248,13 @@ const deleteColisByIDController = async (req, res) => {
 };
 const getStatusColisByIdController = async (req, res) => {
   try {
-    const idColis = req.params?.idColis;
-    if (!idColis) {
+    const idAnnonce = req.params?.idAnnonce;
+    if (!idAnnonce) {
       //check all fields
       return res.status(404).json({ message: "All fields are required" });
     }
 
-    const { success, data, message } = await getStatusColisById(idColis);
+    const { success, data, message } = await getStatusColisById(idAnnonce);
     if (success) {
       return res.status(200).json({
         success: true,
@@ -261,13 +262,11 @@ const getStatusColisByIdController = async (req, res) => {
         message: message,
       });
     } else {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          data: data,
-          message: "server side error in service",
-        });
+      return res.status(500).json({
+        success: false,
+        data: data,
+        message: "server side error in service",
+      });
     }
   } catch (error) {
     console.log(error);

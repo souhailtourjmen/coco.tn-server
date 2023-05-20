@@ -19,7 +19,7 @@ const getProfilById = async (idProfil) => {
   }
 };
 const getAllProposal = async (idProfil) => {
-  const selectPropsal = "text price pointPickup created Annonce";
+  const selectPropsal = "text price pointPickup proposalDate created Annonce";
   const selectAnnonce = "profilexp  pointTrajets description contents";
   const selectTotal = "listProposal";
   try {
@@ -202,7 +202,7 @@ const getlistColisExp = async (idProfil) => {
         select: "proposal_Accept",
         populate: {
           path: "proposal_Accept",
-          select: "profil price",
+          select: "profil price proposalDate",
           populate: {
             path: "profil",
             select: "profil user",
