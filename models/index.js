@@ -1,4 +1,4 @@
-const { User, Transporter } = require("./user");
+const { User, Transporter,Guest } = require("./user");
 const Annonce = require("./annonce");
 const Profil = require("./profil");
 const Notification = require("./notification");
@@ -15,6 +15,7 @@ const Document = require("./Document");
 const RequestUpgradeRole = require("./RequestUpgradeRole")
 module.exports = {
   User,
+  Guest,
   Transporter,
   Annonce,
   Profil,

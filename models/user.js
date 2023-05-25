@@ -3,15 +3,18 @@ const uniqueValidator = require("mongoose-unique-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const TransporterSchema = require("./Transporter");
+const guestSchema = require("./guest");
 const userSchema = mongoose.Schema(
   {
     cin: {
       type: String,
       required: true,
+      maxlength: 8,
     },
     name: {
       type: String,
       required: true,
+      maxlength: 54,
     },
     adresses: [
       {
@@ -27,7 +30,7 @@ const userSchema = mongoose.Schema(
     gender: {
       type: String, // 0 : female, 1: male
       enum: ["0", "1"],
-      default: "0",
+      default: "1",
     },
     email: {
       type: String,
@@ -35,11 +38,12 @@ const userSchema = mongoose.Schema(
       match: [/\S+@\S+\.\S+/, "is invalid"],
       index: true,
       unique: true,
-      maxlength: 254,
+      maxlength: 60,
     },
     password: {
       type: String,
       required: true,
+      minlength: 8,
     },
     image: {
       type: mongoose.Schema.Types.ObjectId,
@@ -93,7 +97,9 @@ et je utilise cette façon le cas j'ajout un autre acteur
 
 const User = mongoose.model("User", userSchema);
 const Transporter = User.discriminator("Transporter", TransporterSchema);
+const Guest = User.discriminator("Guest", guestSchema);
 module.exports = {
   User,
   Transporter,
+  Guest,
 };

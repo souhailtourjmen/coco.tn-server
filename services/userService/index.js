@@ -1,11 +1,12 @@
 const { handleRefreshToken } = require("./refrechTokenService");
+const { createGuestService } = require("./guestService");
 const {
   getProfilById,
   getAllProposal,
   getAllAnnonce,
   getlistColisExp,
   getlistColisLiv,
-  updateIsrequired
+  updateIsrequired,
 } = require("./profilService");
 const {
   getUserById,
@@ -17,7 +18,9 @@ module.exports = {
   handleRefreshToken,
 
   /* end RefrechTokenService */
-
+  /*Guest Service */
+  createGuestService,
+  /* end GuestService */
   /*profilService */
   getProfilById,
   getAllProposal,

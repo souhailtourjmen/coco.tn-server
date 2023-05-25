@@ -19,8 +19,8 @@ const annonceSchema = mongoose.Schema(
       required: [true, "Please enter the statut"],
       trim: true,
       maxLength: 16,
-      enum: ["sender", "recipient"],
-      default: "sender",
+      enum: ["Sender", "Receiver"],
+      default: "Sender",
     },
     statut: {
       type: String,

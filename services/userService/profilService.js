@@ -4,7 +4,7 @@ const getProfilById = async (idProfil) => {
   const profilFound = await Profil.findById(idProfil)
     .populate({
       path: "user",
-      select: "-_id cin phone gender email name image verified role adresses",
+      select: "-_id cin phone gender email name image verified role adresses idCardGris",
       populate: {
         path: "role adresses image",
         select: "_id code place_id city country location path thumbnail",

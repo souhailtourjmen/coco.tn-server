@@ -1,16 +1,17 @@
 const Annonce = require("../../models/annonce");
 const Profil = require("../../models/profil");
-const  {actualizationAnnouce } = require("../../config/websocket/index");
+const { actualizationAnnouce } = require("../../config/websocket/index");
 const {
   createAllContent,
   deleteContentByArray,
   getAnnouce,
+  createGuestService,
   createAddress,
 } = require("../../services/index");
 
 const getAllAnnoncesController = async (req, res) => {
   try {
-    const pageSize = 10; // number of documents per page
+    const pageSize = 20; // number of documents per page
     const pageNumber = 1; // page number to retrieve
     const annonce = await Annonce.find()
       .populate({
@@ -89,7 +90,7 @@ const createAnnonceController = async (req, res) => {
   try {
     const {
       statutProfile,
-      secondidProfil,
+      secondProfil,
       description,
       contents,
       pointExp,
@@ -103,14 +104,14 @@ const createAnnonceController = async (req, res) => {
     if (
       !idProfil ||
       !statutProfile ||
-      !description ||
+      !secondProfil ||
       !contents ||
       !pointExp ||
       !pointDist ||
       !price
     ) {
       return res.status(404).json({
-        message: `All fields are required ${idProfil} ${secondidProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${price} `,
+        message: `All fields are required ${idProfil} ${secondProfil} \n ${statutProfile} \n ${description} \n ${pointExp} \n ${pointDist}\n ${contents} \n ${price} `,
       });
     }
     const profilFound = await Profil.findById(idProfil).exec();
@@ -129,9 +130,14 @@ const createAnnonceController = async (req, res) => {
     /* end block cree des contents */
 
     /* l'annonceur  peut ecrire annonce mais c'est ne pas le personne qu'il va envoie le colis  donc lui c'est qu'il va recuptione colis  */
-
+    const createGuestAccount = await createGuestService(
+      secondProfil?.name,
+      secondProfil?.phone,
+      dateLiv
+    );
     const annonce = new Annonce({
       profilexp: profilFound._id,
+      profilDest: createGuestAccount?._id,
       description: description,
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,

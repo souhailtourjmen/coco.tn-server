@@ -94,7 +94,9 @@ const createProposalController = async (req, res) => {
             });
           });
       }
-      await annonceFound.insertProposal(data._id); // add proposal in Annonce
+      await annonceFound.insertProposal(data._id);
+      // await annonceFound.save()
+      console.log(annonceFound) // add proposal in Annonce
       await profilFound.insertProposal(data._id); // add proposal in Propasal
       return res.status(201).json({
         success: success,

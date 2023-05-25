@@ -4,7 +4,7 @@ const createContent = async (content) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { name, width, length, height, weight, images } = content;
-
+      let imgs = null;
       if (!name || !width || !length || !height || !weight) {
         return reject({
           success: false,
@@ -12,7 +12,10 @@ const createContent = async (content) => {
         });
       }
       /* block  create list  images  */
-      const { dataImages } = images ? await createAllImage(images) : null;
+      if (images) {
+        const { dataImages } = images ? await createAllImage(images) : null;
+        imgs = dataImages;
+      }
       /* end block list images */
       const newcontent = new Content({
         name: name,
@@ -20,7 +23,7 @@ const createContent = async (content) => {
         length: length,
         height: height,
         weight: weight,
-        images: dataImages.map((image) => image._id) || null,
+        images: imgs ? imgs.map((image) => image._id) : null,
       });
 
       const savedcontent = await newcontent.save();

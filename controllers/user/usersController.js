@@ -31,12 +31,12 @@ const updateUserRoleById = async (req, res) => {
     const idProfil = req.auth.idProfil;
     const { role, cardGris } = req.body;
 
-    if (!role) {
+    if (role) {
       if (role === "63d9" && !cardGris) {
         return res.status(404).json({ message: "cardGris  are required" });
       }
-      return res.status(404).json({ message: "role are required" });
     }
+    else{ return res.status(404).json({ message: "role are required" });}
 
     const roleFound = await Role.findOne({ code: role });
     if (!roleFound)
@@ -46,10 +46,11 @@ const updateUserRoleById = async (req, res) => {
 
     const profilFound = await Profil.findById(idProfil);
 
-    const user = await User.findByIdAndUpdate(profilFound.user._id, {
-      role: roleFound._id,
-    });
-    console.log(roleFound);
+    const user = await User.findById(profilFound.user._id);
+    user.role=roleFound._id;
+    const oldPassword = user.password;
+    await user.save()
+
     if (!user)
       return res
         .status(404)
@@ -61,16 +62,9 @@ const updateUserRoleById = async (req, res) => {
       transporter.idCardGris = cardGris;
       const insertTransporter = await transporter.save();
       await User.findByIdAndUpdate(insertTransporter._id, {
-        $set: { password: user.password },
+        $set: { password: oldPassword},
       });
-      // console.log(
-      //   "New transporter",
-      //   insertTransporter,
-      //   "passowrd",
-      //   user.password,
-      //   "userUpdatePassword",
-      //   userUpdatePassword
-      // );
+     
       return res.status(200).json({ success: true, data: insertTransporter });
     } //else{                  // ici on peut ajoute d'autre role comme admin mais pour le momment on ai besoin que de role Transporter
     //  updatedUser = await user.save();

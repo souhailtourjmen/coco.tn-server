@@ -142,7 +142,7 @@ const UpgradeUserRole = async (idUser, idRole, cardGris) => {
         .status(404)
         .json({ success: false, message: "user not found" });
 
-    if (role === "63d9") {
+    if (idRole === "63d9") {
       // cree new Transporter car on a changer son role pour ça on ajoute cette block
       const transporter = new Transporter(user);
       transporter.idCardGris = cardGris;
@@ -172,4 +172,5 @@ module.exports = {
   getUserById,
   updateUserInfo,
   updateUserPassword,
+  UpgradeUserRole
 };

@@ -9,6 +9,7 @@ const {
   updateUserInfo,
   updateUserPassword,
   updateIsrequired,
+  createGuestService,
 } = require("./userService/");
 const {
   createRequest,
@@ -60,6 +61,7 @@ module.exports = {
   updateUserInfo,
   updateUserPassword,
   updateIsrequired,
+  createGuestService,
   /* end userService */
   /*imageService */
   createImage,
