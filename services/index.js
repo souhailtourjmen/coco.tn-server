@@ -39,6 +39,7 @@ const {
   updateStatutProposal,
   deleteProposalByID,
   getProposalById,
+  getAllAnnonces,
 } = require("./annouceService/");
 
 const {
@@ -71,6 +72,7 @@ module.exports = {
   createAddress,
   getAnnouce,
   updateAnnonceById,
+  getAllAnnonces,
   createContent,
   createAllContent,
   deleteContentByArray,

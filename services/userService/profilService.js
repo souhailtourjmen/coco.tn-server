@@ -4,7 +4,8 @@ const getProfilById = async (idProfil) => {
   const profilFound = await Profil.findById(idProfil)
     .populate({
       path: "user",
-      select: "-_id cin phone gender email name image verified role adresses idCardGris",
+      select:
+        "-_id cin phone gender email name image verified role adresses idCardGris",
       populate: {
         path: "role adresses image",
         select: "_id code place_id city country location path thumbnail",
@@ -86,23 +87,27 @@ const getlistColisLiv = async (idProfil) => {
   const selectTotal = "-_id listColisLiv";
   try {
     return await Profil.findById(idProfil)
-      // .populate({
-      //   path: "listColisLiv",
-      //   select: "idAnnonce",
-      //   populate: {
-      //     path: "idAnnonce",
-      //     select: "profilexp profilDest",
-      //     populate: {
-      //       path: "profilexp profilDest",
-      //       select: "user",
-      //       populate: {
-      //         path: "user",
-      //         select: " -_id name email phone  verified ",
-      //       },
-      //     },
-      //   },
-      //   options: { sort: { createdAt: -1 } },
-      // })
+      .populate({
+        path: "listColisLiv",
+        select: "idAnnonce",
+        populate: {
+          path: "idAnnonce",
+          select: "profilexp profilDest",
+          populate: {
+            path: "profilexp profilDest",
+            select: "user",
+            populate: {
+              path: "user",
+              select: " -_id name email phone image verified ",
+              populate: {
+                path: "image",
+                select: "path thumbnail",
+              },
+            },
+          },
+        },
+        options: { sort: { createdAt: -1 } },
+      })
       .populate({
         path: "listColisLiv",
         select: "idAnnonce",
@@ -236,7 +241,7 @@ const getlistColisExp = async (idProfil) => {
 const getAllAnnonce = async (idProfil, filter) => {
   const limit = 10; // limit the number of documents to 10
   const fields = "-_id listAnnonce "; // select only the listAnnonce fields
-console.log(filter)
+  console.log(filter);
   try {
     return await Profil.findById(idProfil)
       .populate({
@@ -313,7 +318,7 @@ const updateIsrequired = async (idProfil, value) => {
       console.error("Error updating Profil:", error);
       return { success: false };
     });
-    return getProfilById(idProfil);
+  return getProfilById(idProfil);
 };
 module.exports = {
   getProfilById,

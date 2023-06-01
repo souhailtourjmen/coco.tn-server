@@ -21,7 +21,7 @@ const getAllProposalbyIdProfilController = async (req, res) => {
         .status(404)
         .json({ success: false, message: "profil not found" });
     }
-    const proposals = await Proposal.find({ profil: profilFound._id })
+    const proposals = await Proposal.find({ profil: profilFound._id });
     return res.status(200).json(proposals);
   } catch (error) {
     console.log(error);
@@ -50,7 +50,7 @@ const getProposalByIdController = async (req, res) => {
 
 const createProposalController = async (req, res) => {
   try {
-    const { idAnnonce, text, price,proposalDate  } = req.body;
+    const { idAnnonce, text, price, proposalDate } = req.body;
 
     const idProfil = req.auth.idProfil;
     if (!idProfil || !idAnnonce || !text || !price) {
@@ -96,7 +96,7 @@ const createProposalController = async (req, res) => {
       }
       await annonceFound.insertProposal(data._id);
       // await annonceFound.save()
-      console.log(annonceFound) // add proposal in Annonce
+      console.log(annonceFound); // add proposal in Annonce
       await profilFound.insertProposal(data._id); // add proposal in Propasal
       return res.status(201).json({
         success: success,

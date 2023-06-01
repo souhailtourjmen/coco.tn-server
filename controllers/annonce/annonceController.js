@@ -7,55 +7,20 @@ const {
   getAnnouce,
   createGuestService,
   createAddress,
+  getAllAnnonces,
 } = require("../../services/index");
 
 const getAllAnnoncesController = async (req, res) => {
   try {
-    const pageSize = 20; // number of documents per page
-    const pageNumber = 1; // page number to retrieve
-    const annonce = await Annonce.find()
-      .populate({
-        path: "contents",
-        populate: {
-          path: "images",
-        },
-      })
-      .populate({
-        path: "pointTrajets.pointExp pointTrajets.pointDist",
-        select: " -_id place_id  city country location ",
-      })
-      .populate({
-        path: "profilexp profilDest",
-        select: " user  ",
-        populate: {
-          path: "user",
-          select: " -_id name  email phone image role verified ",
-          populate: {
-            path: "role image",
-            select: "_id role path thumbnail",
-          },
-        },
-      })
-      .populate({
-        path: "listProposal",
-        populate: {
-          path: "profil",
-          select: " user ",
-          populate: {
-            path: "user",
-            select: " -_id name email phone role image verified", // select only the lastName firstName email phone and verified fields in profil
-            populate: {
-              path: "role image",
-              select: "_id role path thumbnail",
-            },
-          },
-        },
-      })
-      .skip((pageNumber - 1) * pageSize) // calculate the number of documents to skip
-      .limit(pageSize) // limit the number of documents returned to the page size
-      .sort({ createdAt: "desc" })
-      .exec();
-
+    const { pageSize, pageNumber, origine, destination } = JSON.parse(
+      req.params.options
+    );
+    const annonce = await getAllAnnonces(
+      pageSize,
+      pageNumber,
+      origine,
+      destination
+    );
     return res.status(200).json(annonce);
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -84,7 +49,7 @@ const getAnnonceByIdController = async (req, res) => {
       .json({ success: false, data: null, message: error.message });
   }
 };
-/* cette methode cree  un nouveau annonce   */
+/* cette methode cree  une nouveau annonce   */
 
 const createAnnonceController = async (req, res) => {
   try {
@@ -135,9 +100,12 @@ const createAnnonceController = async (req, res) => {
       secondProfil?.phone,
       dateLiv
     );
+    const profil = await new Profil({
+      user: createGuestAccount?._id,
+    });
     const annonce = new Annonce({
       profilexp: profilFound._id,
-      profilDest: createGuestAccount?._id,
+      profilDest: profil?._id,
       description: description,
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,

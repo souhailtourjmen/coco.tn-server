@@ -29,13 +29,17 @@ router.post("/createAnnonce/", verifyToken, createAnnonceController);
  * @return {Object}
  * @response AllAnnonces
  */
-router.get("/fetchAllAnnonces/", verifyToken, getAllAnnoncesController);
+router.get("/fetchAllAnnonces/:options", verifyToken, getAllAnnoncesController);
 
 /* Get method getAllAnnonces
  * @param idAnnonce ,
  * @return {Object}
  * @response Annonces
  */
-router.get("/fetchAnnonceById/:idAnnonce", verifyToken, getAnnonceByIdController);
+router.get(
+  "/fetchAnnonceById/:idAnnonce",
+  verifyToken,
+  getAnnonceByIdController
+);
 
 module.exports = router;
