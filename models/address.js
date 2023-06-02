@@ -13,11 +13,11 @@ const AddressSchema = mongoose.Schema(
     country: { type: String, required: true },
     location: {
       lat: {
-        type: String,
+        type: Number,
         required: true,
       },
       lng: {
-        type: String,
+        type: Number,
         required: true,
       },
     },

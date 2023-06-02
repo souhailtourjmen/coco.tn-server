@@ -19,7 +19,7 @@ const profilSchema = mongoose.Schema({
       default: Date.now() + 24 * 60 * 60 * 5000,
     },
   },
- 
+
   listAnnonce: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -63,7 +63,7 @@ const profilSchema = mongoose.Schema({
     },
   ],
   createdAt: { type: Date, default: Date.now },
- 
+
   friendship: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -81,7 +81,7 @@ profilSchema.plugin(uniqueValidator);
 profilSchema.pre("save", async function (next) {
   this.tokens = {
     token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 5000,
+    expireAt: Date.now() + 24 * 60 * 60 * 15000,
   };
   next();
 });
@@ -91,7 +91,7 @@ profilSchema.methods.getToken = function () {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
-profilSchema.methods.refreshToken =async function () {
+profilSchema.methods.refreshToken = async function () {
   this.tokens = {
     token: await this.getToken(),
     expireAt: Date.now() + 24 * 60 * 60 * 3000000,
@@ -104,7 +104,6 @@ profilSchema.methods.insertReview = async function (idReview) {
   try {
     if (this.listReview.indexOf(idReview) === -1) {
       this.listReview.push(idReview);
-    
     }
 
     return await this.save();
@@ -117,7 +116,6 @@ profilSchema.methods.insertProposal = async function (idProposal) {
   try {
     if (this.listProposal.indexOf(idProposal) === -1) {
       this.listProposal.push(idProposal);
-     
     }
 
     return await this.save();

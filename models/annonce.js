@@ -41,6 +41,15 @@ const annonceSchema = mongoose.Schema(
     dateLiv: {
       type: Date,
     },
+    locationExp: {
+      type: { type: String },
+      coordinates: [],
+    },
+    locationDist: {
+      type: { type: String },
+      coordinates: [],
+    },
+
     pointTrajets: {
       pointExp: {
         type: mongoose.Schema.Types.ObjectId,
@@ -82,5 +91,10 @@ annonceSchema.methods.insertProposal = async function (idProposal) {
     return error;
   }
 };
-
+annonceSchema.index({ "pointTrajets.pointExp.location": "2dsphere" });
+annonceSchema.index({ "pointTrajets.pointDist.location": "2dsphere" });
+annonceSchema.index({ "pointTrajets.pointExp.city": 1 });
+annonceSchema.index({ "pointTrajets.pointDist.city": 1 });
+annonceSchema.index({ locationExp: "2dsphere" });
+annonceSchema.index({ locationDist: "2dsphere" });
 module.exports = mongoose.model("Annonce", annonceSchema);
