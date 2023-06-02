@@ -6,7 +6,7 @@ const {
   createAnnonceController,
   getAnnonceByIdController,
 } = require("../controllers/annonce/index");
-
+const changeTypedocument = require("../libs/changeType")
 /* Post method createAnnonce
 * @param  
     idProfil,
@@ -29,7 +29,7 @@ router.post("/createAnnonce/", verifyToken, createAnnonceController);
  * @return {Object}
  * @response AllAnnonces
  */
-router.get("/fetchAllAnnonces/:options", verifyToken, getAllAnnoncesController);
+router.get("/fetchAllAnnonces/:options?", verifyToken, getAllAnnoncesController);
 
 /* Get method getAllAnnonces
  * @param idAnnonce ,

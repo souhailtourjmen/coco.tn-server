@@ -1,16 +1,40 @@
-const FCM = require("fcm-node");
-require("dotenv").config();
-const getBodyNotifications = require("../../utils/firebase");
-const fcm = new FCM(process.env.serverKeyFirebase);
-const pushNotification = async (message) => {
-  const notification = await getBodyNotifications(message);
-  fcm.send(notification, function (err, response) {
-    if (err) {
-      console.log("Something has gone wrong!");
-    } else {
-      console.log("Successfully sent with response: ", response);
+const getBodyNotifications = (message) => {
+  try {
+    let templateNotifications = {
+      to: message?.to,
+    };
+    if (message?.notification) {
+      templateNotifications.notification = {
+        body: message?.notification?.body,
+        screen: message?.notification?.screen,
+        show_in_foreground: message?.notification?.foreground
+          ? message?.notification?.foreground
+          : true,
+        content_available: true,
+        priority: message?.notification?.priority
+          ? message?.notification?.priority
+          : "high",
+        subtitle: message?.notification?.subtitle,
+        title: message?.notification?.title,
+        icon: message?.notification?.icon,
+        click_action: message?.notification?.click_action,
+      };
     }
-  });
-};
+    if (message?.data) {
+      templateNotifications.data = {
+        priority: message?.data?.priority ? message?.data.priority : "high",
+        sound: message?.data?.sound ? message?.data?.sound : "app_sound.wav",
+        content_available: message?.data?.content_available
+          ? message?.data?.content_available
+          : true,
+        backgroundState: true,
+        body: message?.data?.body ? message?.data?.body : null,
+      };
+    }
 
-module.exports = pushNotification;
+    return templateNotifications;
+  } catch (err) {
+    console.error(err);
+  }
+};
+module.exports = getBodyNotifications;

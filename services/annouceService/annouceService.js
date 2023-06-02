@@ -13,86 +13,115 @@ const updateAnnonceById = async (id, newStatut) => {
 };
 const getAnnouce = async (id) => {
   return await Annonce.findById(id)
-    .populate({
-      path: "contents",
-      populate: {
-        path: "images",
-      },
-    })
-    .populate({
-      path: "profilexp",
-      select: " user  ",
-      populate: {
-        path: "user",
-        select: " -_id name email phone image role verified ",
+    .populate([
+      {
+        path: "contents",
         populate: {
-          path: "image role",
-          select: "role path thumbnail",
+          path: "images",
         },
       },
-    })
-    .populate({
-      path: "pointTrajets.pointExp pointTrajets.pointDist",
-      select: " -_id place_id  city country location ",
-    })
-    .populate({
-      path: "listProposal",
-      populate: {
-        path: "profil",
-        select: " user ",
+      {
+        path: "listProposal",
         populate: {
-          path: "user ",
-          select: " -_id name email phone image role verified", // select only the lastName firstName email phone and verified fields in profil
+          path: "profil",
+          select: "user",
           populate: {
-            path: "image role",
-            select: "role path thumbnail",
+            path: "user",
+            select: "-_id name email phone role image verified",
+            populate: {
+              path: "role image",
+              select: "_id role path thumbnail",
+            },
           },
         },
       },
-    })
-    .exec();
-};
-const getAllAnnonces = async (pageSize, pageNumber, origine, destination) => {
-  return await Annonce.find()
-    .populate({
-      path: "contents",
-      populate: {
-        path: "images",
-      },
-    })
-    .populate({
-      path: "pointTrajets.pointExp pointTrajets.pointDist",
-      select: " -_id place_id  city country location ",
-    })
-    .populate({
-      path: "profilexp profilDest",
-      select: " user  ",
-      populate: {
-        path: "user",
-        select: " -_id name  email phone image role verified ",
-        populate: {
-          path: "role image",
-          select: "_id role path thumbnail",
-        },
-      },
-    })
-    .populate({
-      path: "listProposal",
-      populate: {
-        path: "profil",
-        select: " user ",
+      {
+        path: "profilexp profilDest",
+        select: "user",
         populate: {
           path: "user",
-          select: " -_id name email phone role image verified", // select only the lastName firstName email phone and verified fields in profil
+          select: "-_id name email phone image role verified",
           populate: {
             path: "role image",
             select: "_id role path thumbnail",
           },
         },
       },
-    })
-    .skip((pageNumber - 1) * pageSize) // calculate the number of documents to skip
-    .limit(pageSize) // limit the number of documents returned to the page size
+      {
+        path: "pointTrajets.pointExp pointTrajets.pointDist",
+        select: "-_id place_id city country location",
+      },
+    ])
+    .exec();
+};
+const getAllAnnonces = async (
+  pageSize,
+  pageNumber,
+  origine,
+  destination,
+  radius
+) => {
+  const coordinatesExp = [
+    parseFloat(origine._location.lng), // Assuming origine.lng is a string representing the longitude
+    parseFloat(origine._location.lat), // Assuming origine.lat is a string representing the latitude
+  ];
+  const coordinatesDist = [
+    parseFloat(destination._location.lng), // Assuming origine.lng is a string representing the longitude
+    parseFloat(destination._location.lat), // Assuming origine.lat is a string representing the latitude
+  ];
+
+  return await Annonce.find({
+    locationExp: {
+      $near: {
+        $maxDistance: parseInt(radius),
+        $geometry: {
+          type: "Point",
+          coordinates: coordinatesExp,
+        },
+      },
+    },
+  })
+    .populate([
+      {
+        path: "contents",
+        populate: {
+          path: "images",
+        },
+      },
+      {
+        path: "listProposal",
+        populate: {
+          path: "profil",
+          select: "user",
+          populate: {
+            path: "user",
+            select: "-_id name email phone role image verified",
+            populate: {
+              path: "role image",
+              select: "_id role path thumbnail",
+            },
+          },
+        },
+      },
+      {
+        path: "profilexp profilDest",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "-_id name email phone image role verified",
+          populate: {
+            path: "role image",
+            select: "_id role path thumbnail",
+          },
+        },
+      },
+      {
+        path: "pointTrajets.pointExp pointTrajets.pointDist",
+        select: "-_id place_id city country location",
+      },
+    ])
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
     .sort({ createdAt: "desc" })
     .exec();
 };

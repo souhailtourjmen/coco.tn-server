@@ -12,14 +12,17 @@ const {
 
 const getAllAnnoncesController = async (req, res) => {
   try {
-    const { pageSize, pageNumber, origine, destination } = JSON.parse(
+    const { pageSize, pageNumber, origine, destination, radius } = JSON.parse(
       req.params.options
     );
+    // const { pageSize, pageNumber, origine, destination } = req.body;
+
     const annonce = await getAllAnnonces(
       pageSize,
       pageNumber,
       origine,
-      destination
+      destination,
+      radius
     );
     return res.status(200).json(annonce);
   } catch (error) {
@@ -109,6 +112,14 @@ const createAnnonceController = async (req, res) => {
       description: description,
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,
+      locationExp: {
+        type: "Point",
+        coordinates: [pointExp._location.lng, pointExp._location.lat],
+      },
+      locationDist: {
+        type: "Point",
+        coordinates: [pointDist._location.lng, pointDist._location.lat],
+      },
       pointTrajets: {
         pointExp: (await createAddress(pointExp)).data,
         pointDist: (await createAddress(pointDist)).data,
