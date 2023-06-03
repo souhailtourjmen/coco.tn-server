@@ -3,8 +3,8 @@ const {
   updateStatutColis,
   deleteColisByID,
   getColisById,
-  getStatusColisById
-
+  getStatusColisById,
+  getMessageNotificationColis
 } = require("./colisServicee");
 
 module.exports = {
@@ -12,6 +12,6 @@ module.exports = {
   updateStatutColis,
   deleteColisByID,
   getColisById,
-  getStatusColisById
-
+  getStatusColisById,
+  getMessageNotificationColis
 };

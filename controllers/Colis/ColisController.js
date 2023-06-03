@@ -5,6 +5,7 @@ const {
   StatutColis,
   Annonce,
 } = require("../../models");
+const moment = require("moment");
 const { path } = require("../../models/Transporter");
 
 const {
@@ -15,6 +16,10 @@ const {
   updateAnnonceById,
   updateStatutProposal,
   getStatusColisById,
+  pushNotification,
+  getMessageNotificationColis,
+  getinformationAnnouce,
+  getTokenFCM,
 } = require("../../services");
 require("dotenv").config();
 const getAllColisByUserController = async (req, res) => {
@@ -85,7 +90,8 @@ const createColisControllers = async (req, res) => {
         .json({ success: false, message: "proposal not found" });
     }
     const profilExp = await Profil.findById(idProfil).exec();
-    const profilTrans = await Profil.findById(proposalFound.profil).exec();
+    const profilTrans = await getTokenFCM(proposalFound.profil);
+    console.log(profilTrans);
     /* end check id */
 
     /* chaque colis est son statut donc on ajoute statut pardefaut enregistré
@@ -133,6 +139,18 @@ const createColisControllers = async (req, res) => {
       await profilExp.insertColis(data._id, "Exp"); // add colis in ProfileExpiditaire
       await profilTrans.insertColis(data._id, "Liv"); // add colis in ProfileTransporter
 
+      /* block send notification */
+      const infoAnnonce = await getinformationAnnouce(idAnnonce);
+      const message = getMessageNotificationColis(
+        process.env.statutColisDefault,
+        profilTrans,
+        infoAnnonce?.pointTrajets?.pointExp.city,
+        infoAnnonce?.pointTrajets?.pointDist.city,
+        moment(datePickup).calendar(),
+        "PickupDelivery"
+      );
+      await pushNotification(message);
+      /* end block send notification */
       return res.status(201).json({
         success: true,
         data: data,
@@ -174,13 +192,16 @@ const updateStatutColisController = async (req, res) => {
       return res.status(404).json({ message: "All fields are required" });
     }
     const newStatuts = await StatutColis.findById(idStatut);
-    console.log(newStatuts);
+
     if (!newStatuts)
       return res
         .status(404)
         .json({ success: false, message: "not statut provided" });
-    console.log(newStatuts);
-    const colisFound = await Colis.findById(idColis);
+
+    const colisFound = await Colis.findById(idColis).populate({
+      path: "proposal_Accept",
+      select: "profil",
+    });
 
     if (!colisFound)
       return res
@@ -195,6 +216,27 @@ const updateStatutColisController = async (req, res) => {
         colisFound.id
       );
       if (success) {
+        /* block send notification */
+        const infoAnnonce = await getinformationAnnouce(colisFound?.idAnnonce);
+        const profilExp = await getTokenFCM(infoAnnonce?.profilexp);
+        const data = {
+          idColis: idColis,
+          idTransport: colisFound?.proposal_Accept?.profil,
+        };
+        const message = getMessageNotificationColis(
+          idStatut,
+          profilExp,
+          null,
+          null,
+          moment().calendar(),
+          "Delivering",
+          data
+        );
+   
+        if (message) {
+          await pushNotification(message);
+        }
+        /* end block send notification */
         return res
           .status(200)
           .json({ success: success, data: data, message: message });

@@ -320,6 +320,31 @@ const updateIsrequired = async (idProfil, value) => {
     });
   return getProfilById(idProfil);
 };
+const updateTokenFCM = async (idProfil, tokenFCM) => {
+  Profil.findOneAndUpdate({ _id: idProfil }, { tokenFCM: tokenFCM })
+    .then((doc) => {
+      console.log("Profil updatedTokenFCM  successfully:");
+      return { success: true };
+    })
+    .catch((error) => {
+      console.error("Error updating TokenFCM Profil:", error);
+      return { success: false };
+    });
+};
+const getTokenFCM = async (idProfil) => {
+  const profilFound = await Profil.findById(idProfil)
+    .populate({
+      path: "user",
+      select: "-_id name",
+    })
+    .select("tokenFCM user")
+    .exec();
+  if (!profilFound) {
+    throw new Error("error getting user");
+  } else {
+    return profilFound;
+  }
+};
 module.exports = {
   getProfilById,
   getAllProposal,
@@ -327,4 +352,6 @@ module.exports = {
   getlistColisExp,
   getlistColisLiv,
   updateIsrequired,
+  updateTokenFCM,
+  getTokenFCM,
 };

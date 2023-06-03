@@ -1,5 +1,5 @@
 const { createAddress } = require("./addressService");
-const { updateAnnonceById, getAnnouce ,getAllAnnonces} = require("./annouceService");
+const { updateAnnonceById, getAnnouce ,getAllAnnonces,getinformationAnnouce} = require("./annouceService");
 const {
   createProposal,
   updateStatutProposal,
@@ -17,6 +17,7 @@ module.exports = {
   getAnnouce,
   updateAnnonceById,
   getAllAnnonces,
+  getinformationAnnouce,
   /* end annonceService */
   /*contentService */
   createContent,

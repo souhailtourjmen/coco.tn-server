@@ -1,7 +1,9 @@
 const FCM = require("fcm-node");
 require("dotenv").config();
 const getBodyNotifications = require("../../helper/firebase");
+
 const fcm = new FCM(process.env.serverKeyFirebase);
+
 const pushNotification = async (message) => {
   const notification = await getBodyNotifications(message);
   fcm.send(notification, function (err, response) {
@@ -13,4 +15,4 @@ const pushNotification = async (message) => {
   });
 };
 
-module.exports = pushNotification;
+module.exports = {pushNotification};

@@ -7,11 +7,11 @@ const {
   getStatusColisByIdController
 } = require("./ColisController");
 const {
-  getAllReview,
-  getReviewById,
-  createReview,
-  deleteReviewById,
-} = require("./ReviewController");
+  getAllReviewController,
+  getReviewByIdController,
+  createReviewController,
+  deleteReviewByIdController,
+} = require("./reviewController");
 
 module.exports = {
   /* controller colis  */
@@ -23,8 +23,8 @@ module.exports = {
   getStatusColisByIdController,
 
   /* controller review */
-  getAllReview,
-  getReviewById,
-  createReview,
-  deleteReviewById,
+  getAllReviewController,
+  getReviewByIdController,
+  createReviewController,
+  deleteReviewByIdController,
 };

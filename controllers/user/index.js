@@ -8,6 +8,7 @@ const {
   getProfilListProposal,
   getProfilListColisExp,
   getProfilListColisLiv,
+  updateTokenFCMController,
 } = require("./profilController");
 
 const {
@@ -43,7 +44,7 @@ module.exports = {
   getProfilListProposal,
   getProfilListColisExp,
   getProfilListColisLiv,
-
+  updateTokenFCMController,
   /*end controller profil */
 
   /* controller auth */

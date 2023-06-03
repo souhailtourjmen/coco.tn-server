@@ -1,5 +1,6 @@
 // Update an existing document by ID
 const Annonce = require("../../models/annonce");
+const moment = require('moment')
 const updateAnnonceById = async (id, newStatut) => {
   try {
     return await Annonce.findByIdAndUpdate(
@@ -69,17 +70,20 @@ const getAllAnnonces = async (
     parseFloat(destination._location.lng), // Assuming origine.lng is a string representing the longitude
     parseFloat(destination._location.lat), // Assuming origine.lat is a string representing the latitude
   ];
-
+ console.log(
+  radius)
+console.log(moment().endOf('day'));
   return await Annonce.find({
     locationExp: {
       $near: {
-        $maxDistance: parseInt(radius),
+        $maxDistance: radius,
         $geometry: {
           type: "Point",
           coordinates: coordinatesExp,
         },
       },
     },
+    
   })
     .populate([
       {
@@ -125,5 +129,16 @@ const getAllAnnonces = async (
     .sort({ createdAt: "desc" })
     .exec();
 };
+const getinformationAnnouce = async (id) => {
+  return await Annonce.findById(id)
+  .populate(
+    {
+      path: "pointTrajets.pointExp pointTrajets.pointDist",
+      select: "-_id place_id city country location",
+    },
+  )
+    .select('profilexp pointTrajets dateExp dateLiv')
+    .exec();
+};
 
-module.exports = { updateAnnonceById, getAnnouce, getAllAnnonces };
+module.exports = { updateAnnonceById, getAnnouce, getAllAnnonces,getinformationAnnouce };

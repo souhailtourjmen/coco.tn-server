@@ -5,6 +5,7 @@ const {
   getlistColisExp,
   getlistColisLiv,
   getProfilById,
+  updateTokenFCM,
 } = require("../../services");
 
 const getAllProfils = async (req, res) => {
@@ -18,7 +19,7 @@ const getAllProfils = async (req, res) => {
 };
 const getProfilByID = async (req, res) => {
   try {
-    const idProfil = req.auth.idProfil;
+    const idProfil = req?.params?.idProfil;
     if (!idProfil) {
       return res.status(404).json({ message: "All fields are required" });
     }
@@ -78,18 +79,22 @@ const getProfilListColisByID = async (req, res) => {
 const getProfilListAnnonceByID = async (req, res) => {
   try {
     const idProfil = req.auth.idProfil;
-    const filter =req?.params?.filter
+    const filter = req?.params?.filter;
 
-    const listAnnonceFound = await getAllAnnonce(idProfil,filter);
+    const listAnnonceFound = await getAllAnnonce(idProfil, filter);
     if (!listAnnonceFound) {
       return res
         .status(404)
-        .json({ success: false,data:null, message: "listAnnonce not found" });
+        .json({ success: false, data: null, message: "listAnnonce not found" });
     }
-    return res.status(200).json({ success: true, data: listAnnonceFound,filter:filter });
+    return res
+      .status(200)
+      .json({ success: true, data: listAnnonceFound, filter: filter });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ success: false,data:null, message: error.message });
+    return res
+      .status(500)
+      .json({ success: false, data: null, message: error.message });
   }
 };
 const getProfilListActivity = async (req, res) => {
@@ -105,7 +110,7 @@ const getProfilListActivity = async (req, res) => {
         .json({ success: false, message: "profil not found" });
     }
     const allProposals = await getAllProposal(profilFound._id);
-  
+
     const listAnnonceFound = await getAllAnnonce(profilFound._id);
 
     return res.status(200).json({
@@ -165,8 +170,35 @@ const getProfilListProposal = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data:allProposals,
+      data: allProposals,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const updateTokenFCMController = async (req, res) => {
+  try {
+    const idProfil = req.auth.idProfil;
+    const tokenFCM = req.body.tokenFCM;
+
+    if (!tokenFCM) {
+      return res.status(404).json({ message: "All fields are required" });
+    }
+
+    const result = await updateTokenFCM(idProfil, tokenFCM);
+    if (result) {
+      return res.status(200).json({
+        success: true,
+        data: null,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        data: null,
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
@@ -182,4 +214,5 @@ module.exports = {
   getProfilListColisExp,
   getProfilListColisLiv,
   getProfilListProposal,
+  updateTokenFCMController,
 };

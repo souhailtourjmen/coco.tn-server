@@ -19,7 +19,10 @@ const profilSchema = mongoose.Schema({
       default: Date.now() + 24 * 60 * 60 * 5000,
     },
   },
-
+  tokenFCM: {
+    type: String,
+    default: "",
+  },
   listAnnonce: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -7,6 +7,7 @@ const colisRouter = require("./colisRouter");
 const uploadRoute = require("./uploadRoute");
 const chatRouter = require("./chatRouter");
 const requestRouter = require("./requestRoute");
+const reviewRouter = require("./reviewRouter");
 module.exports = {
   userRoute,
   profilRoute,
@@ -17,4 +18,5 @@ module.exports = {
   uploadRoute,
   chatRouter,
   requestRouter,
+  reviewRouter,
 };

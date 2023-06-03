@@ -2,7 +2,7 @@ const Colis = require("../../models/colis");
 const Profil = require("../../models/profil");
 const Review = require("../../models/review");
 
-const getAllReview = async (req, res) => {
+const getAllReviewController = async (req, res) => {
   try {
     const reviews = await Review.find();
     return res.status(200).json(reviews);
@@ -11,7 +11,7 @@ const getAllReview = async (req, res) => {
     return res.status(500).json({ success: false, message: error });
   }
 };
-const getReviewById = async (req, res) => {
+const getReviewByIdController = async (req, res) => {
   try {
     if (!req.body.idReview) {
       return res.status(404).json({ message: "All fields are required" });
@@ -31,14 +31,14 @@ const getReviewById = async (req, res) => {
   }
 };
 
-const createReview = async (req, res) => {
+const createReviewController = async (req, res) => {
   try {
-    const { idProfil, idColis, title, comment, note } = req.body;
-
-    if (!idProfil || !idColis || !title || !comment || !note) {
+    const { idTransprteur, idColis, comment, note } = req.body;
+    const idProfil = req.auth.idProfil;
+    if (!idTransprteur || !idColis  || !note) {
       return res.status(404).json({ message: "All fields are required" });
     }
-    const profilFound = await Profil.findByID(idProfil);
+    const profilFound = await Profil.findByID(idTransprteur);
     const colisFound = await Colis.findByID(idColis);
 
     if (!profilFound || !colisFound) {
@@ -48,7 +48,6 @@ const createReview = async (req, res) => {
     }
 
     const review = new Review({
-      title: title,
       comment: comment,
       note: note,
       idColis: idColis,
@@ -58,8 +57,7 @@ const createReview = async (req, res) => {
     const savedReview = await review.save();
 
     try {
-      const Transporter = await Profil.findOne({ listColis: colisFound._id });
-      await Transporter.insertReview(review._id);
+      await profilFound.insertReview(review._id);
     } catch (error) {
       console.log(error);
       return res.status(500).json({
@@ -82,7 +80,7 @@ const createReview = async (req, res) => {
     });
   }
 };
-const deleteReviewById = async (req, res) => {
+const deleteReviewByIdController = async (req, res) => {
   try {
     if (!req.body.idReview) {
       return res.status(404).json({ message: "All fields are required" });
@@ -113,8 +111,8 @@ const deleteReviewById = async (req, res) => {
 };
 
 module.exports = {
-  getAllReview,
-  getReviewById,
-  createReview,
-  deleteReviewById,
+  getAllReviewController,
+  getReviewByIdController,
+  createReviewController,
+  deleteReviewByIdController,
 };

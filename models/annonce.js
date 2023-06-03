@@ -11,20 +11,15 @@ const annonceSchema = mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "Please enter the caption"],
       trim: true,
     },
     statutProfile: {
       type: String,
-      required: [true, "Please enter the statut"],
-      trim: true,
-      maxLength: 16,
       enum: ["Sender", "Receiver"],
       default: "Sender",
     },
     statut: {
       type: String,
-      maxLength: 16,
       enum: ["In progress", "Annouce", "Archives"],
       default: "Annouce",
     },

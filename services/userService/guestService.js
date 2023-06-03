@@ -21,9 +21,8 @@ const createGuestService = async (name, phone, expire) => {
       });
 
       const savedProfil = await profil.save();
-      const profilFound = await getProfilById(savedProfil._id);
       return {
-        data: profilFound,
+        data: savedProfil._id,
         success: true,
         message: "User created successfully",
       };

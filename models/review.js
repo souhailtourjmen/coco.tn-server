@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
-const User = require('./user');
 const reviewSchema = mongoose.Schema(
   {
-    title:{
-        type: String,
-        required:true,
-        maxLength:50
-    },
+
     comment:{
         type: String,
     },

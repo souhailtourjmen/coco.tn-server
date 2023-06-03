@@ -20,18 +20,15 @@ const getBodyNotifications = (message) => {
         click_action: message?.notification?.click_action,
       };
     }
-    if (message?.data) {
-      templateNotifications.data = {
-        priority: message?.data?.priority ? message?.data.priority : "high",
-        sound: message?.data?.sound ? message?.data?.sound : "app_sound.wav",
-        content_available: message?.data?.content_available
-          ? message?.data?.content_available
-          : true,
-        backgroundState: true,
-        body: message?.data?.body ? message?.data?.body : null,
-      };
-    }
-
+    templateNotifications.data = {
+      priority: message?.data?.priority ? message?.data.priority : "high",
+      sound: message?.data?.sound ? message?.data?.sound : "app_sound.wav",
+      content_available: message?.data?.content_available
+        ? message?.data?.content_available
+        : true,
+      backgroundState: true,
+      bodyText: message?.data?.body,
+    };
     return templateNotifications;
   } catch (err) {
     console.error(err);

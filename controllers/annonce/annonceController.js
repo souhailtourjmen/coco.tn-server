@@ -103,12 +103,10 @@ const createAnnonceController = async (req, res) => {
       secondProfil?.phone,
       dateLiv
     );
-    const profil = await new Profil({
-      user: createGuestAccount?._id,
-    });
+
     const annonce = new Annonce({
       profilexp: profilFound._id,
-      profilDest: profil?._id,
+      profilDest: createGuestAccount?.data,
       description: description,
       statutProfile: statutProfile,
       contents: dataContent.map((content) => content._id) || null,

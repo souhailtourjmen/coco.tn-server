@@ -15,6 +15,7 @@ const {
   uploadRoute,
   chatRouter,
   requestRouter,
+  reviewRouter
 } = require("./routes");
 
 /* test route */
@@ -56,6 +57,7 @@ app.use("/api", profilRoute);
 app.use("/api/annonce", annonceRoute);
 app.use("/api/proposal", proposalRouter);
 app.use("/api/colis", colisRouter);
+app.use("/api/review", reviewRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/requestRole", requestRouter);
 app.use("/api/test", testRoute);

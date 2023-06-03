@@ -7,6 +7,9 @@ const {
   getlistColisExp,
   getlistColisLiv,
   updateIsrequired,
+  updateTokenFCM,
+  getTokenFCM,
+
 } = require("./profilService");
 const {
   getUserById,
@@ -28,6 +31,9 @@ module.exports = {
   getlistColisExp,
   getlistColisLiv,
   updateIsrequired,
+  updateTokenFCM,
+  getTokenFCM,
+
   /*end ProfilService */
   /* UserService */
   getUserById,

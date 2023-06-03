@@ -2,7 +2,8 @@ const { Colis } = require("../../models");
 const {
   updateAnnonceById,
 } = require("../../services/annouceService/annouceService");
-
+const { messageNotification } = require("../../utils/pushNotification");
+const { STATUSCOLIS } = require("../../constants/statusColis");
 const createColis = async (
   idAnnonce,
   idProposal,
@@ -11,7 +12,6 @@ const createColis = async (
   idStatutColisDefault
 ) => {
   try {
-    console.log(idAnnonce, idProposal, idStatutColisDefault);
     /* creation nouveau colis  */
     const colis = new Colis({
       idAnnonce: idAnnonce,
@@ -163,10 +163,61 @@ const getStatusColisById = async (idAnnonce) => {
     };
   }
 };
+
+const getMessageNotificationColis = (
+  idStatus,
+  profile,
+  pointExp,
+  pointDist,
+  datePickup,
+  screen,
+  data
+) => {
+  console.log(idStatus===STATUSCOLIS.Delivering)
+  switch (idStatus) {
+    case STATUSCOLIS.PickUp:
+     
+      return messageNotification(
+        profile.tokenFCM,
+        "Carpooling request for parcels accepted",
+        "",
+        `Hello ${profile?.user?.name},\n
+
+        We are delighted to inform you that your parcel sharing request has been accepted by sender. Here are the details of your carpool:\n
+   
+        Departure point: ${pointExp}\n
+        Destination: ${pointDist}\n
+        Date and time of departure: ${datePickup}.\n
+        Please ensure that you are ready with your parcel at the agreed time.`,
+        screen
+      );
+
+    case STATUSCOLIS.Moving:
+      return null;
+    case STATUSCOLIS.Delivering:
+      return messageNotification(
+        "e8GdjPI-RA-a4K8BbrQj_c:APA91bGp3vpcoy78EP60Mevzi_ZqAWeWTwoH-EXiZFXzdgHPOBsxzHI3K646WQQmYDcG5Cy2FLjTtWq8c4eTb0S7cSqJRtBIMBpRuPhtIAADKOH8gFh8jmxmJoxwfd2z7lsH9HsIlX1T",
+        "Parcel delivered",
+        "",
+        `Hello ${profile?.user?.name},\n
+
+        We are pleased to inform you that the parcel you carpooled has been successfully delivered to its destination.\n
+      
+        Thank you for taking part in this parcel carpool and helping to ensure safe delivery.\n`,
+        screen,
+        data
+      );
+
+    case STATUSCOLIS.Cancel:
+      return null;
+  }
+};
+
 module.exports = {
   createColis,
   updateStatutColis,
   deleteColisByID,
   getColisById,
   getStatusColisById,
+  getMessageNotificationColis,
 };

@@ -10,6 +10,8 @@ const {
   updateUserPassword,
   updateIsrequired,
   createGuestService,
+  updateTokenFCM,
+  getTokenFCM,
 } = require("./userService/");
 const {
   createRequest,
@@ -40,6 +42,7 @@ const {
   deleteProposalByID,
   getProposalById,
   getAllAnnonces,
+  getinformationAnnouce
 } = require("./annouceService/");
 
 const {
@@ -48,8 +51,11 @@ const {
   deleteColisByID,
   getColisById,
   getStatusColisById,
+  getMessageNotificationColis,
 } = require("./colisService/colisServicee");
 const { createImage, createAllImage } = require("./imageService/imageService");
+
+const { pushNotification } = require("./firebase");
 module.exports = {
   /* userService */
   handleRefreshToken,
@@ -63,6 +69,9 @@ module.exports = {
   updateUserPassword,
   updateIsrequired,
   createGuestService,
+  updateTokenFCM,
+  getTokenFCM,
+
   /* end userService */
   /*imageService */
   createImage,
@@ -80,6 +89,7 @@ module.exports = {
   updateStatutProposal,
   deleteProposalByID,
   getProposalById,
+  getinformationAnnouce,
   /* end annouceService */
   /*Chat Service */
   createChatRoom,
@@ -96,7 +106,7 @@ module.exports = {
   deleteColisByID,
   getColisById,
   getStatusColisById,
-
+  getMessageNotificationColis,
   /* end Service */
   /*RequestUpgrade Role Service  */
   createRequest,
@@ -106,4 +116,8 @@ module.exports = {
   getDocumentById,
   getStatusRequestById,
   /*end RequestUpgrade */
+
+  /** firebase service */
+  pushNotification,
+  /* ends firebase */
 };

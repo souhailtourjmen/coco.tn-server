@@ -14,13 +14,14 @@ const {
   getProfilListProposal,
   getProfilListColisExp,
   getProfilListColisLiv,
+  updateTokenFCMController
 } = require("../controllers/user/index");
 
 /* Get method getProfilByID
  * @param idProfil
  * @return {Object}
  */
-router.get("/getProfilByID/", verifyToken, getProfilByID);
+router.get("/getProfilByID/:idProfil?", verifyToken, getProfilByID);
 /* Get method getAllProfil
  * @param null
  * @return Array[{Objet}]
@@ -73,6 +74,12 @@ router.get("/getProfilListColisLiv/", verifyToken, getProfilListColisLiv);
  * @return {Object}
  */
 router.get("/getProfilListActivity/", verifyToken, getProfilListActivity);
+
+/* Get method refreshTokenController
+ * @param idProfil
+ * @return {Object}
+ */
+router.put("/updateTokenFCM/", verifyToken, updateTokenFCMController);
 
 /* Get method refreshTokenController
  * @param idProfil
