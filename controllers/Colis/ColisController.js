@@ -90,8 +90,9 @@ const createColisControllers = async (req, res) => {
         .json({ success: false, message: "proposal not found" });
     }
     const profilExp = await Profil.findById(idProfil).exec();
+    const profilTr = await Profil.findById(proposalFound.profil).exec();
     const profilTrans = await getTokenFCM(proposalFound.profil);
-    console.log(profilTrans);
+
     /* end check id */
 
     /* chaque colis est son statut donc on ajoute statut pardefaut enregistré
@@ -137,8 +138,8 @@ const createColisControllers = async (req, res) => {
           });
         });
       await profilExp.insertColis(data._id, "Exp"); // add colis in ProfileExpiditaire
-      await profilTrans.insertColis(data._id, "Liv"); // add colis in ProfileTransporter
-
+      await profilTr.insertColis(data._id, "Liv"); // add colis in ProfileTransporter
+      
       /* block send notification */
       const infoAnnonce = await getinformationAnnouce(idAnnonce);
       const message = getMessageNotificationColis(
@@ -218,7 +219,9 @@ const updateStatutColisController = async (req, res) => {
       if (success) {
         /* block send notification */
         const infoAnnonce = await getinformationAnnouce(colisFound?.idAnnonce);
+        console.log("annouce",infoAnnonce);
         const profilExp = await getTokenFCM(infoAnnonce?.profilexp);
+        console.log("profil",profilExp);
         const data = {
           idColis: idColis,
           idTransport: colisFound?.proposal_Accept?.profil,
@@ -231,8 +234,9 @@ const updateStatutColisController = async (req, res) => {
           moment().calendar(),
           "Delivering",
           data
-        );
-   
+          );
+          
+          console.log(message);
         if (message) {
           await pushNotification(message);
         }

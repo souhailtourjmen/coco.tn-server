@@ -196,7 +196,7 @@ const getMessageNotificationColis = (
       return null;
     case STATUSCOLIS.Delivering:
       return messageNotification(
-        "e8GdjPI-RA-a4K8BbrQj_c:APA91bGp3vpcoy78EP60Mevzi_ZqAWeWTwoH-EXiZFXzdgHPOBsxzHI3K646WQQmYDcG5Cy2FLjTtWq8c4eTb0S7cSqJRtBIMBpRuPhtIAADKOH8gFh8jmxmJoxwfd2z7lsH9HsIlX1T",
+        profile.tokenFCM,
         "Parcel delivered",
         "",
         `Hello ${profile?.user?.name},\n

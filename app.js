@@ -18,9 +18,6 @@ const {
   reviewRouter
 } = require("./routes");
 
-/* test route */
-const testRoute = require("./test/routes/testFCM");
-/*end test */
 
 app.use(cors(corsOptions));
 
@@ -60,6 +57,6 @@ app.use("/api/colis", colisRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/requestRole", requestRouter);
-app.use("/api/test", testRoute);
+
 
 module.exports = app;

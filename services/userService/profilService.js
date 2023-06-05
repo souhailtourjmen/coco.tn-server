@@ -309,14 +309,15 @@ const getAllAnnonce = async (idProfil, filter) => {
 };
 
 const updateIsrequired = async (idProfil, value) => {
+  let success =false;
   Profil.findOneAndUpdate({ _id: idProfil }, { isRequired: value })
     .then((doc) => {
       console.log("Profil updated successfully:");
-      return { success: true };
+       success= true ;
     })
     .catch((error) => {
       console.error("Error updating Profil:", error);
-      return { success: false };
+      success= false ;
     });
   return getProfilById(idProfil);
 };

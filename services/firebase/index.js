@@ -6,9 +6,10 @@ const fcm = new FCM(process.env.serverKeyFirebase);
 
 const pushNotification = async (message) => {
   const notification = await getBodyNotifications(message);
+ 
   fcm.send(notification, function (err, response) {
     if (err) {
-      console.log("Something has gone wrong!");
+      console.log("Something has gone wrong!",err);
     } else {
       console.log("Successfully sent with response: ", response);
     }
