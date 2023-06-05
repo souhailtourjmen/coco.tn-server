@@ -321,15 +321,18 @@ const updateIsrequired = async (idProfil, value) => {
   return getProfilById(idProfil);
 };
 const updateTokenFCM = async (idProfil, tokenFCM) => {
+  let success =false;
   Profil.findOneAndUpdate({ _id: idProfil }, { tokenFCM: tokenFCM })
     .then((doc) => {
       console.log("Profil updatedTokenFCM  successfully:");
-      return { success: true };
+      success=true
+      
     })
     .catch((error) => {
       console.error("Error updating TokenFCM Profil:", error);
-      return { success: false };
+       success= false;
     });
+    return success;
 };
 const getTokenFCM = async (idProfil) => {
   const profilFound = await Profil.findById(idProfil)

@@ -188,6 +188,7 @@ const updateTokenFCMController = async (req, res) => {
     }
 
     const result = await updateTokenFCM(idProfil, tokenFCM);
+
     if (result) {
       return res.status(200).json({
         success: true,

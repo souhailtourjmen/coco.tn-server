@@ -147,7 +147,7 @@ const UpgradeUserRole = async (idUser, idRole, cardGris) => {
       const transporter = new Transporter(user);
       transporter.idCardGris = cardGris;
       const insertTransporter = await transporter.save();
-      await User.findByIdAndUpdate(insertTransporter._id, {
+      await Transporter.findByIdAndUpdate(insertTransporter._id, {
         $set: { password: user.password },
       });
       console.log(
