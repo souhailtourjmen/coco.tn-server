@@ -70,21 +70,27 @@ const getAllAnnonces = async (
     parseFloat(destination._location.lng), // Assuming origine.lng is a string representing the longitude
     parseFloat(destination._location.lat), // Assuming origine.lat is a string representing the latitude
   ];
- console.log(
-  radius)
-console.log(moment().endOf('day'));
-  return await Annonce.find({
-    locationExp: {
-      $near: {
-        $maxDistance: radius,
-        $geometry: {
-          type: "Point",
-          coordinates: coordinatesExp,
-        },
+const today=moment().endOf('day')
+const filters = {
+  locationExp: {
+    $near: {
+      $maxDistance: radius,
+      $geometry: {
+        type: "Point",
+        coordinates: coordinatesExp,
       },
     },
-    
-  })
+  },
+  statut:{
+    $eq:'Annouce'
+  },
+  dateLiv: {
+    $gte: today,
+  },
+};
+console.log(today);
+
+  return await Annonce.find(filters)
     .populate([
       {
         path: "contents",
@@ -124,6 +130,7 @@ console.log(moment().endOf('day'));
         select: "-_id place_id city country location",
       },
     ])
+    
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize)
     .sort({ createdAt: "desc" })

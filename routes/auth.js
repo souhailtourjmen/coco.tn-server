@@ -7,7 +7,7 @@ const {
   checkLogin,
   checkIsValidUser,
 } = require("../middleware/user/index");
-
+const { signInLimiter, limiter } = require("../middleware/auth");
 /* Post method signUp
 * @param  cin,
      lastName,
@@ -22,13 +22,13 @@ const {
 * @return {Object}
 * @response token , message
 */
-router.post("/signup/", signUp);
+router.post("/signup/", limiter, signUp);
 
 /* Post method login
  * @param email, password,
  * @return {Object}
  * @response token , role , profil
  */
-router.post("/login/",checkLogin, login);
+router.post("/login/", signInLimiter, checkLogin, login);
 
 module.exports = router;
