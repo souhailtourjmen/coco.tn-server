@@ -2,9 +2,10 @@ const {Profil} = require("../../models");
 const jwt = require("jsonwebtoken");
 const handleRefreshToken = async (token) => {
   // Detected refresh token reuse!
-  console.log(token);
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
     if (!decoded)
       return { status: 403, message: "hacked user", refreshToken: null }; //Forbidden     hacked user
     const foundprofil = await Profil.findById(decoded.id).exec();
@@ -16,7 +17,7 @@ const handleRefreshToken = async (token) => {
       .exec();
     return {
       status: 200,
-      message: "success refreshToken ",
+      message: "success refreshToken",
       refreshToken: refreshToken,
     };
   } catch (error) {

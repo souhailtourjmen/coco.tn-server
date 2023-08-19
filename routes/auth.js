@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { signUp, login } = require("../controllers/user/index");
+const {
+  signUp,
+  login,
+  refreshToken,
+} = require("../controllers/user");
 const {
   checkDuplicatedEmail,
   checkroleExisted,
   checkLogin,
   checkIsValidUser,
 } = require("../middleware/user/index");
-const { signInLimiter, limiter } = require("../middleware/auth");
+const { signInLimiter, limiter, verifyToken } = require("../middleware/auth");
 /* Post method signUp
 * @param  cin,
      lastName,
@@ -30,5 +34,7 @@ router.post("/signup/", limiter, signUp);
  * @response token , role , profil
  */
 router.post("/login/", signInLimiter, checkLogin, login);
+
+router.get("/refrech/",signInLimiter, refreshToken);
 
 module.exports = router;

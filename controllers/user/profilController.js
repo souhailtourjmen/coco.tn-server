@@ -182,13 +182,13 @@ const updateTokenFCMController = async (req, res) => {
   try {
     const idProfil = req.auth.idProfil;
     const tokenFCM = req.body.tokenFCM;
-
+console.log(tokenFCM);
     if (!tokenFCM) {
       return res.status(404).json({ message: "All fields are required" });
     }
 
     const result = await updateTokenFCM(idProfil, tokenFCM);
-
+console.log(result);
     if (result) {
       return res.status(200).json({
         success: true,

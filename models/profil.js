@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const jwt = require("jsonwebtoken");
+const { getToken, refreshToken } = require("../helper/token");
 const profilSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectID,
@@ -8,7 +8,6 @@ const profilSchema = mongoose.Schema({
     ref: "User",
     unique: true,
   },
-
   tokens: {
     token: {
       type: String,
@@ -16,7 +15,7 @@ const profilSchema = mongoose.Schema({
     },
     expireAt: {
       type: Date,
-      default: Date.now() + 24 * 60 * 60 * 5000,
+      default: new Date(),
     },
   },
   tokenFCM: {
@@ -82,22 +81,23 @@ const profilSchema = mongoose.Schema({
 profilSchema.plugin(uniqueValidator);
 
 profilSchema.pre("save", async function (next) {
-  this.tokens = {
-    token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 15000,
-  };
+  if (this._isNewUser) {
+    // custom parameters, set the _isNewUser property before calling the save()
+    const currentTime = new Date();
+    const futureTime = new Date(currentTime.getTime() + 15 * 60 * 1000); // Add 15 min in milliseconds
+    this.tokens = {
+      token: await getToken({ id: this._id }),
+      expireAt: futureTime, 
+    };
+  }
   next();
 });
-
-profilSchema.methods.getToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
 profilSchema.methods.refreshToken = async function () {
+  const currentTime = new Date();
+  const futureTime = new Date(currentTime.getTime() + 30 * 24 * 60 * 60 * 1000); // Add 30 days in milliseconds
   this.tokens = {
-    token: await this.getToken(),
-    expireAt: Date.now() + 24 * 60 * 60 * 3000000,
+    token: await refreshToken({ id: this._id }),
+    expireAt: futureTime,
   };
   return await this.save();
 };
@@ -209,4 +209,6 @@ profilSchema.methods.removeAnnonce = async function (idAnnonce) {
     return error;
   }
 };
+profilSchema.index({ "tokens.token": 1 }, { unique: true });
+
 module.exports = mongoose.model("Profil", profilSchema);

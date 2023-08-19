@@ -19,9 +19,8 @@ const {
   deleteUserById,
 } = require("./usersController");
 
-const { signUp, login } = require("./authController");
+const { signUp, login,refreshToken } = require("./authController");
 
-const { refreshTokenController } = require("./refrechTokenController");
 module.exports = {
   /* controller user */
 
@@ -51,10 +50,7 @@ module.exports = {
 
   signUp,
   login,
-
+  refreshToken,
   /*end controller auth */
 
-  /* refreshTokenController */
-  refreshTokenController,
-  /*end refreshTokenController */
 };

@@ -15,11 +15,11 @@ const verifyToken = async (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: "No token provided" });
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_REFRECH_SECRET);
     req.auth = {
       idProfil: decoded.id,
     };
-
+    console.log(decoded.id);
     const profilFound = await Profil.findById(req.auth.idProfil, {
       password: 0,
     });

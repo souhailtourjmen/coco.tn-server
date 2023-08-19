@@ -9,7 +9,6 @@ const {
   getProfilListReviewByID,
   getProfilListColisByID,
   getProfilListAnnonceByID,
-  refreshTokenController,
   getProfilListActivity,
   getProfilListProposal,
   getProfilListColisExp,
@@ -81,10 +80,6 @@ router.get("/getProfilListActivity/", verifyToken, getProfilListActivity);
  */
 router.put("/updateTokenFCM/", verifyToken, updateTokenFCMController);
 
-/* Get method refreshTokenController
- * @param idProfil
- * @return {Object}
- */
-router.get("/refreshToken/", refreshTokenController);
+
 
 module.exports = router;
