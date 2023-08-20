@@ -84,9 +84,9 @@ const filters = {
   statut:{
     $eq:'Annouce'
   },
-  dateLiv: {
-    $gte: today,
-  },
+  // dateLiv: {
+  //   $gte: today,
+  // },
 };
 console.log(today);
 
