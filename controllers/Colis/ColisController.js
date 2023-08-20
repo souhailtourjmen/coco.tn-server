@@ -6,7 +6,6 @@ const {
   Annonce,
 } = require("../../models");
 const moment = require("moment");
-const { path } = require("../../models/Transporter");
 
 const {
   createColis,
